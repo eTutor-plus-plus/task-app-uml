@@ -10,13 +10,14 @@ CREATE TABLE task
     id            BIGINT        NOT NULL,
     max_points    NUMERIC(7, 2) NOT NULL,
     status        TASK_STATUS   NOT NULL,
+    identifiers   TEXT[]        NOT NULL,
     CONSTRAINT task_pk PRIMARY KEY (id)
 );
 
-CREATE TABLE solution
+CREATE TABLE solutionBlock
 (
     id            BIGINT        NOT NULL,
-    solution    TEXT          NOT NULL,
+    solution_block    TEXT          NOT NULL,
     task_id       BIGINT        NOT NULL,
     CONSTRAINT solution_pk PRIMARY KEY (id),
     CONSTRAINT solution_task_fk FOREIGN KEY (task_id) REFERENCES task (id)
