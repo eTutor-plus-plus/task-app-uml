@@ -35,7 +35,7 @@
     <dependencies>
         <dependency>
             <groupId>at.jku.dke.etutor</groupId>
-            <artifactId>etutor-umlTask-app-starter</artifactId>
+            <artifactId>etutor-Task-app-starter</artifactId>
             <version>1.2.2</version>
         </dependency>
 
