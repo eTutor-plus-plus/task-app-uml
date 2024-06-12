@@ -1,55 +1,47 @@
 package at.jku.dke.task_app.uml.data.entities;
 
-
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
-
 @Entity
-@Table(name = "solutionblockalternative")
+@Table(name = "umlblockalt")
 public class UmlBlockAlt {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private Long id;
+    private Integer id;
 
     @NotNull
-    @Column(name = "solution_block_alternative", nullable = false, length = Integer.MAX_VALUE)
-    private String solutionBlockAlternative;
+    @Column(name = "uml_block_alternative", nullable = false, length = Integer.MAX_VALUE)
+    private String umlBlockAlternative;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "solution_block_id", nullable = false)
-    private UmlBlock umlBlockAlt;
+    @JoinColumn(name = "uml_block_id", nullable = false)
+    private UmlBlock umlBlock;
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-
-    public void setSolutionBlockAlternative(String solutionBlockAlternative) {
-        this.solutionBlockAlternative = solutionBlockAlternative;
+    public String getUmlBlockAlternative() {
+        return umlBlockAlternative;
     }
 
-    public UmlBlock getUmlBlockAlt() {
-        return umlBlockAlt;
+    public void setUmlBlockAlternative(String umlBlockAlternative) {
+        this.umlBlockAlternative = umlBlockAlternative;
     }
 
-    public void setUmlBlockAlt(UmlBlock umlBlockAlt) {
-        this.umlBlockAlt = umlBlockAlt;
+    public UmlBlock getUmlBlock() {
+        return umlBlock;
     }
 
-    public UmlBlockAlt(String solutionBlockAlternative) {
-        this.solutionBlockAlternative = solutionBlockAlternative;
-    }
-
-
-
-    public UmlBlockAlt() {
-
+    public void setUmlBlock(UmlBlock umlBlock) {
+        this.umlBlock = umlBlock;
     }
 
 }

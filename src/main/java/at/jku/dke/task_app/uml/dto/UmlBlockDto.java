@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 public class UmlBlockDto {
-    private Long id;
 
     @JsonProperty("umlBlock")
     private List<UmlBlockAltDto> umlBlockAlt;
@@ -26,11 +25,4 @@ public class UmlBlockDto {
         this.umlBlockAlt = umlBlockAlt;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 }

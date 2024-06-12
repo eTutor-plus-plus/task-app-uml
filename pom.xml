@@ -11,11 +11,11 @@
     </parent>
 
     <groupId>at.jku.dke.etutor</groupId>
-    <artifactId>task-app-uml</artifactId>
+    <artifactId>umlTask-app-uml</artifactId>
     <version>1.0.3</version>
 
     <name>eTutor Task-App: UML</name>
-    <description>eTutor Task-App for task type "Plant UML"</description>
+    <description>eTutor Task-App for umlTask type "Plant UML"</description>
     <packaging>jar</packaging>
 
     <properties>
@@ -28,14 +28,14 @@
     <repositories>
         <repository>
             <id>github-starter</id>
-            <url>https://maven.pkg.github.com/eTutor-plus-plus/task-app-starter</url>
+            <url>https://maven.pkg.github.com/eTutor-plus-plus/umlTask-app-starter</url>
         </repository>
     </repositories>
 
     <dependencies>
         <dependency>
             <groupId>at.jku.dke.etutor</groupId>
-            <artifactId>etutor-task-app-starter</artifactId>
+            <artifactId>etutor-umlTask-app-starter</artifactId>
             <version>1.2.2</version>
         </dependency>
 

@@ -1,14 +1,14 @@
 # eTutor Task-App: Binary Search
 
-This application provides a REST-interface for following task type: binary_search.
+This application provides a REST-interface for following umlTask type: binary_search.
 
 Students have to guess a number. The student's input is compared with the number stored in the solution, and it is returned whether the number sought is _smaller_, _equal_ to or
 _greater_ than the input.
 
-This project **can** be used as a template for new task apps. Replace all occurrences of `binarysearch`/`binary search`/`binary-search`/`binary_search` with the name of your task
+This project **can** be used as a template for new umlTask apps. Replace all occurrences of `binarysearch`/`binary search`/`binary-search`/`binary_search` with the name of your umlTask
 type.
 
-Task-App repositories should start with `task-app-` and end with the task type (e.g. `task-app-binary-search`).
+Task-App repositories should start with `umlTask-app-` and end with the umlTask type (e.g. `umlTask-app-binary-search`).
 
 ## Development
 
@@ -30,7 +30,7 @@ docker run -p 8090:8081 \
   -e SPRING_DATASOURCE_PASSWORD=myPwd \
   -e SPRING_FLYWAY_USER=etutor_binary_search_admin \
   -e SPRING_FLYWAY_PASSWORD=adPwd \
-  -e CLIENTS_API_KEYS_0_NAME=task-administration \
+  -e CLIENTS_API_KEYS_0_NAME=umlTask-administration \
   -e CLIENTS_API_KEYS_0_KEY=some-secret-key \
   -e CLIENTS_API_KEYS_0_ROLES_0=CRUD \
   -e CLIENTS_API_KEYS_0_ROLES_1=SUBMIT \
@@ -40,7 +40,7 @@ docker run -p 8090:8081 \
   -e CLIENTS_API_KEYS_2_NAME=plagiarism-checker \
   -e CLIENTS_API_KEYS_2_KEY=key-for-reading-submissions \
   -e CLIENTS_API_KEYS_2_ROLES_0=READ_SUBMISSION \
-  etutorplusplus/task-app-binary-search
+  etutorplusplus/umlTask-app-binary-search
 ```
 
 or with Docker Compose:
@@ -49,8 +49,8 @@ or with Docker Compose:
 version: '3.8'
 
 services:
-    task-app-binary-search:
-        image: etutorplusplus/task-app-binary-search
+    umlTask-app-binary-search:
+        image: etutorplusplus/umlTask-app-binary-search
         restart: unless-stopped
         ports:
             -   target: 8081
@@ -61,7 +61,7 @@ services:
             SPRING_DATASOURCE_PASSWORD: myPwd
             SPRING_FLYWAY_USER: etutor_binary_search_admin
             SPRING_FLYWAY_PASSWORD: adPwd
-            CLIENTS_API_KEYS_0_NAME: task-administration
+            CLIENTS_API_KEYS_0_NAME: umlTask-administration
             CLIENTS_API_KEYS_0_KEY: some-secret-key
             CLIENTS_API_KEYS_0_ROLES_0: CRUD
             CLIENTS_API_KEYS_0_ROLES_1: SUBMIT

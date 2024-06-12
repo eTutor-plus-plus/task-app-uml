@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * DTO for {@link at.jku.dke.task_app.uml.data.entities.UmlTask}
  *
- * @param umlBlocks The solution.
+ * @param umlSolution The solution.
  */
-public record UmlTaskDto(@NotNull List<UmlBlockDto> umlBlocks) implements Serializable {
+public record UmlTaskDto(@NotNull List<UmlBlockDto> umlSolution) implements Serializable {
 }
