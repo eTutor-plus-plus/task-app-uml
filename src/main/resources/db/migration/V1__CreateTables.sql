@@ -10,17 +10,25 @@ CREATE TABLE task
     id            BIGINT        NOT NULL,
     max_points    NUMERIC(7, 2) NOT NULL,
     status        TASK_STATUS   NOT NULL,
-    identifiers   TEXT[]        NOT NULL,
+    identifiers   TEXT       NOT NULL,
     CONSTRAINT task_pk PRIMARY KEY (id)
 );
 
 CREATE TABLE solutionBlock
 (
     id            BIGINT        NOT NULL,
-    solution_block    TEXT          NOT NULL,
     task_id       BIGINT        NOT NULL,
     CONSTRAINT solution_pk PRIMARY KEY (id),
     CONSTRAINT solution_task_fk FOREIGN KEY (task_id) REFERENCES task (id)
+);
+
+CREATE TABLE solutionBlockAlternative
+(
+    id            BIGINT        NOT NULL,
+    solution_block_alternative    TEXT          NOT NULL,
+    solution_block_id       BIGINT        NOT NULL,
+    CONSTRAINT solution_alternative_pk PRIMARY KEY (id),
+    CONSTRAINT solution_alternative_solution_fk FOREIGN KEY (solution_block_id) REFERENCES solutionBlock (id)
 );
 
 CREATE TABLE submission
