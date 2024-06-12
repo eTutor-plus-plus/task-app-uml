@@ -3,7 +3,8 @@ package at.jku.dke.task_app.uml.evaluation;
 import at.jku.dke.etutor.task_app.dto.CriterionDto;
 import at.jku.dke.etutor.task_app.dto.GradingDto;
 import at.jku.dke.etutor.task_app.dto.SubmitSubmissionDto;
-import at.jku.dke.task_app.uml.dto.BinarySearchSubmissionDto;
+import at.jku.dke.task_app.uml.data.repositories.UmlTaskRepository;
+import at.jku.dke.task_app.uml.dto.UmlSubmissionDto;
 import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +24,7 @@ import java.util.Locale;
 public class EvaluationService {
     private static final Logger LOG = LoggerFactory.getLogger(EvaluationService.class);
 
-    private final BinarySearchTaskRepository taskRepository;
+    private final UmlTaskRepository taskRepository;
     private final MessageSource messageSource;
 
     /**
@@ -32,7 +33,7 @@ public class EvaluationService {
      * @param taskRepository The task repository.
      * @param messageSource  The message source.
      */
-    public EvaluationService(BinarySearchTaskRepository taskRepository, MessageSource messageSource) {
+    public EvaluationService(UmlTaskRepository taskRepository, MessageSource messageSource) {
         this.taskRepository = taskRepository;
         this.messageSource = messageSource;
     }
@@ -44,7 +45,7 @@ public class EvaluationService {
      * @return The evaluation result.
      */
     @Transactional
-    public GradingDto evaluate(SubmitSubmissionDto<BinarySearchSubmissionDto> submission) {
+    public GradingDto evaluate(SubmitSubmissionDto<UmlSubmissionDto> submission) {
         // find task
         var task = this.taskRepository.findById(submission.taskId()).orElseThrow(() -> new EntityNotFoundException("Task " + submission.taskId() + " does not exist."));
 
@@ -79,35 +80,8 @@ public class EvaluationService {
         }
 
         // evaluate and grade
-        switch (submission.mode()) {
-            case RUN:
-                feedback = this.messageSource.getMessage("input", new Object[]{submission.submission().input()}, locale);
-                break;
-            case DIAGNOSE:
-                feedback = this.messageSource.getMessage(error == null && input.equals(task.getSolution()) ? "correct" : "incorrect", null, locale);
-                if (error == null) {
-                    int diff = task.getSolution() - input;
-                    if (diff == 0)
-                        points = task.getMaxPoints();
-                    if (submission.feedbackLevel() > 0)
-                        criteria.add(new CriterionDto(
-                            this.messageSource.getMessage("criterium.value", null, locale),
-                            points,
-                            diff == 0,
-                            this.messageSource.getMessage(diff < 0 ? "criterium.value.less" : (diff > 0 ? "criterium.value.greater" : "criterium.value.equals"), null, locale)));
-                }
-                break;
-            case SUBMIT:
-                if (error == null && input.equals(task.getSolution())) {
-                    feedback = this.messageSource.getMessage("correct", null, locale);
-                    points = task.getMaxPoints();
-                } else
-                    feedback = this.messageSource.getMessage("incorrect", null, locale);
-                break;
-            default:
-                throw new IllegalStateException("Unexpected value: " + submission.mode());
-        }
 
-        return new GradingDto(task.getMaxPoints(), points, feedback, criteria);
+
+        return new GradingDto(task.getMaxPoints(), points, "", criteria);
     }
 }

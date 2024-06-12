@@ -6,7 +6,7 @@ import at.jku.dke.etutor.task_app.dto.TaskModificationResponseDto;
 import at.jku.dke.etutor.task_app.services.BaseTaskService;
 
 import at.jku.dke.task_app.uml.data.entities.UmlTask;
-import at.jku.dke.task_app.uml.dto.ModifyBinarySearchTaskDto;
+import at.jku.dke.task_app.uml.dto.ModifyUmlTaskDto;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -18,7 +18,7 @@ import java.util.Locale;
  * This class provides methods for managing {@link UmlTask}s.
  */
 @Service
-public class UmlTaskService extends BaseTaskService<UmlTask, ModifyBinarySearchTaskDto>{
+public class UmlTaskService extends BaseTaskService<UmlTask, ModifyUmlTaskDto>{
 
     private final MessageSource messageSource;
 
@@ -34,14 +34,14 @@ public class UmlTaskService extends BaseTaskService<UmlTask, ModifyBinarySearchT
 
 
     @Override
-    protected BinarySearchTask createTask(long id, ModifyTaskDto<ModifyBinarySearchTaskDto> modifyTaskDto) {
+    protected UmlTask createTask(long id, ModifyTaskDto<ModifyUmlTaskDto> modifyTaskDto) {
         if (!modifyTaskDto.taskType().equals("binary-search"))
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid task type.");
-        return new BinarySearchTask(modifyTaskDto.additionalData().solution());
+        return new UmlTask();
     }
 
     @Override
-    protected void updateTask(UmlTask task, ModifyTaskDto<ModifyBinarySearchTaskDto> dto) {
+    protected void updateTask(UmlTask task, ModifyTaskDto<ModifyUmlTaskDto> dto) {
 
     }
 

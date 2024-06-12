@@ -31,13 +31,13 @@ public class UmlTask extends BaseTask {
 */
     @OneToMany(orphanRemoval = true)
     @JoinColumn(name = "task_id")
-    private List<Solution> solutions = new ArrayList<>();
+    private List<UmlSolution> umlSolutions = new ArrayList<>();
 
-    public List<Solution> getSolutions() {
-        return solutions;
+    public List<UmlSolution> getSolutions() {
+        return umlSolutions;
     }
 
-    public void setSolutions(List<Solution> solutions) {
-        this.solutions = solutions;
+    public void setSolutions(List<UmlSolution> umlSolutions) {
+        this.umlSolutions = umlSolutions;
     }
 }

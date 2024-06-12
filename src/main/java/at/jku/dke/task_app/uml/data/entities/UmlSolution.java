@@ -8,7 +8,7 @@ import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "solution")
-public class Solution {
+public class UmlSolution {
     @Id
     @NotNull
     @Column(name = "id", nullable = false)
