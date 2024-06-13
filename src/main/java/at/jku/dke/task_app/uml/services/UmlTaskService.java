@@ -14,6 +14,15 @@ import at.jku.dke.task_app.uml.data.repositories.UmlTaskRepository;
 import at.jku.dke.task_app.uml.dto.ModifyUmlTaskDto;
 import at.jku.dke.task_app.uml.dto.UmlBlockAltDto;
 import at.jku.dke.task_app.uml.dto.UmlBlockDto;
+import at.jku.dke.task_app.uml.evaluation.MyPlantUML_ATGListener;
+import at.jku.dke.task_app.uml.evaluation.atg.gen.PlantUML_ATGLexer;
+import at.jku.dke.task_app.uml.evaluation.atg.gen.PlantUML_ATGParser;
+import at.jku.dke.task_app.uml.evaluation.atg.objects.UMLClass;
+import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.CharStreams;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -79,6 +88,7 @@ public class UmlTaskService extends BaseTaskService<UmlTask, ModifyUmlTaskDto>{
             }
 
         }
+        generateObjectsFromSolution(task, dto);
         //get all identifiers from the task;
     }
 
@@ -123,5 +133,26 @@ public class UmlTaskService extends BaseTaskService<UmlTask, ModifyUmlTaskDto>{
             this.messageSource.getMessage("defaultTaskDescription", null, Locale.GERMAN),
             this.messageSource.getMessage("defaultTaskDescription", null, Locale.ENGLISH)
         );
+    }
+
+    protected void generateObjectsFromSolution(UmlTask task, ModifyTaskDto<ModifyUmlTaskDto> dto) {
+        for (UmlBlockDto umlBlockDto : dto.additionalData().umlSolution()) {
+            UmlBlock umlBlock = new UmlBlock();
+            umlBlock.setTask(task);
+            umlBlockRepository.save(umlBlock);
+            for (UmlBlockAltDto umlBlockAltDto : umlBlockDto.getUmlBlockAlt()) {
+                String solution = umlBlockAltDto.getSolutionBlockAlternative();
+                CharStream input = CharStreams.fromString(solution);
+                PlantUML_ATGLexer lexer = new PlantUML_ATGLexer(input);
+                CommonTokenStream tokens = new CommonTokenStream(lexer);
+                PlantUML_ATGParser parser = new PlantUML_ATGParser(tokens);
+                ParseTree tree = parser.start();
+                ParseTreeWalker walker = new ParseTreeWalker();
+                MyPlantUML_ATGListener listener = new MyPlantUML_ATGListener();
+                walker.walk(listener, tree);
+                List<UMLClass> umlClasses = listener.getUmlClasses();
+                System.out.println(umlClasses);
+            }
+        }
     }
 }

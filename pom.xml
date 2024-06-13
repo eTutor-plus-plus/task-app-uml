@@ -3,6 +3,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+
+
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
@@ -96,6 +98,7 @@
             <artifactId>therapi-runtime-javadoc</artifactId>
             <version>0.15.0</version>
         </dependency>
+        <!-- ANTLR -->
         <dependency>
             <groupId>org.antlr</groupId>
             <artifactId>antlr4-runtime</artifactId>
@@ -232,7 +235,7 @@
             <plugin>
                 <groupId>org.antlr</groupId>
                 <artifactId>antlr4-maven-plugin</artifactId>
-                <version>4.7.1</version>
+                <version>4.13.1</version>
                 <executions>
                     <execution>
                         <goals>
@@ -240,6 +243,9 @@
                         </goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <outputDirectory>${project.basedir}/src/main/java/at/jku/dke/task_app/uml/evaluation/atg/gen</outputDirectory>
+                </configuration>
             </plugin>
         </plugins>
     </build>
