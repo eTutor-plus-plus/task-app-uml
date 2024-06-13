@@ -74,7 +74,6 @@ public class UmlTaskService extends BaseTaskService<UmlTask, ModifyUmlTaskDto>{
 
     @Override
     protected void afterCreate(UmlTask task, ModifyTaskDto<ModifyUmlTaskDto> dto) {
-        //task.setCompleteComoarison(dto.additionalData().completeComparison());
         super.afterCreate(task, dto);
         for (UmlBlockDto umlBlockDto : dto.additionalData().umlSolution()) {
             UmlBlock umlBlock = new UmlBlock();
@@ -103,7 +102,20 @@ public class UmlTaskService extends BaseTaskService<UmlTask, ModifyUmlTaskDto>{
     @Override
     protected void afterUpdate(UmlTask task, ModifyTaskDto<ModifyUmlTaskDto> dto) {
         super.afterUpdate(task, dto);
-        afterCreate(task, dto);
+        for (UmlBlockDto umlBlockDto : dto.additionalData().umlSolution()) {
+            UmlBlock umlBlock = new UmlBlock();
+            umlBlock.setTask(task);
+            umlBlockRepository.save(umlBlock);
+            for (UmlBlockAltDto umlBlockAltDto : umlBlockDto.getUmlBlockAlt()) {
+                UmlBlockAlt umlBlockAlt = new UmlBlockAlt();
+                umlBlockAlt.setUmlBlock(umlBlock);
+                umlBlockAlt.setUmlBlockAlternative(umlBlockAltDto.getSolutionBlockAlternative());
+                umlBlockAltRepository.save(umlBlockAlt);
+            }
+
+        }
+        generateObjectsFromSolution(task, dto);
+        //get all identifiers from the task;
     }
 
     @Override
