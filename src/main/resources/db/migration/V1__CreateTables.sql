@@ -8,6 +8,7 @@ CREATE CAST (CHARACTER VARYING as submission_mode) WITH INOUT AS IMPLICIT;
 CREATE TABLE umlTask
 (
     id            BIGINT        NOT NULL,
+    complete_comparison BOOLEAN NOT NULL,
     max_points    NUMERIC(7, 2) NOT NULL,
     status        TASK_STATUS   NOT NULL,
     identifiers   TEXT       ,

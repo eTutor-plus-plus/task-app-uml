@@ -1,18 +1,5 @@
 grammar PlantUML_ATG;
 
-@header {
-import java.util.*;
-import at.jku.dke.etutor.modules.uml.atg.objects.*;
-}
-
-@members {
-    List<UMLClass> umlClasses = new ArrayList<>();
-    Map<String, List<UMLAttribute>> attributesMap = new HashMap<>();
-    List<UMLRelationship> relationships = new ArrayList<>();
-    Map<String, UMLClass> classMap = new HashMap<>();
-    String currentClassName; // To track current class in context for attributes
-}
-
 // Parser Rules
 classDiagram: '@startuml' (classDefinition | relationship | multiRelationship | constraints | note | noteConnection | association)* '@enduml'
                 {
@@ -21,15 +8,15 @@ classDiagram: '@startuml' (classDefinition | relationship | multiRelationship | 
                     System.out.println("Relationships: " + relationships);
                 };
 
-association: '(' className[0] ',' className[1] ')' '..' className[2]
+association: '(' className1=className ',' className2=className ')' '..' className3=className
                 {
-                    UMLAssociation assoc = new UMLAssociation(classMap.get($className[0].text), classMap.get($className[1].text), classMap.get($className[2].text));
+                    UMLAssociation assoc = new UMLAssociation(classMap.get($className1.text), classMap.get($className2.text), classMap.get($className3.text));
                     relationships.add(assoc);
                 };
 
 noteConnection: noteName '..' multiRelationshipName;
 
-constraints: '(' className[0] ',' className[1] ')' '..' '(' className[2] ',' className[3] ')' ':' '{' constrainttype '}';
+constraints: '(' className1=className ',' className2=className ')' '..' '(' className3=className ',' className4=className ')' ':' '{' constrainttype '}';
 
 constrainttype: ('disjoint'|'overlapping'|('Teilmenge' labelMultiplicity)|('Ungleich' labelMultiplicity?));
 
@@ -38,11 +25,11 @@ note: 'note' '"' noteText '"' 'as' noteName;
 noteName: Identifier;
 noteText: Identifier;
 
-classDefinition: visibility? abstractModifier? 'class' className[true] ('extends' parentClassName)?
+classDefinition: visibility? abstractModifier? 'class' className ('extends' parentClassName)?
                 {
                     UMLClass clazz = new UMLClass($className.text);
-                    clazz.setAbstract($abstractModifier != null && $abstractModifier.text != null);
-                    if ($parentClassName != null && $parentClassName.text != null) {
+                    clazz.setAbstract($abstractModifier.text != null);
+                    if ($parentClassName.text != null && $parentClassName.text != null) {
                         clazz.setParentClass(classMap.get($parentClassName.text));
                     }
                     umlClasses.add(clazz);
@@ -56,21 +43,21 @@ multiRelationship: 'diamond' multiRelationshipName;
 attribute: attributeName attributeModifier?
                 {
                     UMLAttribute attr = new UMLAttribute($attributeName.text);
-                    attr.setModifier($attributeModifier != null ? $attributeModifier.text : null);
+                    attr.setModifier($attributeModifier.text != null);
                     attributesMap.get(currentClassName).add(attr);
                 };
 
 attributeModifier: '{ID}';
 
-relationship: participant[0] relationTyp participant[1] (':' label)? labelMultiplicity?
+relationship: participant1=participant relationTyp participant2=participant (':' label)? labelMultiplicity?
                 {
-                    UMLRelationship relationship = new UMLRelationship(classMap.get($participant[0].text), classMap.get($participant[1].text), $relationTyp.text);
+                    UMLRelationship relationship = new UMLRelationship(classMap.get($participant1.text), classMap.get($participant2.text), $relationTyp.text);
                     relationships.add(relationship);
                 };
 
 relationTyp: ('*--'|'--' | '<--' | '---|>' | '<|--');
 
-participant: participantMultiplicity? className[false] participantMultiplicity?
+participant: participantMultiplicity? className participantMultiplicity?
                 {
                     currentClassName = $className.text;
                 };
@@ -80,11 +67,9 @@ participantMultiplicity: '"'('*'|cardinality|(cardinality'..'cardinality))'"';
 // Lexer Rules
 visibility: ('+' | '-' | '#' | '~');
 abstractModifier: 'abstract';
-className[boolean create]: Identifier
+className: Identifier
                     {
-                        if ($create) {
-                            currentClassName = $Identifier.text;
-                        }
+                        currentClassName = $Identifier.text;
                     };
 parentClassName: Identifier;
 attributeName: Identifier;

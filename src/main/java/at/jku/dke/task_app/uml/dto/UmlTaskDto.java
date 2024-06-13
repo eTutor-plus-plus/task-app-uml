@@ -10,5 +10,5 @@ import java.util.List;
  *
  * @param umlSolution The solution.
  */
-public record UmlTaskDto(@NotNull List<UmlBlockDto> umlSolution) implements Serializable {
+public record UmlTaskDto(@NotNull boolean completeComparison, @NotNull List<UmlBlockDto> umlSolution) implements Serializable {
 }

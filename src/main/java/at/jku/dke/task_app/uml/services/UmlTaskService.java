@@ -10,6 +10,7 @@ import at.jku.dke.task_app.uml.data.entities.UmlBlockAlt;
 import at.jku.dke.task_app.uml.data.entities.UmlTask;
 import at.jku.dke.task_app.uml.data.repositories.UmlBlockAltRepository;
 import at.jku.dke.task_app.uml.data.repositories.UmlBlockRepository;
+import at.jku.dke.task_app.uml.data.repositories.UmlTaskRepository;
 import at.jku.dke.task_app.uml.dto.ModifyUmlTaskDto;
 import at.jku.dke.task_app.uml.dto.UmlBlockAltDto;
 import at.jku.dke.task_app.uml.dto.UmlBlockDto;
@@ -18,7 +19,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -32,19 +32,21 @@ public class UmlTaskService extends BaseTaskService<UmlTask, ModifyUmlTaskDto>{
     private final TaskRepository<UmlTask> repository;
     private final UmlBlockRepository umlBlockRepository;
     private final UmlBlockAltRepository umlBlockAltRepository;
+    private final UmlTaskRepository umlTaskRepository;
 
     /**
      * Creates a new instance of class {@link BaseTaskService}.
      *
      * @param repository The task repository.
      */
-    protected UmlTaskService(TaskRepository<UmlTask> repository, MessageSource messageSource, TaskRepository<UmlTask> repository1, UmlBlockRepository umlBlockRepository, UmlBlockAltRepository umlBlockAltRepository) {
+    protected UmlTaskService(TaskRepository<UmlTask> repository, MessageSource messageSource, TaskRepository<UmlTask> repository1, UmlBlockRepository umlBlockRepository, UmlBlockAltRepository umlBlockAltRepository, UmlTaskRepository umlTaskRepository) {
         super(repository);
         this.messageSource = messageSource;
         this.repository = repository1;
 
         this.umlBlockRepository = umlBlockRepository;
         this.umlBlockAltRepository = umlBlockAltRepository;
+        this.umlTaskRepository = umlTaskRepository;
     }
 
 
@@ -54,13 +56,16 @@ public class UmlTaskService extends BaseTaskService<UmlTask, ModifyUmlTaskDto>{
         if (!modifyTaskDto.taskType().equals("uml"))
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid task type.");
 
+
         UmlTask task = new UmlTask();
+        task.setCompleteComparison(modifyTaskDto.additionalData().completeComparison());
         task.setId(id);
         return task;
     }
 
     @Override
     protected void afterCreate(UmlTask task, ModifyTaskDto<ModifyUmlTaskDto> dto) {
+        //task.setCompleteComoarison(dto.additionalData().completeComparison());
         super.afterCreate(task, dto);
         for (UmlBlockDto umlBlockDto : dto.additionalData().umlSolution()) {
             UmlBlock umlBlock = new UmlBlock();
@@ -79,11 +84,38 @@ public class UmlTaskService extends BaseTaskService<UmlTask, ModifyUmlTaskDto>{
 
     @Override
     protected void updateTask(UmlTask task, ModifyTaskDto<ModifyUmlTaskDto> dto) {
+        deleteBlocks(task);
 
+        task.setCompleteComparison(dto.additionalData().completeComparison());
+        umlTaskRepository.save(task);
     }
 
+    @Override
+    protected void afterUpdate(UmlTask task, ModifyTaskDto<ModifyUmlTaskDto> dto) {
+        super.afterUpdate(task, dto);
+        afterCreate(task, dto);
+    }
 
+    @Override
+    public void delete(long id) {
+        umlTaskRepository.findById(id).ifPresent(task -> {
+            if (deleteBlocks(task)) {
+                super.delete(id);
+            }
+        });
+    }
 
+    private boolean deleteBlocks(UmlTask task){
+        List<UmlBlock> umlBlocks = umlBlockRepository.findByTask(task);
+        for (UmlBlock umlBlock : umlBlocks) {
+            List<UmlBlockAlt> umlBlockAlts = umlBlockAltRepository.findByUmlBlock(umlBlock);
+            for (UmlBlockAlt umlBlockAlt : umlBlockAlts) {
+                umlBlockAltRepository.delete(umlBlockAlt);
+            }
+            umlBlockRepository.delete(umlBlock);
+        }
+        return true;
+    }
 
     @Override
     protected TaskModificationResponseDto mapToReturnData(UmlTask task, boolean create) {

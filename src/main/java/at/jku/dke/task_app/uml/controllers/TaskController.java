@@ -47,7 +47,7 @@ public class TaskController extends BaseTaskController<UmlTask, UmlTaskDto, Modi
 
             umlBlockDtos.add(umlBlockDto);
         }
-        return new UmlTaskDto(umlBlockDtos);
+        return new UmlTaskDto(task.getCompleteComparison(), umlBlockDtos);
     }
 }
 
