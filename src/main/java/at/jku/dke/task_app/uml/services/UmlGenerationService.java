@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class UmlGenerationService {
@@ -63,10 +64,10 @@ public class UmlGenerationService {
                 ParseTreeWalker walker = new ParseTreeWalker();
                 MyPlantUML_ATGListener listener = new MyPlantUML_ATGListener();
                 walker.walk(listener, tree);
-                umlClasses = listener.getUmlClasses();
-                relationships = listener.getRelationships();
-                associations = listener.getAssociations();
-                constraints = listener.getConstraints();
+                umlClasses.addAll(listener.getUmlClasses());
+                relationships.addAll(listener.getRelationships());
+                associations.addAll(listener.getAssociations());
+                constraints.addAll(listener.getConstraints());
             }
             for (UMLClass umlClass : umlClasses) {
                 if(!identifiers.stream().anyMatch(i -> i.equals(umlClass.getName()))) {
@@ -101,4 +102,32 @@ public class UmlGenerationService {
         task.setIdentifiers(identifiers);
         return identifiers;
     }
+    protected UMLResult generateResultsFromBlockAlt(long id) {
+        UmlBlockAlt umlBlockAlt = umlBlockAltRepository.findById(UUID.fromString(String.valueOf(id))).orElseThrow(() -> new EntityNotFoundException("BlockAlt " + id + " does not exist."));
+        String solution = umlBlockAlt.getUmlBlockAlternative();
+        CharStream input = CharStreams.fromString(solution);
+        PlantUML_ATGLexer lexer = new PlantUML_ATGLexer(input);
+        CommonTokenStream tokens = new CommonTokenStream(lexer);
+        PlantUML_ATGParser parser = new PlantUML_ATGParser(tokens);
+        ParseTree tree = parser.start();
+        ParseTreeWalker walker = new ParseTreeWalker();
+        MyPlantUML_ATGListener listener = new MyPlantUML_ATGListener();
+        walker.walk(listener, tree);
+        UMLResult result = new UMLResult(listener.getUmlClasses(), listener.getRelationships(), listener.getAssociations(), listener.getConstraints());
+        return result;
+    }
+
+    public UMLResult generateResultsFromSubmission(String submission) {
+        CharStream input = CharStreams.fromString(submission);
+        PlantUML_ATGLexer lexer = new PlantUML_ATGLexer(input);
+        CommonTokenStream tokens = new CommonTokenStream(lexer);
+        PlantUML_ATGParser parser = new PlantUML_ATGParser(tokens);
+        ParseTree tree = parser.start();
+        ParseTreeWalker walker = new ParseTreeWalker();
+        MyPlantUML_ATGListener listener = new MyPlantUML_ATGListener();
+        walker.walk(listener, tree);
+        UMLResult result = new UMLResult(listener.getUmlClasses(), listener.getRelationships(), listener.getAssociations(), listener.getConstraints());
+        return result;
+    }
+
 }

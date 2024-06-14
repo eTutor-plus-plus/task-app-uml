@@ -5,6 +5,8 @@ import at.jku.dke.etutor.task_app.dto.GradingDto;
 import at.jku.dke.etutor.task_app.dto.SubmitSubmissionDto;
 import at.jku.dke.task_app.uml.data.repositories.UmlTaskRepository;
 import at.jku.dke.task_app.uml.dto.UmlSubmissionDto;
+import at.jku.dke.task_app.uml.evaluation.atg.objects.UMLResult;
+import at.jku.dke.task_app.uml.services.UmlGenerationService;
 import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +28,7 @@ public class EvaluationService {
 
     private final UmlTaskRepository taskRepository;
     private final MessageSource messageSource;
+    private final UmlGenerationService umlGenerationService;
 
     /**
      * Creates a new instance of class {@link EvaluationService}.
@@ -33,9 +36,10 @@ public class EvaluationService {
      * @param taskRepository The task repository.
      * @param messageSource  The message source.
      */
-    public EvaluationService(UmlTaskRepository taskRepository, MessageSource messageSource) {
+    public EvaluationService(UmlTaskRepository taskRepository, MessageSource messageSource, UmlGenerationService umlGenerationService) {
         this.taskRepository = taskRepository;
         this.messageSource = messageSource;
+        this.umlGenerationService = umlGenerationService;
     }
 
     /**
@@ -49,37 +53,15 @@ public class EvaluationService {
         // find task
         var task = this.taskRepository.findById(submission.taskId()).orElseThrow(() -> new EntityNotFoundException("Task " + submission.taskId() + " does not exist."));
 
-        // evaluate input
-        LOG.info("Evaluating input for task {} with mode {} and feedback-level {}", submission.taskId(), submission.mode(), submission.feedbackLevel());
-        Locale locale = Locale.of(submission.language());
-        BigDecimal points = BigDecimal.ZERO;
-        List<CriterionDto> criteria = new ArrayList<>();
-        String feedback;
+        // evaluate
+        var points = BigDecimal.ZERO;
+        var criteria = new ArrayList<CriterionDto>();
+        UMLResult umlResultSubmission = umlGenerationService.generateResultsFromSubmission(submission.submission().input());
+        System.out.println(umlResultSubmission);
 
-        // parse input
-        Integer input = null;
-        NumberFormatException error = null;
-        try {
-            input = Integer.parseInt(submission.submission().input());
-        } catch (NumberFormatException ex) {
-            error = ex;
-        }
 
-        if (error != null) {
-            criteria.add(new CriterionDto(
-                this.messageSource.getMessage("criterium.syntax", null, locale),
-                null,
-                false,
-                error.getMessage()));
-        } else {
-            criteria.add(new CriterionDto(
-                this.messageSource.getMessage("criterium.syntax", null, locale),
-                null,
-                true,
-                this.messageSource.getMessage("criterium.syntax.valid", null, locale)));
-        }
+        // evaluate
 
-        // evaluate and grade
 
 
         return new GradingDto(task.getMaxPoints(), points, "", criteria);
