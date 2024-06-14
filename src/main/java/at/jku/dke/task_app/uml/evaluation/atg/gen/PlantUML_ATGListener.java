@@ -1,7 +1,5 @@
 // Generated from PlantUML_ATG.g4 by ANTLR 4.13.1
-
 package at.jku.dke.task_app.uml.evaluation.atg.gen;
-
 import at.jku.dke.task_app.uml.evaluation.atg.objects.UMLAssociation;
 import at.jku.dke.task_app.uml.evaluation.atg.objects.UMLClass;
 import at.jku.dke.task_app.uml.evaluation.atg.objects.UMLAttribute;
@@ -120,6 +118,16 @@ public interface PlantUML_ATGListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitMultiRelationship(PlantUML_ATGParser.MultiRelationshipContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link PlantUML_ATGParser#specialAttribute}.
+	 * @param ctx the parse tree
+	 */
+	void enterSpecialAttribute(PlantUML_ATGParser.SpecialAttributeContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link PlantUML_ATGParser#specialAttribute}.
+	 * @param ctx the parse tree
+	 */
+	void exitSpecialAttribute(PlantUML_ATGParser.SpecialAttributeContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link PlantUML_ATGParser#attribute}.
 	 * @param ctx the parse tree
@@ -240,6 +248,16 @@ public interface PlantUML_ATGListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitParentClassName(PlantUML_ATGParser.ParentClassNameContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link PlantUML_ATGParser#speciallabel}.
+	 * @param ctx the parse tree
+	 */
+	void enterSpeciallabel(PlantUML_ATGParser.SpeciallabelContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link PlantUML_ATGParser#speciallabel}.
+	 * @param ctx the parse tree
+	 */
+	void exitSpeciallabel(PlantUML_ATGParser.SpeciallabelContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link PlantUML_ATGParser#attributeName}.
 	 * @param ctx the parse tree

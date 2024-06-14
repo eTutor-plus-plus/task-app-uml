@@ -50,6 +50,20 @@ public class MyPlantUML_ATGListener extends PlantUML_ATGBaseListener {
     }
 
     @Override
+    public void enterSpecialAttribute(PlantUML_ATGParser.SpecialAttributeContext ctx) {
+        UMLAttribute attribute = new UMLAttribute();
+        attribute.setName(ctx.speciallabel().getText());
+
+        if (ctx.score() != null) {
+            attribute.setPoints(Integer.parseInt(ctx.score().points().getText()));
+        }
+        attribute.setType("special");
+        currentAttributes.add(attribute);
+    }
+
+
+
+    @Override
     public void exitClassDefinition(PlantUML_ATGParser.ClassDefinitionContext ctx) {
         currentClass.setAttributes(currentAttributes);
         currentClass.setAssociations(currentAssociations);
@@ -79,6 +93,9 @@ public class MyPlantUML_ATGListener extends PlantUML_ATGBaseListener {
         relationship.addEntity(entity1);
         relationship.addEntity(entity2);
         relationship.setType(ctx.relationTyp.getText());
+        if(ctx.labelMultiplicity()!=null) {
+            relationship.setDirection(ctx.labelMultiplicity().multiplicity);
+        }
         if(ctx.score()!=null) {
             relationship.setPoints(Integer.parseInt(ctx.score().points().getText()));
         }

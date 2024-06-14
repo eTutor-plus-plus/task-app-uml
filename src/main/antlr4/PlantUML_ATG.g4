@@ -63,9 +63,12 @@ classDefinition: visibility? abstractModifier? 'class' className ('extends' pare
                     classMap.put($className.text, clazz);
                     attributesMap.put($className.text, new ArrayList<>());
                 }
-                '{' (attribute*) '}';
+                '{' ((attribute|specialAttribute)*) '}';
 
 multiRelationship: 'diamond' multiRelationshipName;
+
+specialAttribute: '{' speciallabel '}'  score? ;
+
 
 attribute: attributeName attributeModifier? score?
                 {
@@ -100,7 +103,7 @@ relationship: participant1=participant relationTyp participant2=participant (':'
                                      relationships.add(relation);
                 };
 
-relationTyp: ('*--'|'--' | '<--' | '---|>' | '<|--');
+
 
 participant returns [String multiplicity]
     : participantMultiplicity1=participantMultiplicity? className participantMultiplicity2=participantMultiplicity?
@@ -115,6 +118,7 @@ participantMultiplicity returns [String multiplicity]
              $multiplicity = $text;
          };
 // Lexer Rules
+relationTyp: ('*--'|'--' | '<--' | '---|>' | '<|--');
 visibility: ('+' | '-' | '#' | '~');
 abstractModifier: 'abstract';
 points: Integer;
@@ -123,7 +127,7 @@ className: Identifier
                         currentClassName = $Identifier.text;
                     };
 parentClassName: Identifier;
-
+speciallabel: AnythingButCurlyBraces+;
 attributeName: Identifier;
 label: Identifier+;
 multiRelationshipName: Identifier;
@@ -137,7 +141,7 @@ cardinality: Integer;
 WS: [ \t\r\n]+ -> skip;
 Identifier: [a-zA-Z_][a-zA-Z0-9_]*;
 Integer : [0-9]+;
-
+AnythingButCurlyBraces : ~'}';
 
 // Parser entry point
 

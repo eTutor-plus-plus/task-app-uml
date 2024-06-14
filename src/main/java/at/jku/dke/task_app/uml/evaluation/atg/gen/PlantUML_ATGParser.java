@@ -1,9 +1,5 @@
 // Generated from PlantUML_ATG.g4 by ANTLR 4.13.1
-
-
 package at.jku.dke.task_app.uml.evaluation.atg.gen;
-
-
 import at.jku.dke.task_app.uml.evaluation.atg.objects.UMLAssociation;
 import at.jku.dke.task_app.uml.evaluation.atg.objects.UMLClass;
 import at.jku.dke.task_app.uml.evaluation.atg.objects.UMLAttribute;
@@ -37,24 +33,26 @@ public class PlantUML_ATGParser extends Parser {
 		T__17=18, T__18=19, T__19=20, T__20=21, T__21=22, T__22=23, T__23=24,
 		T__24=25, T__25=26, T__26=27, T__27=28, T__28=29, T__29=30, T__30=31,
 		T__31=32, T__32=33, T__33=34, T__34=35, T__35=36, WS=37, Identifier=38,
-		Integer=39;
+		Integer=39, AnythingButCurlyBraces=40;
 	public static final int
 		RULE_classDiagram = 0, RULE_association = 1, RULE_noteConnection = 2,
 		RULE_constraints = 3, RULE_constrainttype = 4, RULE_note = 5, RULE_noteName = 6,
 		RULE_noteText = 7, RULE_classDefinition = 8, RULE_multiRelationship = 9,
-		RULE_attribute = 10, RULE_attributeModifier = 11, RULE_score = 12, RULE_relationship = 13,
-		RULE_relationTyp = 14, RULE_participant = 15, RULE_participantMultiplicity = 16,
-		RULE_visibility = 17, RULE_abstractModifier = 18, RULE_points = 19, RULE_className = 20,
-		RULE_parentClassName = 21, RULE_attributeName = 22, RULE_label = 23, RULE_multiRelationshipName = 24,
-		RULE_labelMultiplicity = 25, RULE_cardinality = 26, RULE_start = 27;
+		RULE_specialAttribute = 10, RULE_attribute = 11, RULE_attributeModifier = 12,
+		RULE_score = 13, RULE_relationship = 14, RULE_relationTyp = 15, RULE_participant = 16,
+		RULE_participantMultiplicity = 17, RULE_visibility = 18, RULE_abstractModifier = 19,
+		RULE_points = 20, RULE_className = 21, RULE_parentClassName = 22, RULE_speciallabel = 23,
+		RULE_attributeName = 24, RULE_label = 25, RULE_multiRelationshipName = 26,
+		RULE_labelMultiplicity = 27, RULE_cardinality = 28, RULE_start = 29;
 	private static String[] makeRuleNames() {
 		return new String[] {
 			"classDiagram", "association", "noteConnection", "constraints", "constrainttype",
 			"note", "noteName", "noteText", "classDefinition", "multiRelationship",
-			"attribute", "attributeModifier", "score", "relationship", "relationTyp",
-			"participant", "participantMultiplicity", "visibility", "abstractModifier",
-			"points", "className", "parentClassName", "attributeName", "label", "multiRelationshipName",
-			"labelMultiplicity", "cardinality", "start"
+			"specialAttribute", "attribute", "attributeModifier", "score", "relationship",
+			"relationTyp", "participant", "participantMultiplicity", "visibility",
+			"abstractModifier", "points", "className", "parentClassName", "speciallabel",
+			"attributeName", "label", "multiRelationshipName", "labelMultiplicity",
+			"cardinality", "start"
 		};
 	}
 	public static final String[] ruleNames = makeRuleNames();
@@ -74,7 +72,7 @@ public class PlantUML_ATGParser extends Parser {
 			null, null, null, null, null, null, null, null, null, null, null, null,
 			null, null, null, null, null, null, null, null, null, null, null, null,
 			null, null, null, null, null, null, null, null, null, null, null, null,
-			null, "WS", "Identifier", "Integer"
+			null, "WS", "Identifier", "Integer", "AnythingButCurlyBraces"
 		};
 	}
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
@@ -201,65 +199,65 @@ public class PlantUML_ATGParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(56);
+			setState(60);
 			match(T__0);
-			setState(66);
+			setState(70);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 291521609736L) != 0)) {
 				{
-				setState(64);
+				setState(68);
 				_errHandler.sync(this);
 				switch ( getInterpreter().adaptivePredict(_input,0,_ctx) ) {
 				case 1:
 					{
-					setState(57);
+					setState(61);
 					classDefinition();
 					}
 					break;
 				case 2:
 					{
-					setState(58);
+					setState(62);
 					relationship();
 					}
 					break;
 				case 3:
 					{
-					setState(59);
+					setState(63);
 					multiRelationship();
 					}
 					break;
 				case 4:
 					{
-					setState(60);
+					setState(64);
 					constraints();
 					}
 					break;
 				case 5:
 					{
-					setState(61);
+					setState(65);
 					note();
 					}
 					break;
 				case 6:
 					{
-					setState(62);
+					setState(66);
 					noteConnection();
 					}
 					break;
 				case 7:
 					{
-					setState(63);
+					setState(67);
 					association();
 					}
 					break;
 				}
 				}
-				setState(68);
+				setState(72);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
-			setState(69);
+			setState(73);
 			match(T__1);
 
 			                    System.out.println("All Classes: " + umlClasses);
@@ -314,26 +312,26 @@ public class PlantUML_ATGParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(72);
-			match(T__2);
-			setState(73);
-			((AssociationContext)_localctx).className1 = className();
-			setState(74);
-			match(T__3);
-			setState(75);
-			((AssociationContext)_localctx).className2 = className();
 			setState(76);
-			match(T__4);
+			match(T__2);
 			setState(77);
-			match(T__5);
+			((AssociationContext)_localctx).className1 = className();
 			setState(78);
-			((AssociationContext)_localctx).className3 = className();
+			match(T__3);
+			setState(79);
+			((AssociationContext)_localctx).className2 = className();
 			setState(80);
+			match(T__4);
+			setState(81);
+			match(T__5);
+			setState(82);
+			((AssociationContext)_localctx).className3 = className();
+			setState(84);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==T__20) {
 				{
-				setState(79);
+				setState(83);
 				score();
 				}
 			}
@@ -386,11 +384,11 @@ public class PlantUML_ATGParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(84);
+			setState(88);
 			noteName();
-			setState(85);
+			setState(89);
 			match(T__5);
-			setState(86);
+			setState(90);
 			multiRelationshipName();
 			}
 		}
@@ -444,42 +442,42 @@ public class PlantUML_ATGParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(88);
-			match(T__2);
-			setState(89);
-			((ConstraintsContext)_localctx).className1 = className();
-			setState(90);
-			match(T__3);
-			setState(91);
-			((ConstraintsContext)_localctx).className2 = className();
 			setState(92);
-			match(T__4);
-			setState(93);
-			match(T__5);
-			setState(94);
 			match(T__2);
-			setState(95);
-			((ConstraintsContext)_localctx).className3 = className();
-			setState(96);
+			setState(93);
+			((ConstraintsContext)_localctx).className1 = className();
+			setState(94);
 			match(T__3);
-			setState(97);
-			((ConstraintsContext)_localctx).className4 = className();
-			setState(98);
+			setState(95);
+			((ConstraintsContext)_localctx).className2 = className();
+			setState(96);
 			match(T__4);
+			setState(97);
+			match(T__5);
+			setState(98);
+			match(T__2);
 			setState(99);
-			match(T__6);
+			((ConstraintsContext)_localctx).className3 = className();
 			setState(100);
-			match(T__7);
+			match(T__3);
 			setState(101);
-			constrainttype();
+			((ConstraintsContext)_localctx).className4 = className();
 			setState(102);
-			match(T__8);
+			match(T__4);
+			setState(103);
+			match(T__6);
 			setState(104);
+			match(T__7);
+			setState(105);
+			constrainttype();
+			setState(106);
+			match(T__8);
+			setState(108);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==T__20) {
 				{
-				setState(103);
+				setState(107);
 				score();
 				}
 			}
@@ -523,27 +521,27 @@ public class PlantUML_ATGParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(114);
+			setState(118);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case T__9:
 				{
-				setState(106);
+				setState(110);
 				match(T__9);
 				}
 				break;
 			case T__10:
 				{
-				setState(107);
+				setState(111);
 				match(T__10);
 				}
 				break;
 			case T__11:
 				{
 				{
-				setState(108);
+				setState(112);
 				match(T__11);
-				setState(109);
+				setState(113);
 				labelMultiplicity();
 				}
 				}
@@ -551,14 +549,14 @@ public class PlantUML_ATGParser extends Parser {
 			case T__12:
 				{
 				{
-				setState(110);
+				setState(114);
 				match(T__12);
-				setState(112);
+				setState(116);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & 121064390656L) != 0)) {
 					{
-					setState(111);
+					setState(115);
 					labelMultiplicity();
 					}
 				}
@@ -610,17 +608,17 @@ public class PlantUML_ATGParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(116);
-			match(T__13);
-			setState(117);
-			match(T__14);
-			setState(118);
-			noteText();
-			setState(119);
-			match(T__14);
 			setState(120);
-			match(T__15);
+			match(T__13);
 			setState(121);
+			match(T__14);
+			setState(122);
+			noteText();
+			setState(123);
+			match(T__14);
+			setState(124);
+			match(T__15);
+			setState(125);
 			noteName();
 			}
 		}
@@ -658,7 +656,7 @@ public class PlantUML_ATGParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(123);
+			setState(127);
 			match(Identifier);
 			}
 		}
@@ -696,7 +694,7 @@ public class PlantUML_ATGParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(125);
+			setState(129);
 			match(Identifier);
 			}
 		}
@@ -737,6 +735,12 @@ public class PlantUML_ATGParser extends Parser {
 		public AttributeContext attribute(int i) {
 			return getRuleContext(AttributeContext.class,i);
 		}
+		public List<SpecialAttributeContext> specialAttribute() {
+			return getRuleContexts(SpecialAttributeContext.class);
+		}
+		public SpecialAttributeContext specialAttribute(int i) {
+			return getRuleContext(SpecialAttributeContext.class,i);
+		}
 		public ClassDefinitionContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -758,48 +762,48 @@ public class PlantUML_ATGParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(128);
+			setState(132);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & 8053063680L) != 0)) {
 				{
-				setState(127);
+				setState(131);
 				visibility();
 				}
 			}
 
-			setState(131);
+			setState(135);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==T__32) {
 				{
-				setState(130);
+				setState(134);
 				((ClassDefinitionContext)_localctx).abstractModifier = abstractModifier();
 				}
 			}
 
-			setState(133);
-			match(T__16);
-			setState(134);
-			((ClassDefinitionContext)_localctx).className = className();
 			setState(137);
+			match(T__16);
+			setState(138);
+			((ClassDefinitionContext)_localctx).className = className();
+			setState(141);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==T__17) {
 				{
-				setState(135);
+				setState(139);
 				match(T__17);
-				setState(136);
+				setState(140);
 				((ClassDefinitionContext)_localctx).parentClassName = parentClassName();
 				}
 			}
 
-			setState(140);
+			setState(144);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==T__20) {
 				{
-				setState(139);
+				setState(143);
 				score();
 				}
 			}
@@ -814,25 +818,39 @@ public class PlantUML_ATGParser extends Parser {
 			                    classMap.put((((ClassDefinitionContext)_localctx).className!=null?_input.getText(((ClassDefinitionContext)_localctx).className.start,((ClassDefinitionContext)_localctx).className.stop):null), clazz);
 			                    attributesMap.put((((ClassDefinitionContext)_localctx).className!=null?_input.getText(((ClassDefinitionContext)_localctx).className.start,((ClassDefinitionContext)_localctx).className.stop):null), new ArrayList<>());
 
-			setState(143);
+			setState(147);
 			match(T__7);
 			{
-			setState(147);
+			setState(152);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while (_la==Identifier) {
+			while (_la==T__7 || _la==Identifier) {
 				{
-				{
-				setState(144);
-				attribute();
+				setState(150);
+				_errHandler.sync(this);
+				switch (_input.LA(1)) {
+				case Identifier:
+					{
+					setState(148);
+					attribute();
+					}
+					break;
+				case T__7:
+					{
+					setState(149);
+					specialAttribute();
+					}
+					break;
+				default:
+					throw new NoViableAltException(this);
 				}
 				}
-				setState(149);
+				setState(154);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
 			}
-			setState(150);
+			setState(155);
 			match(T__8);
 			}
 		}
@@ -872,10 +890,68 @@ public class PlantUML_ATGParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(152);
+			setState(157);
 			match(T__18);
-			setState(153);
+			setState(158);
 			multiRelationshipName();
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	@SuppressWarnings("CheckReturnValue")
+	public static class SpecialAttributeContext extends ParserRuleContext {
+		public SpeciallabelContext speciallabel() {
+			return getRuleContext(SpeciallabelContext.class,0);
+		}
+		public ScoreContext score() {
+			return getRuleContext(ScoreContext.class,0);
+		}
+		public SpecialAttributeContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_specialAttribute; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PlantUML_ATGListener ) ((PlantUML_ATGListener)listener).enterSpecialAttribute(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PlantUML_ATGListener ) ((PlantUML_ATGListener)listener).exitSpecialAttribute(this);
+		}
+	}
+
+	public final SpecialAttributeContext specialAttribute() throws RecognitionException {
+		SpecialAttributeContext _localctx = new SpecialAttributeContext(_ctx, getState());
+		enterRule(_localctx, 20, RULE_specialAttribute);
+		int _la;
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(160);
+			match(T__7);
+			setState(161);
+			speciallabel();
+			setState(162);
+			match(T__8);
+			setState(164);
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			if (_la==T__20) {
+				{
+				setState(163);
+				score();
+				}
+			}
+
 			}
 		}
 		catch (RecognitionException re) {
@@ -918,29 +994,29 @@ public class PlantUML_ATGParser extends Parser {
 
 	public final AttributeContext attribute() throws RecognitionException {
 		AttributeContext _localctx = new AttributeContext(_ctx, getState());
-		enterRule(_localctx, 20, RULE_attribute);
+		enterRule(_localctx, 22, RULE_attribute);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(155);
+			setState(166);
 			((AttributeContext)_localctx).attributeName = attributeName();
-			setState(157);
+			setState(168);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==T__19) {
 				{
-				setState(156);
+				setState(167);
 				((AttributeContext)_localctx).attributeModifier = attributeModifier();
 				}
 			}
 
-			setState(160);
+			setState(171);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==T__20) {
 				{
-				setState(159);
+				setState(170);
 				score();
 				}
 			}
@@ -983,11 +1059,11 @@ public class PlantUML_ATGParser extends Parser {
 
 	public final AttributeModifierContext attributeModifier() throws RecognitionException {
 		AttributeModifierContext _localctx = new AttributeModifierContext(_ctx, getState());
-		enterRule(_localctx, 22, RULE_attributeModifier);
+		enterRule(_localctx, 24, RULE_attributeModifier);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(164);
+			setState(175);
 			match(T__19);
 			}
 		}
@@ -1023,15 +1099,15 @@ public class PlantUML_ATGParser extends Parser {
 
 	public final ScoreContext score() throws RecognitionException {
 		ScoreContext _localctx = new ScoreContext(_ctx, getState());
-		enterRule(_localctx, 24, RULE_score);
+		enterRule(_localctx, 26, RULE_score);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(166);
+			setState(177);
 			match(T__20);
-			setState(167);
+			setState(178);
 			points();
-			setState(168);
+			setState(179);
 			match(T__21);
 			}
 		}
@@ -1086,45 +1162,45 @@ public class PlantUML_ATGParser extends Parser {
 
 	public final RelationshipContext relationship() throws RecognitionException {
 		RelationshipContext _localctx = new RelationshipContext(_ctx, getState());
-		enterRule(_localctx, 26, RULE_relationship);
+		enterRule(_localctx, 28, RULE_relationship);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(170);
+			setState(181);
 			((RelationshipContext)_localctx).participant1 = participant();
-			setState(171);
+			setState(182);
 			((RelationshipContext)_localctx).relationTyp = relationTyp();
-			setState(172);
+			setState(183);
 			((RelationshipContext)_localctx).participant2 = participant();
-			setState(175);
+			setState(186);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==T__6) {
 				{
-				setState(173);
+				setState(184);
 				match(T__6);
-				setState(174);
+				setState(185);
 				((RelationshipContext)_localctx).label = label();
 				}
 			}
 
-			setState(178);
+			setState(189);
 			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,14,_ctx) ) {
+			switch ( getInterpreter().adaptivePredict(_input,16,_ctx) ) {
 			case 1:
 				{
-				setState(177);
+				setState(188);
 				labelMultiplicity();
 				}
 				break;
 			}
-			setState(181);
+			setState(192);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==T__20) {
 				{
-				setState(180);
+				setState(191);
 				score();
 				}
 			}
@@ -1180,12 +1256,12 @@ public class PlantUML_ATGParser extends Parser {
 
 	public final RelationTypContext relationTyp() throws RecognitionException {
 		RelationTypContext _localctx = new RelationTypContext(_ctx, getState());
-		enterRule(_localctx, 28, RULE_relationTyp);
+		enterRule(_localctx, 30, RULE_relationTyp);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(185);
+			setState(196);
 			_la = _input.LA(1);
 			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & 260046848L) != 0)) ) {
 			_errHandler.recoverInline(this);
@@ -1239,29 +1315,29 @@ public class PlantUML_ATGParser extends Parser {
 
 	public final ParticipantContext participant() throws RecognitionException {
 		ParticipantContext _localctx = new ParticipantContext(_ctx, getState());
-		enterRule(_localctx, 30, RULE_participant);
+		enterRule(_localctx, 32, RULE_participant);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(188);
+			setState(199);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==T__14) {
 				{
-				setState(187);
+				setState(198);
 				((ParticipantContext)_localctx).participantMultiplicity1 = participantMultiplicity();
 				}
 			}
 
-			setState(190);
+			setState(201);
 			((ParticipantContext)_localctx).className = className();
-			setState(192);
+			setState(203);
 			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,17,_ctx) ) {
+			switch ( getInterpreter().adaptivePredict(_input,19,_ctx) ) {
 			case 1:
 				{
-				setState(191);
+				setState(202);
 				((ParticipantContext)_localctx).participantMultiplicity2 = participantMultiplicity();
 				}
 				break;
@@ -1308,41 +1384,41 @@ public class PlantUML_ATGParser extends Parser {
 
 	public final ParticipantMultiplicityContext participantMultiplicity() throws RecognitionException {
 		ParticipantMultiplicityContext _localctx = new ParticipantMultiplicityContext(_ctx, getState());
-		enterRule(_localctx, 32, RULE_participantMultiplicity);
+		enterRule(_localctx, 34, RULE_participantMultiplicity);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(196);
+			setState(207);
 			match(T__14);
-			setState(203);
+			setState(214);
 			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,18,_ctx) ) {
+			switch ( getInterpreter().adaptivePredict(_input,20,_ctx) ) {
 			case 1:
 				{
-				setState(197);
+				setState(208);
 				match(T__27);
 				}
 				break;
 			case 2:
 				{
-				setState(198);
+				setState(209);
 				cardinality();
 				}
 				break;
 			case 3:
 				{
 				{
-				setState(199);
+				setState(210);
 				cardinality();
-				setState(200);
+				setState(211);
 				match(T__5);
-				setState(201);
+				setState(212);
 				cardinality();
 				}
 				}
 				break;
 			}
-			setState(205);
+			setState(216);
 			match(T__14);
 
 			             ((ParticipantMultiplicityContext)_localctx).multiplicity =  _input.getText(_localctx.start, _input.LT(-1));
@@ -1378,12 +1454,12 @@ public class PlantUML_ATGParser extends Parser {
 
 	public final VisibilityContext visibility() throws RecognitionException {
 		VisibilityContext _localctx = new VisibilityContext(_ctx, getState());
-		enterRule(_localctx, 34, RULE_visibility);
+		enterRule(_localctx, 36, RULE_visibility);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(208);
+			setState(219);
 			_la = _input.LA(1);
 			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & 8053063680L) != 0)) ) {
 			_errHandler.recoverInline(this);
@@ -1424,11 +1500,11 @@ public class PlantUML_ATGParser extends Parser {
 
 	public final AbstractModifierContext abstractModifier() throws RecognitionException {
 		AbstractModifierContext _localctx = new AbstractModifierContext(_ctx, getState());
-		enterRule(_localctx, 36, RULE_abstractModifier);
+		enterRule(_localctx, 38, RULE_abstractModifier);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(210);
+			setState(221);
 			match(T__32);
 			}
 		}
@@ -1462,11 +1538,11 @@ public class PlantUML_ATGParser extends Parser {
 
 	public final PointsContext points() throws RecognitionException {
 		PointsContext _localctx = new PointsContext(_ctx, getState());
-		enterRule(_localctx, 38, RULE_points);
+		enterRule(_localctx, 40, RULE_points);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(212);
+			setState(223);
 			match(Integer);
 			}
 		}
@@ -1501,11 +1577,11 @@ public class PlantUML_ATGParser extends Parser {
 
 	public final ClassNameContext className() throws RecognitionException {
 		ClassNameContext _localctx = new ClassNameContext(_ctx, getState());
-		enterRule(_localctx, 40, RULE_className);
+		enterRule(_localctx, 42, RULE_className);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(214);
+			setState(225);
 			((ClassNameContext)_localctx).Identifier = match(Identifier);
 
 			                        currentClassName = (((ClassNameContext)_localctx).Identifier!=null?((ClassNameContext)_localctx).Identifier.getText():null);
@@ -1542,12 +1618,66 @@ public class PlantUML_ATGParser extends Parser {
 
 	public final ParentClassNameContext parentClassName() throws RecognitionException {
 		ParentClassNameContext _localctx = new ParentClassNameContext(_ctx, getState());
-		enterRule(_localctx, 42, RULE_parentClassName);
+		enterRule(_localctx, 44, RULE_parentClassName);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(217);
+			setState(228);
 			match(Identifier);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	@SuppressWarnings("CheckReturnValue")
+	public static class SpeciallabelContext extends ParserRuleContext {
+		public List<TerminalNode> AnythingButCurlyBraces() { return getTokens(PlantUML_ATGParser.AnythingButCurlyBraces); }
+		public TerminalNode AnythingButCurlyBraces(int i) {
+			return getToken(PlantUML_ATGParser.AnythingButCurlyBraces, i);
+		}
+		public SpeciallabelContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_speciallabel; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof PlantUML_ATGListener ) ((PlantUML_ATGListener)listener).enterSpeciallabel(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof PlantUML_ATGListener ) ((PlantUML_ATGListener)listener).exitSpeciallabel(this);
+		}
+	}
+
+	public final SpeciallabelContext speciallabel() throws RecognitionException {
+		SpeciallabelContext _localctx = new SpeciallabelContext(_ctx, getState());
+		enterRule(_localctx, 46, RULE_speciallabel);
+		int _la;
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(231);
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			do {
+				{
+				{
+				setState(230);
+				match(AnythingButCurlyBraces);
+				}
+				}
+				setState(233);
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+			} while ( _la==AnythingButCurlyBraces );
 			}
 		}
 		catch (RecognitionException re) {
@@ -1580,11 +1710,11 @@ public class PlantUML_ATGParser extends Parser {
 
 	public final AttributeNameContext attributeName() throws RecognitionException {
 		AttributeNameContext _localctx = new AttributeNameContext(_ctx, getState());
-		enterRule(_localctx, 44, RULE_attributeName);
+		enterRule(_localctx, 48, RULE_attributeName);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(219);
+			setState(235);
 			match(Identifier);
 			}
 		}
@@ -1621,12 +1751,12 @@ public class PlantUML_ATGParser extends Parser {
 
 	public final LabelContext label() throws RecognitionException {
 		LabelContext _localctx = new LabelContext(_ctx, getState());
-		enterRule(_localctx, 46, RULE_label);
+		enterRule(_localctx, 50, RULE_label);
 		try {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(222);
+			setState(238);
 			_errHandler.sync(this);
 			_alt = 1;
 			do {
@@ -1634,7 +1764,7 @@ public class PlantUML_ATGParser extends Parser {
 				case 1:
 					{
 					{
-					setState(221);
+					setState(237);
 					match(Identifier);
 					}
 					}
@@ -1642,9 +1772,9 @@ public class PlantUML_ATGParser extends Parser {
 				default:
 					throw new NoViableAltException(this);
 				}
-				setState(224);
+				setState(240);
 				_errHandler.sync(this);
-				_alt = getInterpreter().adaptivePredict(_input,19,_ctx);
+				_alt = getInterpreter().adaptivePredict(_input,22,_ctx);
 			} while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER );
 			}
 		}
@@ -1678,11 +1808,11 @@ public class PlantUML_ATGParser extends Parser {
 
 	public final MultiRelationshipNameContext multiRelationshipName() throws RecognitionException {
 		MultiRelationshipNameContext _localctx = new MultiRelationshipNameContext(_ctx, getState());
-		enterRule(_localctx, 48, RULE_multiRelationshipName);
+		enterRule(_localctx, 52, RULE_multiRelationshipName);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(226);
+			setState(242);
 			match(Identifier);
 			}
 		}
@@ -1716,12 +1846,12 @@ public class PlantUML_ATGParser extends Parser {
 
 	public final LabelMultiplicityContext labelMultiplicity() throws RecognitionException {
 		LabelMultiplicityContext _localctx = new LabelMultiplicityContext(_ctx, getState());
-		enterRule(_localctx, 50, RULE_labelMultiplicity);
+		enterRule(_localctx, 54, RULE_labelMultiplicity);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(228);
+			setState(244);
 			_la = _input.LA(1);
 			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & 121064390656L) != 0)) ) {
 			_errHandler.recoverInline(this);
@@ -1766,11 +1896,11 @@ public class PlantUML_ATGParser extends Parser {
 
 	public final CardinalityContext cardinality() throws RecognitionException {
 		CardinalityContext _localctx = new CardinalityContext(_ctx, getState());
-		enterRule(_localctx, 52, RULE_cardinality);
+		enterRule(_localctx, 56, RULE_cardinality);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(231);
+			setState(247);
 			match(Integer);
 			}
 		}
@@ -1806,11 +1936,11 @@ public class PlantUML_ATGParser extends Parser {
 
 	public final StartContext start() throws RecognitionException {
 		StartContext _localctx = new StartContext(_ctx, getState());
-		enterRule(_localctx, 54, RULE_start);
+		enterRule(_localctx, 58, RULE_start);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(233);
+			setState(249);
 			classDiagram();
 			}
 		}
@@ -1826,7 +1956,7 @@ public class PlantUML_ATGParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\u0004\u0001\'\u00ec\u0002\u0000\u0007\u0000\u0002\u0001\u0007\u0001\u0002"+
+		"\u0004\u0001(\u00fc\u0002\u0000\u0007\u0000\u0002\u0001\u0007\u0001\u0002"+
 		"\u0002\u0007\u0002\u0002\u0003\u0007\u0003\u0002\u0004\u0007\u0004\u0002"+
 		"\u0005\u0007\u0005\u0002\u0006\u0007\u0006\u0002\u0007\u0007\u0007\u0002"+
 		"\b\u0007\b\u0002\t\u0007\t\u0002\n\u0007\n\u0002\u000b\u0007\u000b\u0002"+
@@ -1835,138 +1965,151 @@ public class PlantUML_ATGParser extends Parser {
 		"\u0002\u0013\u0007\u0013\u0002\u0014\u0007\u0014\u0002\u0015\u0007\u0015"+
 		"\u0002\u0016\u0007\u0016\u0002\u0017\u0007\u0017\u0002\u0018\u0007\u0018"+
 		"\u0002\u0019\u0007\u0019\u0002\u001a\u0007\u001a\u0002\u001b\u0007\u001b"+
+		"\u0002\u001c\u0007\u001c\u0002\u001d\u0007\u001d\u0001\u0000\u0001\u0000"+
 		"\u0001\u0000\u0001\u0000\u0001\u0000\u0001\u0000\u0001\u0000\u0001\u0000"+
-		"\u0001\u0000\u0001\u0000\u0005\u0000A\b\u0000\n\u0000\f\u0000D\t\u0000"+
-		"\u0001\u0000\u0001\u0000\u0001\u0000\u0001\u0001\u0001\u0001\u0001\u0001"+
-		"\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0003\u0001"+
-		"Q\b\u0001\u0001\u0001\u0001\u0001\u0001\u0002\u0001\u0002\u0001\u0002"+
-		"\u0001\u0002\u0001\u0003\u0001\u0003\u0001\u0003\u0001\u0003\u0001\u0003"+
+		"\u0005\u0000E\b\u0000\n\u0000\f\u0000H\t\u0000\u0001\u0000\u0001\u0000"+
+		"\u0001\u0000\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001"+
+		"\u0001\u0001\u0001\u0001\u0001\u0001\u0003\u0001U\b\u0001\u0001\u0001"+
+		"\u0001\u0001\u0001\u0002\u0001\u0002\u0001\u0002\u0001\u0002\u0001\u0003"+
 		"\u0001\u0003\u0001\u0003\u0001\u0003\u0001\u0003\u0001\u0003\u0001\u0003"+
-		"\u0001\u0003\u0001\u0003\u0001\u0003\u0001\u0003\u0001\u0003\u0003\u0003"+
-		"i\b\u0003\u0001\u0004\u0001\u0004\u0001\u0004\u0001\u0004\u0001\u0004"+
-		"\u0001\u0004\u0003\u0004q\b\u0004\u0003\u0004s\b\u0004\u0001\u0005\u0001"+
-		"\u0005\u0001\u0005\u0001\u0005\u0001\u0005\u0001\u0005\u0001\u0005\u0001"+
-		"\u0006\u0001\u0006\u0001\u0007\u0001\u0007\u0001\b\u0003\b\u0081\b\b\u0001"+
-		"\b\u0003\b\u0084\b\b\u0001\b\u0001\b\u0001\b\u0001\b\u0003\b\u008a\b\b"+
-		"\u0001\b\u0003\b\u008d\b\b\u0001\b\u0001\b\u0001\b\u0005\b\u0092\b\b\n"+
-		"\b\f\b\u0095\t\b\u0001\b\u0001\b\u0001\t\u0001\t\u0001\t\u0001\n\u0001"+
-		"\n\u0003\n\u009e\b\n\u0001\n\u0003\n\u00a1\b\n\u0001\n\u0001\n\u0001\u000b"+
-		"\u0001\u000b\u0001\f\u0001\f\u0001\f\u0001\f\u0001\r\u0001\r\u0001\r\u0001"+
-		"\r\u0001\r\u0003\r\u00b0\b\r\u0001\r\u0003\r\u00b3\b\r\u0001\r\u0003\r"+
-		"\u00b6\b\r\u0001\r\u0001\r\u0001\u000e\u0001\u000e\u0001\u000f\u0003\u000f"+
-		"\u00bd\b\u000f\u0001\u000f\u0001\u000f\u0003\u000f\u00c1\b\u000f\u0001"+
-		"\u000f\u0001\u000f\u0001\u0010\u0001\u0010\u0001\u0010\u0001\u0010\u0001"+
-		"\u0010\u0001\u0010\u0001\u0010\u0003\u0010\u00cc\b\u0010\u0001\u0010\u0001"+
-		"\u0010\u0001\u0010\u0001\u0011\u0001\u0011\u0001\u0012\u0001\u0012\u0001"+
-		"\u0013\u0001\u0013\u0001\u0014\u0001\u0014\u0001\u0014\u0001\u0015\u0001"+
-		"\u0015\u0001\u0016\u0001\u0016\u0001\u0017\u0004\u0017\u00df\b\u0017\u000b"+
-		"\u0017\f\u0017\u00e0\u0001\u0018\u0001\u0018\u0001\u0019\u0001\u0019\u0001"+
-		"\u0019\u0001\u001a\u0001\u001a\u0001\u001b\u0001\u001b\u0001\u001b\u0000"+
-		"\u0000\u001c\u0000\u0002\u0004\u0006\b\n\f\u000e\u0010\u0012\u0014\u0016"+
-		"\u0018\u001a\u001c\u001e \"$&(*,.0246\u0000\u0003\u0001\u0000\u0017\u001b"+
-		"\u0001\u0000\u001d \u0002\u0000\u001c\u001d\"$\u00eb\u00008\u0001\u0000"+
-		"\u0000\u0000\u0002H\u0001\u0000\u0000\u0000\u0004T\u0001\u0000\u0000\u0000"+
-		"\u0006X\u0001\u0000\u0000\u0000\br\u0001\u0000\u0000\u0000\nt\u0001\u0000"+
-		"\u0000\u0000\f{\u0001\u0000\u0000\u0000\u000e}\u0001\u0000\u0000\u0000"+
-		"\u0010\u0080\u0001\u0000\u0000\u0000\u0012\u0098\u0001\u0000\u0000\u0000"+
-		"\u0014\u009b\u0001\u0000\u0000\u0000\u0016\u00a4\u0001\u0000\u0000\u0000"+
-		"\u0018\u00a6\u0001\u0000\u0000\u0000\u001a\u00aa\u0001\u0000\u0000\u0000"+
-		"\u001c\u00b9\u0001\u0000\u0000\u0000\u001e\u00bc\u0001\u0000\u0000\u0000"+
-		" \u00c4\u0001\u0000\u0000\u0000\"\u00d0\u0001\u0000\u0000\u0000$\u00d2"+
-		"\u0001\u0000\u0000\u0000&\u00d4\u0001\u0000\u0000\u0000(\u00d6\u0001\u0000"+
-		"\u0000\u0000*\u00d9\u0001\u0000\u0000\u0000,\u00db\u0001\u0000\u0000\u0000"+
-		".\u00de\u0001\u0000\u0000\u00000\u00e2\u0001\u0000\u0000\u00002\u00e4"+
-		"\u0001\u0000\u0000\u00004\u00e7\u0001\u0000\u0000\u00006\u00e9\u0001\u0000"+
-		"\u0000\u00008B\u0005\u0001\u0000\u00009A\u0003\u0010\b\u0000:A\u0003\u001a"+
-		"\r\u0000;A\u0003\u0012\t\u0000<A\u0003\u0006\u0003\u0000=A\u0003\n\u0005"+
-		"\u0000>A\u0003\u0004\u0002\u0000?A\u0003\u0002\u0001\u0000@9\u0001\u0000"+
-		"\u0000\u0000@:\u0001\u0000\u0000\u0000@;\u0001\u0000\u0000\u0000@<\u0001"+
-		"\u0000\u0000\u0000@=\u0001\u0000\u0000\u0000@>\u0001\u0000\u0000\u0000"+
-		"@?\u0001\u0000\u0000\u0000AD\u0001\u0000\u0000\u0000B@\u0001\u0000\u0000"+
-		"\u0000BC\u0001\u0000\u0000\u0000CE\u0001\u0000\u0000\u0000DB\u0001\u0000"+
-		"\u0000\u0000EF\u0005\u0002\u0000\u0000FG\u0006\u0000\uffff\uffff\u0000"+
-		"G\u0001\u0001\u0000\u0000\u0000HI\u0005\u0003\u0000\u0000IJ\u0003(\u0014"+
-		"\u0000JK\u0005\u0004\u0000\u0000KL\u0003(\u0014\u0000LM\u0005\u0005\u0000"+
-		"\u0000MN\u0005\u0006\u0000\u0000NP\u0003(\u0014\u0000OQ\u0003\u0018\f"+
-		"\u0000PO\u0001\u0000\u0000\u0000PQ\u0001\u0000\u0000\u0000QR\u0001\u0000"+
-		"\u0000\u0000RS\u0006\u0001\uffff\uffff\u0000S\u0003\u0001\u0000\u0000"+
-		"\u0000TU\u0003\f\u0006\u0000UV\u0005\u0006\u0000\u0000VW\u00030\u0018"+
-		"\u0000W\u0005\u0001\u0000\u0000\u0000XY\u0005\u0003\u0000\u0000YZ\u0003"+
-		"(\u0014\u0000Z[\u0005\u0004\u0000\u0000[\\\u0003(\u0014\u0000\\]\u0005"+
-		"\u0005\u0000\u0000]^\u0005\u0006\u0000\u0000^_\u0005\u0003\u0000\u0000"+
-		"_`\u0003(\u0014\u0000`a\u0005\u0004\u0000\u0000ab\u0003(\u0014\u0000b"+
-		"c\u0005\u0005\u0000\u0000cd\u0005\u0007\u0000\u0000de\u0005\b\u0000\u0000"+
-		"ef\u0003\b\u0004\u0000fh\u0005\t\u0000\u0000gi\u0003\u0018\f\u0000hg\u0001"+
-		"\u0000\u0000\u0000hi\u0001\u0000\u0000\u0000i\u0007\u0001\u0000\u0000"+
-		"\u0000js\u0005\n\u0000\u0000ks\u0005\u000b\u0000\u0000lm\u0005\f\u0000"+
-		"\u0000ms\u00032\u0019\u0000np\u0005\r\u0000\u0000oq\u00032\u0019\u0000"+
-		"po\u0001\u0000\u0000\u0000pq\u0001\u0000\u0000\u0000qs\u0001\u0000\u0000"+
-		"\u0000rj\u0001\u0000\u0000\u0000rk\u0001\u0000\u0000\u0000rl\u0001\u0000"+
-		"\u0000\u0000rn\u0001\u0000\u0000\u0000s\t\u0001\u0000\u0000\u0000tu\u0005"+
-		"\u000e\u0000\u0000uv\u0005\u000f\u0000\u0000vw\u0003\u000e\u0007\u0000"+
-		"wx\u0005\u000f\u0000\u0000xy\u0005\u0010\u0000\u0000yz\u0003\f\u0006\u0000"+
-		"z\u000b\u0001\u0000\u0000\u0000{|\u0005&\u0000\u0000|\r\u0001\u0000\u0000"+
-		"\u0000}~\u0005&\u0000\u0000~\u000f\u0001\u0000\u0000\u0000\u007f\u0081"+
-		"\u0003\"\u0011\u0000\u0080\u007f\u0001\u0000\u0000\u0000\u0080\u0081\u0001"+
-		"\u0000\u0000\u0000\u0081\u0083\u0001\u0000\u0000\u0000\u0082\u0084\u0003"+
-		"$\u0012\u0000\u0083\u0082\u0001\u0000\u0000\u0000\u0083\u0084\u0001\u0000"+
-		"\u0000\u0000\u0084\u0085\u0001\u0000\u0000\u0000\u0085\u0086\u0005\u0011"+
-		"\u0000\u0000\u0086\u0089\u0003(\u0014\u0000\u0087\u0088\u0005\u0012\u0000"+
-		"\u0000\u0088\u008a\u0003*\u0015\u0000\u0089\u0087\u0001\u0000\u0000\u0000"+
-		"\u0089\u008a\u0001\u0000\u0000\u0000\u008a\u008c\u0001\u0000\u0000\u0000"+
-		"\u008b\u008d\u0003\u0018\f\u0000\u008c\u008b\u0001\u0000\u0000\u0000\u008c"+
-		"\u008d\u0001\u0000\u0000\u0000\u008d\u008e\u0001\u0000\u0000\u0000\u008e"+
-		"\u008f\u0006\b\uffff\uffff\u0000\u008f\u0093\u0005\b\u0000\u0000\u0090"+
-		"\u0092\u0003\u0014\n\u0000\u0091\u0090\u0001\u0000\u0000\u0000\u0092\u0095"+
-		"\u0001\u0000\u0000\u0000\u0093\u0091\u0001\u0000\u0000\u0000\u0093\u0094"+
-		"\u0001\u0000\u0000\u0000\u0094\u0096\u0001\u0000\u0000\u0000\u0095\u0093"+
-		"\u0001\u0000\u0000\u0000\u0096\u0097\u0005\t\u0000\u0000\u0097\u0011\u0001"+
-		"\u0000\u0000\u0000\u0098\u0099\u0005\u0013\u0000\u0000\u0099\u009a\u0003"+
-		"0\u0018\u0000\u009a\u0013\u0001\u0000\u0000\u0000\u009b\u009d\u0003,\u0016"+
-		"\u0000\u009c\u009e\u0003\u0016\u000b\u0000\u009d\u009c\u0001\u0000\u0000"+
-		"\u0000\u009d\u009e\u0001\u0000\u0000\u0000\u009e\u00a0\u0001\u0000\u0000"+
-		"\u0000\u009f\u00a1\u0003\u0018\f\u0000\u00a0\u009f\u0001\u0000\u0000\u0000"+
-		"\u00a0\u00a1\u0001\u0000\u0000\u0000\u00a1\u00a2\u0001\u0000\u0000\u0000"+
-		"\u00a2\u00a3\u0006\n\uffff\uffff\u0000\u00a3\u0015\u0001\u0000\u0000\u0000"+
-		"\u00a4\u00a5\u0005\u0014\u0000\u0000\u00a5\u0017\u0001\u0000\u0000\u0000"+
-		"\u00a6\u00a7\u0005\u0015\u0000\u0000\u00a7\u00a8\u0003&\u0013\u0000\u00a8"+
-		"\u00a9\u0005\u0016\u0000\u0000\u00a9\u0019\u0001\u0000\u0000\u0000\u00aa"+
-		"\u00ab\u0003\u001e\u000f\u0000\u00ab\u00ac\u0003\u001c\u000e\u0000\u00ac"+
-		"\u00af\u0003\u001e\u000f\u0000\u00ad\u00ae\u0005\u0007\u0000\u0000\u00ae"+
-		"\u00b0\u0003.\u0017\u0000\u00af\u00ad\u0001\u0000\u0000\u0000\u00af\u00b0"+
-		"\u0001\u0000\u0000\u0000\u00b0\u00b2\u0001\u0000\u0000\u0000\u00b1\u00b3"+
-		"\u00032\u0019\u0000\u00b2\u00b1\u0001\u0000\u0000\u0000\u00b2\u00b3\u0001"+
-		"\u0000\u0000\u0000\u00b3\u00b5\u0001\u0000\u0000\u0000\u00b4\u00b6\u0003"+
-		"\u0018\f\u0000\u00b5\u00b4\u0001\u0000\u0000\u0000\u00b5\u00b6\u0001\u0000"+
-		"\u0000\u0000\u00b6\u00b7\u0001\u0000\u0000\u0000\u00b7\u00b8\u0006\r\uffff"+
-		"\uffff\u0000\u00b8\u001b\u0001\u0000\u0000\u0000\u00b9\u00ba\u0007\u0000"+
-		"\u0000\u0000\u00ba\u001d\u0001\u0000\u0000\u0000\u00bb\u00bd\u0003 \u0010"+
-		"\u0000\u00bc\u00bb\u0001\u0000\u0000\u0000\u00bc\u00bd\u0001\u0000\u0000"+
-		"\u0000\u00bd\u00be\u0001\u0000\u0000\u0000\u00be\u00c0\u0003(\u0014\u0000"+
-		"\u00bf\u00c1\u0003 \u0010\u0000\u00c0\u00bf\u0001\u0000\u0000\u0000\u00c0"+
-		"\u00c1\u0001\u0000\u0000\u0000\u00c1\u00c2\u0001\u0000\u0000\u0000\u00c2"+
-		"\u00c3\u0006\u000f\uffff\uffff\u0000\u00c3\u001f\u0001\u0000\u0000\u0000"+
-		"\u00c4\u00cb\u0005\u000f\u0000\u0000\u00c5\u00cc\u0005\u001c\u0000\u0000"+
-		"\u00c6\u00cc\u00034\u001a\u0000\u00c7\u00c8\u00034\u001a\u0000\u00c8\u00c9"+
-		"\u0005\u0006\u0000\u0000\u00c9\u00ca\u00034\u001a\u0000\u00ca\u00cc\u0001"+
-		"\u0000\u0000\u0000\u00cb\u00c5\u0001\u0000\u0000\u0000\u00cb\u00c6\u0001"+
-		"\u0000\u0000\u0000\u00cb\u00c7\u0001\u0000\u0000\u0000\u00cc\u00cd\u0001"+
-		"\u0000\u0000\u0000\u00cd\u00ce\u0005\u000f\u0000\u0000\u00ce\u00cf\u0006"+
-		"\u0010\uffff\uffff\u0000\u00cf!\u0001\u0000\u0000\u0000\u00d0\u00d1\u0007"+
-		"\u0001\u0000\u0000\u00d1#\u0001\u0000\u0000\u0000\u00d2\u00d3\u0005!\u0000"+
-		"\u0000\u00d3%\u0001\u0000\u0000\u0000\u00d4\u00d5\u0005\'\u0000\u0000"+
-		"\u00d5\'\u0001\u0000\u0000\u0000\u00d6\u00d7\u0005&\u0000\u0000\u00d7"+
-		"\u00d8\u0006\u0014\uffff\uffff\u0000\u00d8)\u0001\u0000\u0000\u0000\u00d9"+
-		"\u00da\u0005&\u0000\u0000\u00da+\u0001\u0000\u0000\u0000\u00db\u00dc\u0005"+
-		"&\u0000\u0000\u00dc-\u0001\u0000\u0000\u0000\u00dd\u00df\u0005&\u0000"+
-		"\u0000\u00de\u00dd\u0001\u0000\u0000\u0000\u00df\u00e0\u0001\u0000\u0000"+
-		"\u0000\u00e0\u00de\u0001\u0000\u0000\u0000\u00e0\u00e1\u0001\u0000\u0000"+
-		"\u0000\u00e1/\u0001\u0000\u0000\u0000\u00e2\u00e3\u0005&\u0000\u0000\u00e3"+
-		"1\u0001\u0000\u0000\u0000\u00e4\u00e5\u0007\u0002\u0000\u0000\u00e5\u00e6"+
-		"\u0006\u0019\uffff\uffff\u0000\u00e63\u0001\u0000\u0000\u0000\u00e7\u00e8"+
-		"\u0005\'\u0000\u0000\u00e85\u0001\u0000\u0000\u0000\u00e9\u00ea\u0003"+
-		"\u0000\u0000\u0000\u00ea7\u0001\u0000\u0000\u0000\u0014@BPhpr\u0080\u0083"+
-		"\u0089\u008c\u0093\u009d\u00a0\u00af\u00b2\u00b5\u00bc\u00c0\u00cb\u00e0";
+		"\u0001\u0003\u0001\u0003\u0001\u0003\u0001\u0003\u0001\u0003\u0001\u0003"+
+		"\u0001\u0003\u0001\u0003\u0001\u0003\u0003\u0003m\b\u0003\u0001\u0004"+
+		"\u0001\u0004\u0001\u0004\u0001\u0004\u0001\u0004\u0001\u0004\u0003\u0004"+
+		"u\b\u0004\u0003\u0004w\b\u0004\u0001\u0005\u0001\u0005\u0001\u0005\u0001"+
+		"\u0005\u0001\u0005\u0001\u0005\u0001\u0005\u0001\u0006\u0001\u0006\u0001"+
+		"\u0007\u0001\u0007\u0001\b\u0003\b\u0085\b\b\u0001\b\u0003\b\u0088\b\b"+
+		"\u0001\b\u0001\b\u0001\b\u0001\b\u0003\b\u008e\b\b\u0001\b\u0003\b\u0091"+
+		"\b\b\u0001\b\u0001\b\u0001\b\u0001\b\u0005\b\u0097\b\b\n\b\f\b\u009a\t"+
+		"\b\u0001\b\u0001\b\u0001\t\u0001\t\u0001\t\u0001\n\u0001\n\u0001\n\u0001"+
+		"\n\u0003\n\u00a5\b\n\u0001\u000b\u0001\u000b\u0003\u000b\u00a9\b\u000b"+
+		"\u0001\u000b\u0003\u000b\u00ac\b\u000b\u0001\u000b\u0001\u000b\u0001\f"+
+		"\u0001\f\u0001\r\u0001\r\u0001\r\u0001\r\u0001\u000e\u0001\u000e\u0001"+
+		"\u000e\u0001\u000e\u0001\u000e\u0003\u000e\u00bb\b\u000e\u0001\u000e\u0003"+
+		"\u000e\u00be\b\u000e\u0001\u000e\u0003\u000e\u00c1\b\u000e\u0001\u000e"+
+		"\u0001\u000e\u0001\u000f\u0001\u000f\u0001\u0010\u0003\u0010\u00c8\b\u0010"+
+		"\u0001\u0010\u0001\u0010\u0003\u0010\u00cc\b\u0010\u0001\u0010\u0001\u0010"+
+		"\u0001\u0011\u0001\u0011\u0001\u0011\u0001\u0011\u0001\u0011\u0001\u0011"+
+		"\u0001\u0011\u0003\u0011\u00d7\b\u0011\u0001\u0011\u0001\u0011\u0001\u0011"+
+		"\u0001\u0012\u0001\u0012\u0001\u0013\u0001\u0013\u0001\u0014\u0001\u0014"+
+		"\u0001\u0015\u0001\u0015\u0001\u0015\u0001\u0016\u0001\u0016\u0001\u0017"+
+		"\u0004\u0017\u00e8\b\u0017\u000b\u0017\f\u0017\u00e9\u0001\u0018\u0001"+
+		"\u0018\u0001\u0019\u0004\u0019\u00ef\b\u0019\u000b\u0019\f\u0019\u00f0"+
+		"\u0001\u001a\u0001\u001a\u0001\u001b\u0001\u001b\u0001\u001b\u0001\u001c"+
+		"\u0001\u001c\u0001\u001d\u0001\u001d\u0001\u001d\u0000\u0000\u001e\u0000"+
+		"\u0002\u0004\u0006\b\n\f\u000e\u0010\u0012\u0014\u0016\u0018\u001a\u001c"+
+		"\u001e \"$&(*,.02468:\u0000\u0003\u0001\u0000\u0017\u001b\u0001\u0000"+
+		"\u001d \u0002\u0000\u001c\u001d\"$\u00fc\u0000<\u0001\u0000\u0000\u0000"+
+		"\u0002L\u0001\u0000\u0000\u0000\u0004X\u0001\u0000\u0000\u0000\u0006\\"+
+		"\u0001\u0000\u0000\u0000\bv\u0001\u0000\u0000\u0000\nx\u0001\u0000\u0000"+
+		"\u0000\f\u007f\u0001\u0000\u0000\u0000\u000e\u0081\u0001\u0000\u0000\u0000"+
+		"\u0010\u0084\u0001\u0000\u0000\u0000\u0012\u009d\u0001\u0000\u0000\u0000"+
+		"\u0014\u00a0\u0001\u0000\u0000\u0000\u0016\u00a6\u0001\u0000\u0000\u0000"+
+		"\u0018\u00af\u0001\u0000\u0000\u0000\u001a\u00b1\u0001\u0000\u0000\u0000"+
+		"\u001c\u00b5\u0001\u0000\u0000\u0000\u001e\u00c4\u0001\u0000\u0000\u0000"+
+		" \u00c7\u0001\u0000\u0000\u0000\"\u00cf\u0001\u0000\u0000\u0000$\u00db"+
+		"\u0001\u0000\u0000\u0000&\u00dd\u0001\u0000\u0000\u0000(\u00df\u0001\u0000"+
+		"\u0000\u0000*\u00e1\u0001\u0000\u0000\u0000,\u00e4\u0001\u0000\u0000\u0000"+
+		".\u00e7\u0001\u0000\u0000\u00000\u00eb\u0001\u0000\u0000\u00002\u00ee"+
+		"\u0001\u0000\u0000\u00004\u00f2\u0001\u0000\u0000\u00006\u00f4\u0001\u0000"+
+		"\u0000\u00008\u00f7\u0001\u0000\u0000\u0000:\u00f9\u0001\u0000\u0000\u0000"+
+		"<F\u0005\u0001\u0000\u0000=E\u0003\u0010\b\u0000>E\u0003\u001c\u000e\u0000"+
+		"?E\u0003\u0012\t\u0000@E\u0003\u0006\u0003\u0000AE\u0003\n\u0005\u0000"+
+		"BE\u0003\u0004\u0002\u0000CE\u0003\u0002\u0001\u0000D=\u0001\u0000\u0000"+
+		"\u0000D>\u0001\u0000\u0000\u0000D?\u0001\u0000\u0000\u0000D@\u0001\u0000"+
+		"\u0000\u0000DA\u0001\u0000\u0000\u0000DB\u0001\u0000\u0000\u0000DC\u0001"+
+		"\u0000\u0000\u0000EH\u0001\u0000\u0000\u0000FD\u0001\u0000\u0000\u0000"+
+		"FG\u0001\u0000\u0000\u0000GI\u0001\u0000\u0000\u0000HF\u0001\u0000\u0000"+
+		"\u0000IJ\u0005\u0002\u0000\u0000JK\u0006\u0000\uffff\uffff\u0000K\u0001"+
+		"\u0001\u0000\u0000\u0000LM\u0005\u0003\u0000\u0000MN\u0003*\u0015\u0000"+
+		"NO\u0005\u0004\u0000\u0000OP\u0003*\u0015\u0000PQ\u0005\u0005\u0000\u0000"+
+		"QR\u0005\u0006\u0000\u0000RT\u0003*\u0015\u0000SU\u0003\u001a\r\u0000"+
+		"TS\u0001\u0000\u0000\u0000TU\u0001\u0000\u0000\u0000UV\u0001\u0000\u0000"+
+		"\u0000VW\u0006\u0001\uffff\uffff\u0000W\u0003\u0001\u0000\u0000\u0000"+
+		"XY\u0003\f\u0006\u0000YZ\u0005\u0006\u0000\u0000Z[\u00034\u001a\u0000"+
+		"[\u0005\u0001\u0000\u0000\u0000\\]\u0005\u0003\u0000\u0000]^\u0003*\u0015"+
+		"\u0000^_\u0005\u0004\u0000\u0000_`\u0003*\u0015\u0000`a\u0005\u0005\u0000"+
+		"\u0000ab\u0005\u0006\u0000\u0000bc\u0005\u0003\u0000\u0000cd\u0003*\u0015"+
+		"\u0000de\u0005\u0004\u0000\u0000ef\u0003*\u0015\u0000fg\u0005\u0005\u0000"+
+		"\u0000gh\u0005\u0007\u0000\u0000hi\u0005\b\u0000\u0000ij\u0003\b\u0004"+
+		"\u0000jl\u0005\t\u0000\u0000km\u0003\u001a\r\u0000lk\u0001\u0000\u0000"+
+		"\u0000lm\u0001\u0000\u0000\u0000m\u0007\u0001\u0000\u0000\u0000nw\u0005"+
+		"\n\u0000\u0000ow\u0005\u000b\u0000\u0000pq\u0005\f\u0000\u0000qw\u0003"+
+		"6\u001b\u0000rt\u0005\r\u0000\u0000su\u00036\u001b\u0000ts\u0001\u0000"+
+		"\u0000\u0000tu\u0001\u0000\u0000\u0000uw\u0001\u0000\u0000\u0000vn\u0001"+
+		"\u0000\u0000\u0000vo\u0001\u0000\u0000\u0000vp\u0001\u0000\u0000\u0000"+
+		"vr\u0001\u0000\u0000\u0000w\t\u0001\u0000\u0000\u0000xy\u0005\u000e\u0000"+
+		"\u0000yz\u0005\u000f\u0000\u0000z{\u0003\u000e\u0007\u0000{|\u0005\u000f"+
+		"\u0000\u0000|}\u0005\u0010\u0000\u0000}~\u0003\f\u0006\u0000~\u000b\u0001"+
+		"\u0000\u0000\u0000\u007f\u0080\u0005&\u0000\u0000\u0080\r\u0001\u0000"+
+		"\u0000\u0000\u0081\u0082\u0005&\u0000\u0000\u0082\u000f\u0001\u0000\u0000"+
+		"\u0000\u0083\u0085\u0003$\u0012\u0000\u0084\u0083\u0001\u0000\u0000\u0000"+
+		"\u0084\u0085\u0001\u0000\u0000\u0000\u0085\u0087\u0001\u0000\u0000\u0000"+
+		"\u0086\u0088\u0003&\u0013\u0000\u0087\u0086\u0001\u0000\u0000\u0000\u0087"+
+		"\u0088\u0001\u0000\u0000\u0000\u0088\u0089\u0001\u0000\u0000\u0000\u0089"+
+		"\u008a\u0005\u0011\u0000\u0000\u008a\u008d\u0003*\u0015\u0000\u008b\u008c"+
+		"\u0005\u0012\u0000\u0000\u008c\u008e\u0003,\u0016\u0000\u008d\u008b\u0001"+
+		"\u0000\u0000\u0000\u008d\u008e\u0001\u0000\u0000\u0000\u008e\u0090\u0001"+
+		"\u0000\u0000\u0000\u008f\u0091\u0003\u001a\r\u0000\u0090\u008f\u0001\u0000"+
+		"\u0000\u0000\u0090\u0091\u0001\u0000\u0000\u0000\u0091\u0092\u0001\u0000"+
+		"\u0000\u0000\u0092\u0093\u0006\b\uffff\uffff\u0000\u0093\u0098\u0005\b"+
+		"\u0000\u0000\u0094\u0097\u0003\u0016\u000b\u0000\u0095\u0097\u0003\u0014"+
+		"\n\u0000\u0096\u0094\u0001\u0000\u0000\u0000\u0096\u0095\u0001\u0000\u0000"+
+		"\u0000\u0097\u009a\u0001\u0000\u0000\u0000\u0098\u0096\u0001\u0000\u0000"+
+		"\u0000\u0098\u0099\u0001\u0000\u0000\u0000\u0099\u009b\u0001\u0000\u0000"+
+		"\u0000\u009a\u0098\u0001\u0000\u0000\u0000\u009b\u009c\u0005\t\u0000\u0000"+
+		"\u009c\u0011\u0001\u0000\u0000\u0000\u009d\u009e\u0005\u0013\u0000\u0000"+
+		"\u009e\u009f\u00034\u001a\u0000\u009f\u0013\u0001\u0000\u0000\u0000\u00a0"+
+		"\u00a1\u0005\b\u0000\u0000\u00a1\u00a2\u0003.\u0017\u0000\u00a2\u00a4"+
+		"\u0005\t\u0000\u0000\u00a3\u00a5\u0003\u001a\r\u0000\u00a4\u00a3\u0001"+
+		"\u0000\u0000\u0000\u00a4\u00a5\u0001\u0000\u0000\u0000\u00a5\u0015\u0001"+
+		"\u0000\u0000\u0000\u00a6\u00a8\u00030\u0018\u0000\u00a7\u00a9\u0003\u0018"+
+		"\f\u0000\u00a8\u00a7\u0001\u0000\u0000\u0000\u00a8\u00a9\u0001\u0000\u0000"+
+		"\u0000\u00a9\u00ab\u0001\u0000\u0000\u0000\u00aa\u00ac\u0003\u001a\r\u0000"+
+		"\u00ab\u00aa\u0001\u0000\u0000\u0000\u00ab\u00ac\u0001\u0000\u0000\u0000"+
+		"\u00ac\u00ad\u0001\u0000\u0000\u0000\u00ad\u00ae\u0006\u000b\uffff\uffff"+
+		"\u0000\u00ae\u0017\u0001\u0000\u0000\u0000\u00af\u00b0\u0005\u0014\u0000"+
+		"\u0000\u00b0\u0019\u0001\u0000\u0000\u0000\u00b1\u00b2\u0005\u0015\u0000"+
+		"\u0000\u00b2\u00b3\u0003(\u0014\u0000\u00b3\u00b4\u0005\u0016\u0000\u0000"+
+		"\u00b4\u001b\u0001\u0000\u0000\u0000\u00b5\u00b6\u0003 \u0010\u0000\u00b6"+
+		"\u00b7\u0003\u001e\u000f\u0000\u00b7\u00ba\u0003 \u0010\u0000\u00b8\u00b9"+
+		"\u0005\u0007\u0000\u0000\u00b9\u00bb\u00032\u0019\u0000\u00ba\u00b8\u0001"+
+		"\u0000\u0000\u0000\u00ba\u00bb\u0001\u0000\u0000\u0000\u00bb\u00bd\u0001"+
+		"\u0000\u0000\u0000\u00bc\u00be\u00036\u001b\u0000\u00bd\u00bc\u0001\u0000"+
+		"\u0000\u0000\u00bd\u00be\u0001\u0000\u0000\u0000\u00be\u00c0\u0001\u0000"+
+		"\u0000\u0000\u00bf\u00c1\u0003\u001a\r\u0000\u00c0\u00bf\u0001\u0000\u0000"+
+		"\u0000\u00c0\u00c1\u0001\u0000\u0000\u0000\u00c1\u00c2\u0001\u0000\u0000"+
+		"\u0000\u00c2\u00c3\u0006\u000e\uffff\uffff\u0000\u00c3\u001d\u0001\u0000"+
+		"\u0000\u0000\u00c4\u00c5\u0007\u0000\u0000\u0000\u00c5\u001f\u0001\u0000"+
+		"\u0000\u0000\u00c6\u00c8\u0003\"\u0011\u0000\u00c7\u00c6\u0001\u0000\u0000"+
+		"\u0000\u00c7\u00c8\u0001\u0000\u0000\u0000\u00c8\u00c9\u0001\u0000\u0000"+
+		"\u0000\u00c9\u00cb\u0003*\u0015\u0000\u00ca\u00cc\u0003\"\u0011\u0000"+
+		"\u00cb\u00ca\u0001\u0000\u0000\u0000\u00cb\u00cc\u0001\u0000\u0000\u0000"+
+		"\u00cc\u00cd\u0001\u0000\u0000\u0000\u00cd\u00ce\u0006\u0010\uffff\uffff"+
+		"\u0000\u00ce!\u0001\u0000\u0000\u0000\u00cf\u00d6\u0005\u000f\u0000\u0000"+
+		"\u00d0\u00d7\u0005\u001c\u0000\u0000\u00d1\u00d7\u00038\u001c\u0000\u00d2"+
+		"\u00d3\u00038\u001c\u0000\u00d3\u00d4\u0005\u0006\u0000\u0000\u00d4\u00d5"+
+		"\u00038\u001c\u0000\u00d5\u00d7\u0001\u0000\u0000\u0000\u00d6\u00d0\u0001"+
+		"\u0000\u0000\u0000\u00d6\u00d1\u0001\u0000\u0000\u0000\u00d6\u00d2\u0001"+
+		"\u0000\u0000\u0000\u00d7\u00d8\u0001\u0000\u0000\u0000\u00d8\u00d9\u0005"+
+		"\u000f\u0000\u0000\u00d9\u00da\u0006\u0011\uffff\uffff\u0000\u00da#\u0001"+
+		"\u0000\u0000\u0000\u00db\u00dc\u0007\u0001\u0000\u0000\u00dc%\u0001\u0000"+
+		"\u0000\u0000\u00dd\u00de\u0005!\u0000\u0000\u00de\'\u0001\u0000\u0000"+
+		"\u0000\u00df\u00e0\u0005\'\u0000\u0000\u00e0)\u0001\u0000\u0000\u0000"+
+		"\u00e1\u00e2\u0005&\u0000\u0000\u00e2\u00e3\u0006\u0015\uffff\uffff\u0000"+
+		"\u00e3+\u0001\u0000\u0000\u0000\u00e4\u00e5\u0005&\u0000\u0000\u00e5-"+
+		"\u0001\u0000\u0000\u0000\u00e6\u00e8\u0005(\u0000\u0000\u00e7\u00e6\u0001"+
+		"\u0000\u0000\u0000\u00e8\u00e9\u0001\u0000\u0000\u0000\u00e9\u00e7\u0001"+
+		"\u0000\u0000\u0000\u00e9\u00ea\u0001\u0000\u0000\u0000\u00ea/\u0001\u0000"+
+		"\u0000\u0000\u00eb\u00ec\u0005&\u0000\u0000\u00ec1\u0001\u0000\u0000\u0000"+
+		"\u00ed\u00ef\u0005&\u0000\u0000\u00ee\u00ed\u0001\u0000\u0000\u0000\u00ef"+
+		"\u00f0\u0001\u0000\u0000\u0000\u00f0\u00ee\u0001\u0000\u0000\u0000\u00f0"+
+		"\u00f1\u0001\u0000\u0000\u0000\u00f13\u0001\u0000\u0000\u0000\u00f2\u00f3"+
+		"\u0005&\u0000\u0000\u00f35\u0001\u0000\u0000\u0000\u00f4\u00f5\u0007\u0002"+
+		"\u0000\u0000\u00f5\u00f6\u0006\u001b\uffff\uffff\u0000\u00f67\u0001\u0000"+
+		"\u0000\u0000\u00f7\u00f8\u0005\'\u0000\u0000\u00f89\u0001\u0000\u0000"+
+		"\u0000\u00f9\u00fa\u0003\u0000\u0000\u0000\u00fa;\u0001\u0000\u0000\u0000"+
+		"\u0017DFTltv\u0084\u0087\u008d\u0090\u0096\u0098\u00a4\u00a8\u00ab\u00ba"+
+		"\u00bd\u00c0\u00c7\u00cb\u00d6\u00e9\u00f0";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

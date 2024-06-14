@@ -1,7 +1,5 @@
 // Generated from PlantUML_ATG.g4 by ANTLR 4.13.1
-
 package at.jku.dke.task_app.uml.evaluation.atg.gen;
-
 import at.jku.dke.task_app.uml.evaluation.atg.objects.UMLAssociation;
 import at.jku.dke.task_app.uml.evaluation.atg.objects.UMLClass;
 import at.jku.dke.task_app.uml.evaluation.atg.objects.UMLAttribute;
@@ -150,6 +148,18 @@ public class PlantUML_ATGBaseListener implements PlantUML_ATGListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterSpecialAttribute(PlantUML_ATGParser.SpecialAttributeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitSpecialAttribute(PlantUML_ATGParser.SpecialAttributeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterAttribute(PlantUML_ATGParser.AttributeContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -289,6 +299,18 @@ public class PlantUML_ATGBaseListener implements PlantUML_ATGListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitParentClassName(PlantUML_ATGParser.ParentClassNameContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterSpeciallabel(PlantUML_ATGParser.SpeciallabelContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitSpeciallabel(PlantUML_ATGParser.SpeciallabelContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

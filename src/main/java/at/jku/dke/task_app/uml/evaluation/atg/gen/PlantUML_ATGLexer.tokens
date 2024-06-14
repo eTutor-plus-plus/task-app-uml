@@ -37,6 +37,7 @@ T__35=36
 WS=37
 Identifier=38
 Integer=39
+AnythingButCurlyBraces=40
 '@startuml'=1
 '@enduml'=2
 '('=3
