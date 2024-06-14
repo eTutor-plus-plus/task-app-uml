@@ -6,6 +6,7 @@ public class UMLConstraints {
     private String rel2C1;
     private String rel2C2;
     private String type;
+    private int points;
 
     public UMLConstraints(String rel1C1, String rel1C2, String rel2C1, String rel2C2, String type) {
         this.rel1C1 = rel1C1;
@@ -56,5 +57,13 @@ public class UMLConstraints {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public int getPoints() {
+        return points;
+    }
+
+    public void setPoints(int points) {
+        this.points = points;
     }
 }

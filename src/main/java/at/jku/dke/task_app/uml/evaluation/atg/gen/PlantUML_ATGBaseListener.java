@@ -1,5 +1,7 @@
 // Generated from PlantUML_ATG.g4 by ANTLR 4.13.1
+
 package at.jku.dke.task_app.uml.evaluation.atg.gen;
+
 import at.jku.dke.task_app.uml.evaluation.atg.objects.UMLAssociation;
 import at.jku.dke.task_app.uml.evaluation.atg.objects.UMLClass;
 import at.jku.dke.task_app.uml.evaluation.atg.objects.UMLAttribute;
@@ -172,6 +174,18 @@ public class PlantUML_ATGBaseListener implements PlantUML_ATGListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterScore(PlantUML_ATGParser.ScoreContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitScore(PlantUML_ATGParser.ScoreContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterRelationship(PlantUML_ATGParser.RelationshipContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -239,6 +253,18 @@ public class PlantUML_ATGBaseListener implements PlantUML_ATGListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitAbstractModifier(PlantUML_ATGParser.AbstractModifierContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterPoints(PlantUML_ATGParser.PointsContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitPoints(PlantUML_ATGParser.PointsContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

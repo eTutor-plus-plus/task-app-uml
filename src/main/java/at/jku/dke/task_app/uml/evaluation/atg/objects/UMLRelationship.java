@@ -1,5 +1,6 @@
 package at.jku.dke.task_app.uml.evaluation.atg.objects;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class UMLRelationship {
@@ -36,6 +37,7 @@ public class UMLRelationship {
     }
 
     public UMLRelationship() {
+        entities = new ArrayList<>();
     }
 
     public List<UMLRelationshipEntity> getEntities() {
@@ -76,4 +78,9 @@ public class UMLRelationship {
     public void setType(String type) {
         this.type = type;
     }
+
+    public void addEntity(UMLRelationshipEntity entity) {
+        this.entities.add(entity);
+    }
+
 }

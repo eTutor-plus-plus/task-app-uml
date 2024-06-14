@@ -11,7 +11,7 @@ CREATE TABLE umlTask
     complete_comparison BOOLEAN NOT NULL,
     max_points    NUMERIC(7, 2) NOT NULL,
     status        TASK_STATUS   NOT NULL,
-    identifiers   TEXT       ,
+    identifiers   TEXT[]       ,
     CONSTRAINT task_pk PRIMARY KEY (id)
 );
 

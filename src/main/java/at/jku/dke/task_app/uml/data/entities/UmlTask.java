@@ -5,17 +5,32 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
+
+import java.util.List;
 
 @Entity
 @Table(name = "umltask")
 public class UmlTask extends BaseTask {
 
-    @Column(name = "identifiers", length = Integer.MAX_VALUE)
-    private String identifiers;
+
 
     @NotNull
     @Column(name = "complete_comparison", nullable = false)
     private Boolean completeComparison = false;
+
+    @Column(name = "identifiers")
+    @JdbcTypeCode(SqlTypes.ARRAY)
+    private List<String> identifiers;
+
+    public List<String> getIdentifiers() {
+        return identifiers;
+    }
+
+    public void setIdentifiers(List<String> identifiers) {
+        this.identifiers = identifiers;
+    }
 
     public Boolean getCompleteComparison() {
         return completeComparison;
@@ -25,13 +40,6 @@ public class UmlTask extends BaseTask {
         this.completeComparison = completeComparison;
     }
 
-    public String getIdentifiers() {
-        return identifiers;
-    }
-
-    public void setIdentifiers(String identifiers) {
-        this.identifiers = identifiers;
-    }
 
 /*
  TODO [Reverse Engineering] create field to map the 'status' column

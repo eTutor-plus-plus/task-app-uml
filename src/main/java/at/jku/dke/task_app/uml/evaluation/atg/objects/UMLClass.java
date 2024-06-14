@@ -6,18 +6,18 @@ import java.util.List;
 public class UMLClass {
     private String name;
     private boolean isAbstract;
+    private int points;
     private List<UMLAttribute> attributes;
     private UMLClass parentClass;
-    private List<UMLClass> innerClasses; // for nested classes
     private List<UMLAssociation> associations; // associations this class is part of
 
     // Add a constructor that takes certain parameters
-    public UMLClass(String name, boolean isAbstract, List<UMLAttribute> attributes, UMLClass parentClass, List<UMLClass> innerClasses, List<UMLAssociation> associations) {
+    public UMLClass(String name, boolean isAbstract, List<UMLAttribute> attributes, UMLClass parentClass, int points, List<UMLAssociation> associations) {
         this.name = name;
         this.isAbstract = isAbstract;
         this.attributes = attributes;
         this.parentClass = parentClass;
-        this.innerClasses = innerClasses;
+        this.points = points;
         this.associations = associations;
     }
 
@@ -62,12 +62,12 @@ public class UMLClass {
         this.parentClass = parentClass;
     }
 
-    public List<UMLClass> getInnerClasses() {
-        return innerClasses;
+    public int getPoints() {
+        return points;
     }
 
-    public void setInnerClasses(List<UMLClass> innerClasses) {
-        this.innerClasses = innerClasses;
+    public void setPoints(int points) {
+        this.points = points;
     }
 
     public List<UMLAssociation> getAssociations() {

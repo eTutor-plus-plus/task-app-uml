@@ -31,16 +31,19 @@ classDiagram: '@startuml' (classDefinition | relationship | multiRelationship | 
                     System.out.println("Relationships: " + relationships);
                 };
 
-association: '(' className1=className ',' className2=className ')' '..' className3=className
+association: '(' className1=className ',' className2=className ')' '..' className3=className score?
                 {
-                    UMLAssociation assoc = new UMLAssociation(classMap.get($className1.text).getName(), classMap.get($className2.text).getName(), classMap.get($className3.text).getName());
-                    associations.add(assoc);
+                    UMLAssociation association = new UMLAssociation();
+                    association.setClass1($className1.text);
+                    association.setClass2($className2.text);
+                    association.setAssoClass($className3.text);
+                    associations.add(association);
                 };
 
 
 noteConnection: noteName '..' multiRelationshipName;
 
-constraints: '(' className1=className ',' className2=className ')' '..' '(' className3=className ',' className4=className ')' ':' '{' constrainttype '}';
+constraints: '(' className1=className ',' className2=className ')' '..' '(' className3=className ',' className4=className ')' ':' '{' constrainttype '}' score? ;
 
 constrainttype: ('disjoint'|'overlapping'|('Teilmenge' labelMultiplicity)|('Ungleich' labelMultiplicity?));
 
@@ -49,7 +52,7 @@ note: 'note' '"' noteText '"' 'as' noteName;
 noteName: Identifier;
 noteText: Identifier;
 
-classDefinition: visibility? abstractModifier? 'class' className ('extends' parentClassName)?
+classDefinition: visibility? abstractModifier? 'class' className ('extends' parentClassName)? score?
                 {
                     UMLClass clazz = new UMLClass($className.text);
                     clazz.setAbstract($abstractModifier.text != null);
@@ -64,7 +67,7 @@ classDefinition: visibility? abstractModifier? 'class' className ('extends' pare
 
 multiRelationship: 'diamond' multiRelationshipName;
 
-attribute: attributeName attributeModifier?
+attribute: attributeName attributeModifier? score?
                 {
                     UMLAttribute attr = new UMLAttribute($attributeName.text);
                     if($attributeModifier.text != null){
@@ -74,8 +77,8 @@ attribute: attributeName attributeModifier?
                 };
 
 attributeModifier: '{ID}';
-
-relationship: participant1=participant relationTyp participant2=participant (':' label)? labelMultiplicity?
+score: '[' points ']';
+relationship: participant1=participant relationTyp participant2=participant (':' label)? labelMultiplicity? score?
                 {
                                      UMLRelationshipEntity entity1 = new UMLRelationshipEntity();
                                      entity1.setClassname($participant1.text);
@@ -114,11 +117,13 @@ participantMultiplicity returns [String multiplicity]
 // Lexer Rules
 visibility: ('+' | '-' | '#' | '~');
 abstractModifier: 'abstract';
+points: Integer;
 className: Identifier
                     {
                         currentClassName = $Identifier.text;
                     };
 parentClassName: Identifier;
+
 attributeName: Identifier;
 label: Identifier+;
 multiRelationshipName: Identifier;

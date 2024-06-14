@@ -1,5 +1,7 @@
 // Generated from PlantUML_ATG.g4 by ANTLR 4.13.1
+
 package at.jku.dke.task_app.uml.evaluation.atg.gen;
+
 import at.jku.dke.task_app.uml.evaluation.atg.objects.UMLAssociation;
 import at.jku.dke.task_app.uml.evaluation.atg.objects.UMLClass;
 import at.jku.dke.task_app.uml.evaluation.atg.objects.UMLAttribute;
@@ -139,6 +141,16 @@ public interface PlantUML_ATGListener extends ParseTreeListener {
 	 */
 	void exitAttributeModifier(PlantUML_ATGParser.AttributeModifierContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link PlantUML_ATGParser#score}.
+	 * @param ctx the parse tree
+	 */
+	void enterScore(PlantUML_ATGParser.ScoreContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link PlantUML_ATGParser#score}.
+	 * @param ctx the parse tree
+	 */
+	void exitScore(PlantUML_ATGParser.ScoreContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link PlantUML_ATGParser#relationship}.
 	 * @param ctx the parse tree
 	 */
@@ -198,6 +210,16 @@ public interface PlantUML_ATGListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitAbstractModifier(PlantUML_ATGParser.AbstractModifierContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link PlantUML_ATGParser#points}.
+	 * @param ctx the parse tree
+	 */
+	void enterPoints(PlantUML_ATGParser.PointsContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link PlantUML_ATGParser#points}.
+	 * @param ctx the parse tree
+	 */
+	void exitPoints(PlantUML_ATGParser.PointsContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link PlantUML_ATGParser#className}.
 	 * @param ctx the parse tree

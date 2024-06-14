@@ -14,10 +14,12 @@ import at.jku.dke.task_app.uml.data.repositories.UmlTaskRepository;
 import at.jku.dke.task_app.uml.dto.ModifyUmlTaskDto;
 import at.jku.dke.task_app.uml.dto.UmlBlockAltDto;
 import at.jku.dke.task_app.uml.dto.UmlBlockDto;
-import at.jku.dke.task_app.uml.evaluation.MyPlantUML_ATGListener;
+import at.jku.dke.task_app.uml.evaluation.atg.MyPlantUML_ATGListener;
 import at.jku.dke.task_app.uml.evaluation.atg.gen.PlantUML_ATGLexer;
 import at.jku.dke.task_app.uml.evaluation.atg.gen.PlantUML_ATGParser;
 import at.jku.dke.task_app.uml.evaluation.atg.objects.UMLClass;
+import at.jku.dke.task_app.uml.evaluation.atg.objects.UMLRelationship;
+import jakarta.persistence.EntityNotFoundException;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -42,13 +44,16 @@ public class UmlTaskService extends BaseTaskService<UmlTask, ModifyUmlTaskDto>{
     private final UmlBlockRepository umlBlockRepository;
     private final UmlBlockAltRepository umlBlockAltRepository;
     private final UmlTaskRepository umlTaskRepository;
+    private final TaskRepository taskRepository;
+    private final UmlGenerationService umlGenerationService;;
 
     /**
      * Creates a new instance of class {@link BaseTaskService}.
      *
      * @param repository The task repository.
      */
-    protected UmlTaskService(TaskRepository<UmlTask> repository, MessageSource messageSource, TaskRepository<UmlTask> repository1, UmlBlockRepository umlBlockRepository, UmlBlockAltRepository umlBlockAltRepository, UmlTaskRepository umlTaskRepository) {
+    protected UmlTaskService(TaskRepository<UmlTask> repository, MessageSource messageSource, TaskRepository<UmlTask> repository1, UmlBlockRepository umlBlockRepository, UmlBlockAltRepository umlBlockAltRepository, UmlTaskRepository umlTaskRepository,
+                             TaskRepository taskRepository, UmlGenerationService umlGenerationService) {
         super(repository);
         this.messageSource = messageSource;
         this.repository = repository1;
@@ -56,6 +61,8 @@ public class UmlTaskService extends BaseTaskService<UmlTask, ModifyUmlTaskDto>{
         this.umlBlockRepository = umlBlockRepository;
         this.umlBlockAltRepository = umlBlockAltRepository;
         this.umlTaskRepository = umlTaskRepository;
+        this.taskRepository = taskRepository;
+        this.umlGenerationService = umlGenerationService;
     }
 
 
@@ -87,7 +94,7 @@ public class UmlTaskService extends BaseTaskService<UmlTask, ModifyUmlTaskDto>{
             }
 
         }
-        generateObjectsFromSolution(task, dto);
+        List<String> identifiers = umlGenerationService.generateIdentifiersFromSolution(task.getId());
         //get all identifiers from the task;
     }
 
@@ -114,8 +121,8 @@ public class UmlTaskService extends BaseTaskService<UmlTask, ModifyUmlTaskDto>{
             }
 
         }
-        generateObjectsFromSolution(task, dto);
-        //get all identifiers from the task;
+        List<String> identifiers = umlGenerationService.generateIdentifiersFromSolution(task.getId());
+
     }
 
     @Override
@@ -147,24 +154,5 @@ public class UmlTaskService extends BaseTaskService<UmlTask, ModifyUmlTaskDto>{
         );
     }
 
-    protected void generateObjectsFromSolution(UmlTask task, ModifyTaskDto<ModifyUmlTaskDto> dto) {
-        for (UmlBlockDto umlBlockDto : dto.additionalData().umlSolution()) {
-            UmlBlock umlBlock = new UmlBlock();
-            umlBlock.setTask(task);
-            umlBlockRepository.save(umlBlock);
-            for (UmlBlockAltDto umlBlockAltDto : umlBlockDto.getUmlBlockAlt()) {
-                String solution = umlBlockAltDto.getSolutionBlockAlternative();
-                CharStream input = CharStreams.fromString(solution);
-                PlantUML_ATGLexer lexer = new PlantUML_ATGLexer(input);
-                CommonTokenStream tokens = new CommonTokenStream(lexer);
-                PlantUML_ATGParser parser = new PlantUML_ATGParser(tokens);
-                ParseTree tree = parser.start();
-                ParseTreeWalker walker = new ParseTreeWalker();
-                MyPlantUML_ATGListener listener = new MyPlantUML_ATGListener();
-                walker.walk(listener, tree);
-                List<UMLClass> umlClasses = listener.getUmlClasses();
-                System.out.println(umlClasses);
-            }
-        }
-    }
+
 }
