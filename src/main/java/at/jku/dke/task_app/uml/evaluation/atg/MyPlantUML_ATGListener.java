@@ -43,6 +43,9 @@ public class MyPlantUML_ATGListener extends PlantUML_ATGBaseListener {
         if(ctx.attributeModifier()!=null) {
             attribute.setType(ctx.attributeModifier.getText());
         }
+        else{
+            attribute.setType("normal");
+        }
         if (ctx.score() != null) {
             attribute.setPoints(Integer.parseInt(ctx.score().points().getText()));
         }
@@ -67,7 +70,9 @@ public class MyPlantUML_ATGListener extends PlantUML_ATGBaseListener {
     public void exitClassDefinition(PlantUML_ATGParser.ClassDefinitionContext ctx) {
         currentClass.setAttributes(currentAttributes);
         currentClass.setAssociations(currentAssociations);
-        currentClass.setPoints(0);
+        if(ctx.score()!=null) {
+            currentClass.setPoints(Integer.parseInt(ctx.score().points().getText()));
+        }
         umlClasses.add(currentClass);
         currentClass = null;
 
@@ -104,11 +109,17 @@ public class MyPlantUML_ATGListener extends PlantUML_ATGBaseListener {
         String className2 = ctx.participant2.className.getText();
         System.out.println(className + " " + className2);
         if (className!=null&&!umlClasses.stream().anyMatch(c -> c.getName().equals(className))) {
+            UMLClass umlClass = new UMLClass(className);
+            umlClass.setAttributes(new ArrayList<>());
+            umlClass.setAssociations(new ArrayList<>());
+            umlClasses.add(umlClass);
 
-            umlClasses.add(new UMLClass(className));
         }
         if (className2!=null&&!umlClasses.stream().anyMatch(c -> c.getName().equals(className2))) {
-            umlClasses.add(new UMLClass(className2));
+            UMLClass umlClass = new UMLClass(className2);
+            umlClass.setAttributes(new ArrayList<>());
+            umlClass.setAssociations(new ArrayList<>());
+            umlClasses.add(umlClass);
         }
     }
 

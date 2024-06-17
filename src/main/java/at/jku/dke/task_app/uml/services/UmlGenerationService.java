@@ -8,6 +8,8 @@ import at.jku.dke.task_app.uml.data.repositories.UmlBlockAltRepository;
 import at.jku.dke.task_app.uml.data.repositories.UmlBlockRepository;
 import at.jku.dke.task_app.uml.data.repositories.UmlTaskRepository;
 import at.jku.dke.task_app.uml.evaluation.atg.MyPlantUML_ATGListener;
+import at.jku.dke.task_app.uml.evaluation.atg.PlantUML_ATGErrorListener;
+import at.jku.dke.task_app.uml.evaluation.atg.PlantUML_ATGException;
 import at.jku.dke.task_app.uml.evaluation.atg.gen.PlantUML_ATGLexer;
 import at.jku.dke.task_app.uml.evaluation.atg.gen.PlantUML_ATGParser;
 import at.jku.dke.task_app.uml.evaluation.atg.objects.*;
@@ -92,9 +94,26 @@ public class UmlGenerationService {
                 if(!identifiers.stream().anyMatch(i -> i.equals(association.getAssoClass()))) {
                     identifiers.add(association.getAssoClass());
                 }
+                if(!identifiers.stream().anyMatch(i -> i.equals(association.getClass1()))) {
+                    identifiers.add(association.getClass1());
+                }
+                if(!identifiers.stream().anyMatch(i -> i.equals(association.getClass2()))) {
+                    identifiers.add(association.getClass2());
+                }
             }
             for (UMLConstraints constraint : constraints) {
-               //prob not possible
+               if(!identifiers.stream().anyMatch(i -> i.equals(constraint.getRel1C1()))) {
+                        identifiers.add(constraint.getRel1C1());
+                    }
+                    if(!identifiers.stream().anyMatch(i -> i.equals(constraint.getRel1C2()))) {
+                        identifiers.add(constraint.getRel1C2());
+                    }
+                    if(!identifiers.stream().anyMatch(i -> i.equals(constraint.getRel2C1()))) {
+                        identifiers.add(constraint.getRel2C1());
+                    }
+                    if(!identifiers.stream().anyMatch(i -> i.equals(constraint.getRel2C2()))) {
+                        identifiers.add(constraint.getRel2C2());
+                    }
             }
 
 
@@ -102,7 +121,7 @@ public class UmlGenerationService {
         task.setIdentifiers(identifiers);
         return identifiers;
     }
-    protected UMLResult generateResultsFromBlockAlt(long id) {
+    public UMLResult generateResultsFromBlockAlt(long id) {
         UmlBlockAlt umlBlockAlt = umlBlockAltRepository.findById(UUID.fromString(String.valueOf(id))).orElseThrow(() -> new EntityNotFoundException("BlockAlt " + id + " does not exist."));
         String solution = umlBlockAlt.getUmlBlockAlternative();
         CharStream input = CharStreams.fromString(solution);
@@ -118,7 +137,26 @@ public class UmlGenerationService {
     }
 
     public UMLResult generateResultsFromSubmission(String submission) {
-        CharStream input = CharStreams.fromString(submission);
+        try {
+            CharStream input = CharStreams.fromString(submission);
+            PlantUML_ATGLexer lexer = new PlantUML_ATGLexer(input);
+            CommonTokenStream tokens = new CommonTokenStream(lexer);
+            PlantUML_ATGParser parser = new PlantUML_ATGParser(tokens);
+            parser.addErrorListener(new PlantUML_ATGErrorListener());
+            ParseTree tree = parser.start();
+            ParseTreeWalker walker = new ParseTreeWalker();
+            MyPlantUML_ATGListener listener = new MyPlantUML_ATGListener();
+            walker.walk(listener, tree);
+            UMLResult result = new UMLResult(listener.getUmlClasses(), listener.getRelationships(), listener.getAssociations(), listener.getConstraints());
+            return result;
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
+    public UMLResult generateResultsFromText(String solution) {
+
+        CharStream input = CharStreams.fromString(solution);
         PlantUML_ATGLexer lexer = new PlantUML_ATGLexer(input);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         PlantUML_ATGParser parser = new PlantUML_ATGParser(tokens);
@@ -129,5 +167,4 @@ public class UmlGenerationService {
         UMLResult result = new UMLResult(listener.getUmlClasses(), listener.getRelationships(), listener.getAssociations(), listener.getConstraints());
         return result;
     }
-
 }
