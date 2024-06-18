@@ -1,5 +1,7 @@
 // Generated from PlantUML_ATG.g4 by ANTLR 4.13.1
+
 package at.jku.dke.task_app.uml.evaluation.atg.gen;
+
 import at.jku.dke.task_app.uml.evaluation.atg.objects.UMLAssociation;
 import at.jku.dke.task_app.uml.evaluation.atg.objects.UMLClass;
 import at.jku.dke.task_app.uml.evaluation.atg.objects.UMLAttribute;
@@ -208,18 +210,6 @@ public class PlantUML_ATGBaseListener implements PlantUML_ATGListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterRelationTyp(PlantUML_ATGParser.RelationTypContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitRelationTyp(PlantUML_ATGParser.RelationTypContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterParticipant(PlantUML_ATGParser.ParticipantContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -239,6 +229,18 @@ public class PlantUML_ATGBaseListener implements PlantUML_ATGListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitParticipantMultiplicity(PlantUML_ATGParser.ParticipantMultiplicityContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterRelationTyp(PlantUML_ATGParser.RelationTypContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitRelationTyp(PlantUML_ATGParser.RelationTypContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

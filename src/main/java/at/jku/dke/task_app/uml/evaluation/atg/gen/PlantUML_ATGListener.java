@@ -169,16 +169,6 @@ public interface PlantUML_ATGListener extends ParseTreeListener {
 	 */
 	void exitRelationship(PlantUML_ATGParser.RelationshipContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link PlantUML_ATGParser#relationTyp}.
-	 * @param ctx the parse tree
-	 */
-	void enterRelationTyp(PlantUML_ATGParser.RelationTypContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link PlantUML_ATGParser#relationTyp}.
-	 * @param ctx the parse tree
-	 */
-	void exitRelationTyp(PlantUML_ATGParser.RelationTypContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link PlantUML_ATGParser#participant}.
 	 * @param ctx the parse tree
 	 */
@@ -198,6 +188,16 @@ public interface PlantUML_ATGListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitParticipantMultiplicity(PlantUML_ATGParser.ParticipantMultiplicityContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link PlantUML_ATGParser#relationTyp}.
+	 * @param ctx the parse tree
+	 */
+	void enterRelationTyp(PlantUML_ATGParser.RelationTypContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link PlantUML_ATGParser#relationTyp}.
+	 * @param ctx the parse tree
+	 */
+	void exitRelationTyp(PlantUML_ATGParser.RelationTypContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link PlantUML_ATGParser#visibility}.
 	 * @param ctx the parse tree

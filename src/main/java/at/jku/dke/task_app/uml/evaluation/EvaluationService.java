@@ -15,14 +15,19 @@ import at.jku.dke.task_app.uml.evaluation.atg.EvaluationResult;
 import at.jku.dke.task_app.uml.evaluation.atg.objects.*;
 import at.jku.dke.task_app.uml.services.UmlGenerationService;
 import jakarta.persistence.EntityNotFoundException;
+import net.sourceforge.plantuml.FileFormat;
+import net.sourceforge.plantuml.FileFormatOption;
+import net.sourceforge.plantuml.SourceStringReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.ByteArrayOutputStream;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 /**
@@ -70,6 +75,7 @@ public class EvaluationService {
         try {
             umlResultSubmission = umlGenerationService.generateResultsFromSubmission(submission.submission().input());
             criteria.add(new CriterionDto("Syntax", BigDecimal.ZERO, true, "Valid Syntax"));
+            criteria.add(new CriterionDto("Image", BigDecimal.ZERO, true, generateImage(submission.submission().input())));
 
         } catch (Exception e) {
             LOG.error("Error while evaluating submission", e);
@@ -84,6 +90,7 @@ public class EvaluationService {
                 return new GradingDto(task.getMaxPoints(), points, "", criteria);
             } else {
                 //show image
+
                 criteria.add(new CriterionDto("Identifiers", BigDecimal.ZERO, true, "all Identifiers are correct"));
                 return new GradingDto(task.getMaxPoints(), BigDecimal.ZERO, "", criteria);
             }
@@ -94,7 +101,7 @@ public class EvaluationService {
         if (task.getCompleteComparison()) {
             evaluationResult = fullyCompare(task, umlResultSubmission);
         } else {
-            GradingDto gradingDto = partiallyCompare(task, umlResultSubmission);
+            evaluationResult = fullyCompare(task, umlResultSubmission);
         }
 
         GradingDto gradingDto = generateFeedback(task, evaluationResult, submission);
@@ -106,6 +113,7 @@ public class EvaluationService {
         List<CriterionDto> criteria = new ArrayList<>();
         criteria.add(syntax);
         if (submission.feedbackLevel().equals(0)) {
+            criteria.add(new CriterionDto("Image", BigDecimal.ZERO, true, generateImage(submission.submission().input())));
             return new GradingDto(task.getMaxPoints(), BigDecimal.valueOf(evaluationResult.getPoints()), "", new ArrayList<>());
         }
         if (submission.feedbackLevel().equals(1)) {
@@ -186,7 +194,7 @@ public class EvaluationService {
                 for (UMLRelationship umlRelationship : evaluationResult.getMissingRelationships()) {
                     s += umlRelationship.getType() + ", ";
                 }
-                    }
+            }
             if (evaluationResult.getMissingAssociations().size() > 0 || !evaluationResult.getWrongAssociations().isEmpty()) {
                 criteria.add(new CriterionDto("Associations", BigDecimal.ZERO, false, "Missing Associations: " + evaluationResult.getMissingAssociations().size() + " Wrong Associations: " + evaluationResult.getWrongAssociations().size()));
             }
@@ -335,6 +343,19 @@ public class EvaluationService {
         }
 
         return new GradingDto(task.getMaxPoints(), BigDecimal.valueOf(allpoints), "", new ArrayList<>());
+    }
+
+    private String generateImage(String submission) {
+        try {
+            SourceStringReader reader = new SourceStringReader(submission);
+            try (var baos = new ByteArrayOutputStream()) {
+                reader.outputImage(baos, new FileFormatOption(FileFormat.PNG));
+                String base64EncodedImage = Base64.getEncoder().encodeToString(baos.toByteArray());
+                return "<img src=\"data:image/png;base64," + base64EncodedImage + "\" alt=\"UML-Diagramm\">";
+            }
+        } catch (Exception ex) {
+            return "<p>" + ex.getMessage() + "</p>";
+        }
     }
 
     private EvaluationResult fullyCompare(UmlTask task, UMLResult umlResultSubmission) {
@@ -552,7 +573,7 @@ public class EvaluationService {
             }
 
             points = points - evaluationResult.getMissingAttributes().size() - evaluationResult.getMissingAssociations().size() - evaluationResult.getMissingClasses().size() - evaluationResult.getMissingConstraints().size() - evaluationResult.getMissingRelationships().size();
-            if(points<0){
+            if (points < 0) {
                 points = 0;
             }
             if (points >= bestPoints) {
