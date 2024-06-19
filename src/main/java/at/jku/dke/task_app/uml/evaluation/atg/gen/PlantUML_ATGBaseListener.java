@@ -1,7 +1,5 @@
 // Generated from PlantUML_ATG.g4 by ANTLR 4.13.1
-
 package at.jku.dke.task_app.uml.evaluation.atg.gen;
-
 import at.jku.dke.task_app.uml.evaluation.atg.objects.UMLAssociation;
 import at.jku.dke.task_app.uml.evaluation.atg.objects.UMLClass;
 import at.jku.dke.task_app.uml.evaluation.atg.objects.UMLAttribute;

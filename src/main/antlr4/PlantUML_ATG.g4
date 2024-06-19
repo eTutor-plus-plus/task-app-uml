@@ -109,7 +109,18 @@ participant returns [String multiplicity]
     : participantMultiplicity1=participantMultiplicity? className participantMultiplicity2=participantMultiplicity?
         {
             currentClassName = $className.text;
-            $multiplicity = $participantMultiplicity1.text + $participantMultiplicity2.text;
+            if($participantMultiplicity1.text != null)
+            {
+                $multiplicity = $participantMultiplicity1.text;
+            }
+            else if($participantMultiplicity2.text != null)
+            {
+                $multiplicity = $participantMultiplicity2.text;
+            }
+            else
+            {
+                $multiplicity = "";
+            }
         };
 
 participantMultiplicity returns [String multiplicity]

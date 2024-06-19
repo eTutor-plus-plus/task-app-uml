@@ -108,12 +108,11 @@ public class EvaluationService {
             criteria.add(new CriterionDto("Identifiers", BigDecimal.ZERO, true, "All Identifiers are correct"));
         }
         if (submission.mode().equals(SubmissionMode.RUN)) {
+            criteria.add(new CriterionDto("Image", BigDecimal.ZERO, true, generateImage(submission.submission().input())));
             return new GradingDto(task.getMaxPoints(), BigDecimal.ZERO, "", criteria);
         }
-        if (submission.feedbackLevel().equals(0)) {
-            criteria.add(new CriterionDto("Image", BigDecimal.ZERO, true, generateImage(submission.submission().input())));
-            return new GradingDto(task.getMaxPoints(), BigDecimal.valueOf(evaluationResult.getPoints()), "", criteria);
-        }
+
+
         if (submission.feedbackLevel().equals(1)) {
             if (evaluationResult.getMissingClasses().size() > 0 || !evaluationResult.getWrongClasses().isEmpty()) {
                 criteria.add(new CriterionDto("Classes", BigDecimal.ZERO, false, "Missing Classes: " + (evaluationResult.getMissingClasses().size() + evaluationResult.getWrongClasses().size())));
@@ -133,7 +132,6 @@ public class EvaluationService {
             if (evaluationResult.getMissingConstraints().size() > 0 || !evaluationResult.getWrongConstraints().isEmpty()) {
                 criteria.add(new CriterionDto("Constraints", BigDecimal.ZERO, false, "Missing Constraints: " + (evaluationResult.getMissingConstraints().size() + evaluationResult.getWrongConstraints().size())));
             }
-            return new GradingDto(task.getMaxPoints(), BigDecimal.valueOf(evaluationResult.getPoints()), "", criteria);
         }
         if (submission.feedbackLevel().equals(2)) {
             if (evaluationResult.getMissingClasses().size() > 0 || !evaluationResult.getWrongClasses().isEmpty()) {
@@ -154,7 +152,6 @@ public class EvaluationService {
             if (evaluationResult.getMissingConstraints().size() > 0 || !evaluationResult.getWrongConstraints().isEmpty()) {
                 criteria.add(new CriterionDto("Constraints", BigDecimal.ZERO, false, "Missing Constraints: " + evaluationResult.getMissingConstraints().size() + "<br>Wrong Constraints: " + evaluationResult.getWrongConstraints().size()));
             }
-            return new GradingDto(task.getMaxPoints(), BigDecimal.valueOf(evaluationResult.getPoints()), "", criteria);
         }
         if (submission.feedbackLevel().equals(3)) {
             if (evaluationResult.getMissingClasses().size() > 0 || !evaluationResult.getWrongClasses().isEmpty()) {
@@ -222,8 +219,20 @@ public class EvaluationService {
                 }
                 criteria.add(new CriterionDto("Constraints", BigDecimal.ZERO, false, s));
             }
-            return new GradingDto(task.getMaxPoints(), BigDecimal.valueOf(evaluationResult.getPoints()), "", criteria);
+
+            if(evaluationResult.getWrongMultiRelationships().size() > 0){
+                String s = "Wrong ternaer Relationship: ";
+                for (UMLMultiRelationship multiRelationship : evaluationResult.getWrongMultiRelationships()){
+                    s +=  multiRelationship.getName() +", ";
+                }
+                criteria.add(new CriterionDto("MultiRelationships", BigDecimal.ZERO, false, s));
+            }
+
+
         }
+        criteria.add(new CriterionDto("Image", BigDecimal.ZERO, true, generateImage(submission.submission().input())));
+
+
         return new GradingDto(task.getMaxPoints(), BigDecimal.valueOf(evaluationResult.getPoints()), "", criteria);
 
 
@@ -400,12 +409,12 @@ public class EvaluationService {
             combination = "@startuml\n" + combination + "\n@enduml";
             allCombinations.set(i, combination);
         }
-        int bestPoints = 0;
+        double bestPoints = 0;
         UMLResult currentBestResult = null;
         EvaluationResult bestevaluationResult = new EvaluationResult();
 
         for (String combination : allCombinations) {
-            int points = 0;
+            double points = 0;
             EvaluationResult evaluationResult = new EvaluationResult();
             UMLResult umlResultSolution = umlGenerationService.generateResultsFromText(combination);
 
@@ -419,7 +428,7 @@ public class EvaluationService {
                                 if (umlClassSolution.getParentClass() != null) {
                                     if (umlClassSubmission.getParentClass().getName().equals(umlClassSolution.getParentClass().getName())) {
                                         if (umlClassSolution.getPoints() == 0) {
-                                            points += task.getClassPoints().intValue();
+                                            points += task.getClassPoints().doubleValue();
                                         } else {
                                             points += umlClassSolution.getPoints();
                                         }
@@ -430,7 +439,7 @@ public class EvaluationService {
                                                 if (attributeSubmission.getName().equals(attributeSolution.getName())) {
                                                     if (attributeSubmission.getType().equals(attributeSolution.getType())) {
                                                         if (attributeSolution.getPoints() == 0) {
-                                                            points += task.getAttributePoints().intValue();
+                                                            points += task.getAttributePoints().doubleValue();
                                                         } else {
                                                             points += attributeSolution.getPoints();
                                                         }
@@ -463,7 +472,7 @@ public class EvaluationService {
                                 evaluationResult.getWrongClasses().add(umlClassSubmission);
                             } else if (umlClassSolution.getParentClass() == null) {
                                 if (umlClassSolution.getPoints() == 0) {
-                                    points += task.getClassPoints().intValue();
+                                    points += task.getClassPoints().doubleValue();
                                 } else {
                                     points += umlClassSolution.getPoints();
                                 }
@@ -474,7 +483,7 @@ public class EvaluationService {
                                         if (attributeSubmission.getName().equals(attributeSolution.getName())) {
                                             if (attributeSubmission.getType().equals(attributeSolution.getType())) {
                                                 if (attributeSolution.getPoints() == 0) {
-                                                    points += task.getAttributePoints().intValue();
+                                                    points += task.getAttributePoints().doubleValue();
                                                 } else {
                                                     points += attributeSolution.getPoints();
                                                 }
@@ -538,7 +547,7 @@ public class EvaluationService {
                                     if (relationshipSubmission.getType().equals(relationshipSolution.getType())) {
                                         if (relationshipSubmission.getName().equals(relationshipSolution.getName())) {
                                             if (relationshipSolution.getPoints() == 0) {
-                                                points += task.getRelationshipPoints().intValue();
+                                                points += task.getRelationshipPoints().doubleValue();
                                             } else {
                                                 points += relationshipSolution.getPoints();
                                             }
@@ -583,7 +592,7 @@ public class EvaluationService {
                         if (associationSubmission.getClass1().equals(associationSolution.getClass1())) {
                             if (associationSubmission.getClass2().equals(associationSolution.getClass2())) {
                                 if (associationSolution.getPoints() == 0) {
-                                    points += task.getAssociationPoints().intValue();
+                                    points += task.getAssociationPoints().doubleValue();
                                 } else {
                                     points += associationSolution.getPoints();
                                 }
@@ -593,7 +602,7 @@ public class EvaluationService {
                         } else if (associationSubmission.getClass1().equals(associationSolution.getClass2())) {
                             if (associationSubmission.getClass2().equals(associationSolution.getClass1())) {
                                 if (associationSolution.getPoints() == 0) {
-                                    points += task.getAssociationPoints().intValue();
+                                    points += task.getAssociationPoints().doubleValue();
                                 } else {
                                     points += associationSolution.getPoints();
                                 }
@@ -630,18 +639,33 @@ public class EvaluationService {
 
 
             for (UMLConstraints constraintSubmission : umlResultSubmission.getConstraints()) {
+                boolean isCorrectConstraint = false;
                 for (UMLConstraints constraintSolution : umlResultSolution.getConstraints()) {
                     if (constraintSubmission.getRel1C1().equals(constraintSolution.getRel1C1())) {
                         if (constraintSubmission.getRel1C2().equals(constraintSolution.getRel1C2())) {
                             if (constraintSubmission.getRel2C1().equals(constraintSolution.getRel2C1())) {
                                 if (constraintSubmission.getRel2C2().equals(constraintSolution.getRel2C2())) {
-                                    points += constraintSolution.getPoints();
-                                    break;
+                                    if (constraintSolution.getType().equals(constraintSubmission.getType())) {
+                                        if (constraintSolution.getPoints() == 0) {
+                                            points += task.getConstraintPoints().doubleValue();
+                                        } else {
+                                            points += constraintSolution.getPoints();
+                                        }
+                                        isCorrectConstraint = true;
+                                        break;
+                                    }
                                 }
                             } else if (constraintSubmission.getRel2C1().equals(constraintSolution.getRel2C2())) {
                                 if (constraintSubmission.getRel2C2().equals(constraintSolution.getRel2C1())) {
-                                    points += constraintSolution.getPoints();
-                                    break;
+                                    if (constraintSolution.getType().equals(constraintSubmission.getType())) {
+                                        if (constraintSolution.getPoints() == 0) {
+                                            points += task.getConstraintPoints().doubleValue();
+                                        } else {
+                                            points += constraintSolution.getPoints();
+                                        }
+                                        isCorrectConstraint = true;
+                                        break;
+                                    }
                                 }
 
                             }
@@ -650,13 +674,27 @@ public class EvaluationService {
                         if (constraintSubmission.getRel1C2().equals(constraintSolution.getRel1C1())) {
                             if (constraintSubmission.getRel2C1().equals(constraintSolution.getRel2C1())) {
                                 if (constraintSubmission.getRel2C2().equals(constraintSolution.getRel2C2())) {
-                                    points += constraintSolution.getPoints();
-                                    break;
+                                    if (constraintSolution.getType().equals(constraintSubmission.getType())) {
+                                        if (constraintSolution.getPoints() == 0) {
+                                            points += task.getConstraintPoints().doubleValue();
+                                        } else {
+                                            points += constraintSolution.getPoints();
+                                        }
+                                        isCorrectConstraint = true;
+                                        break;
+                                    }
                                 }
                             } else if (constraintSubmission.getRel2C1().equals(constraintSolution.getRel2C2())) {
                                 if (constraintSubmission.getRel2C2().equals(constraintSolution.getRel2C1())) {
-                                    points += constraintSolution.getPoints();
-                                    break;
+                                    if (constraintSolution.getType().equals(constraintSubmission.getType())) {
+                                        if (constraintSolution.getPoints() == 0) {
+                                            points += task.getConstraintPoints().doubleValue();
+                                        } else {
+                                            points += constraintSolution.getPoints();
+                                        }
+                                        isCorrectConstraint = true;
+                                        break;
+                                    }
                                 }
 
                             }
@@ -664,9 +702,10 @@ public class EvaluationService {
                     }
 
                 }
-                evaluationResult.getWrongConstraints().add(constraintSubmission);
+                if (!isCorrectConstraint) {
+                    evaluationResult.getWrongConstraints().add(constraintSubmission);
+                }
             }
-
             for (UMLConstraints constraintSolution : umlResultSolution.getConstraints()) {
                 boolean isCorrectConstraint = false;
                 for (UMLConstraints constraintSubmission : umlResultSubmission.getConstraints()) {
@@ -707,6 +746,28 @@ public class EvaluationService {
                 }
             }
 
+            for(UMLMultiRelationship multiRelationship : umlResultSubmission.getMultiRelationships())
+            {
+                boolean isCorrectMultiRelationship = false;
+                for(UMLMultiRelationship multiRelationshipSolution : umlResultSolution.getMultiRelationships())
+                {
+                    if(multiRelationship.getName().equals(multiRelationshipSolution.getName()))
+                    {
+                        String connectedNoteSolution = umlResultSolution.getNoteConnections().stream().filter(noteConnection -> noteConnection.getClassName().equals(multiRelationshipSolution.getName())).findFirst().get().getNoteName();
+                        if(umlResultSubmission.getNoteConnections().stream().anyMatch(e -> e.getClassName().equals(multiRelationship.getName())&& e.getNoteName().equals(connectedNoteSolution)))
+                        {
+                            isCorrectMultiRelationship = true;
+                            break;
+                        }
+                    }
+
+                }
+                if(!isCorrectMultiRelationship)
+                {
+                    evaluationResult.getWrongMultiRelationships().add(multiRelationship);
+                }
+            }
+
             points = points - evaluationResult.getMissingAttributes().size() - evaluationResult.getMissingAssociations().size() - evaluationResult.getMissingClasses().size() - evaluationResult.getMissingConstraints().size() - evaluationResult.getMissingRelationships().size();
             if (points < 0) {
                 points = 0;
@@ -718,7 +779,7 @@ public class EvaluationService {
             }
 
         }
-        bestevaluationResult.setPoints(bestPoints);
+        bestevaluationResult.setPoints((int)bestPoints);
         return bestevaluationResult;
     }
 

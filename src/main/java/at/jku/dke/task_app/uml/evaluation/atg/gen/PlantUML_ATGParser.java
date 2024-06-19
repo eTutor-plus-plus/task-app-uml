@@ -1,5 +1,6 @@
 // Generated from PlantUML_ATG.g4 by ANTLR 4.13.1
 package at.jku.dke.task_app.uml.evaluation.atg.gen;
+
 import at.jku.dke.task_app.uml.evaluation.atg.objects.UMLAssociation;
 import at.jku.dke.task_app.uml.evaluation.atg.objects.UMLClass;
 import at.jku.dke.task_app.uml.evaluation.atg.objects.UMLAttribute;
@@ -1298,7 +1299,18 @@ public class PlantUML_ATGParser extends Parser {
 			}
 
 			            currentClassName = (((ParticipantContext)_localctx).className!=null?_input.getText(((ParticipantContext)_localctx).className.start,((ParticipantContext)_localctx).className.stop):null);
-			            ((ParticipantContext)_localctx).multiplicity =  (((ParticipantContext)_localctx).participantMultiplicity1!=null?_input.getText(((ParticipantContext)_localctx).participantMultiplicity1.start,((ParticipantContext)_localctx).participantMultiplicity1.stop):null) + (((ParticipantContext)_localctx).participantMultiplicity2!=null?_input.getText(((ParticipantContext)_localctx).participantMultiplicity2.start,((ParticipantContext)_localctx).participantMultiplicity2.stop):null);
+			            if((((ParticipantContext)_localctx).participantMultiplicity1!=null?_input.getText(((ParticipantContext)_localctx).participantMultiplicity1.start,((ParticipantContext)_localctx).participantMultiplicity1.stop):null) != null)
+			            {
+			                ((ParticipantContext)_localctx).multiplicity =  (((ParticipantContext)_localctx).participantMultiplicity1!=null?_input.getText(((ParticipantContext)_localctx).participantMultiplicity1.start,((ParticipantContext)_localctx).participantMultiplicity1.stop):null);
+			            }
+			            else if((((ParticipantContext)_localctx).participantMultiplicity2!=null?_input.getText(((ParticipantContext)_localctx).participantMultiplicity2.start,((ParticipantContext)_localctx).participantMultiplicity2.stop):null) != null)
+			            {
+			                ((ParticipantContext)_localctx).multiplicity =  (((ParticipantContext)_localctx).participantMultiplicity2!=null?_input.getText(((ParticipantContext)_localctx).participantMultiplicity2.start,((ParticipantContext)_localctx).participantMultiplicity2.stop):null);
+			            }
+			            else
+			            {
+			                ((ParticipantContext)_localctx).multiplicity =  "";
+			            }
 
 			}
 		}
