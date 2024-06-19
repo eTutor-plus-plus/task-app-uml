@@ -132,7 +132,7 @@ public class UmlGenerationService {
         ParseTreeWalker walker = new ParseTreeWalker();
         MyPlantUML_ATGListener listener = new MyPlantUML_ATGListener();
         walker.walk(listener, tree);
-        UMLResult result = new UMLResult(listener.getUmlClasses(), listener.getRelationships(), listener.getAssociations(), listener.getConstraints());
+        UMLResult result = new UMLResult(listener.getUmlClasses(), listener.getRelationships(), listener.getAssociations(), listener.getConstraints(), listener.getMultiRelationships(),listener.getNotes(),listener.getNoteConnections());
         return result;
     }
 
@@ -147,7 +147,7 @@ public class UmlGenerationService {
             ParseTreeWalker walker = new ParseTreeWalker();
             MyPlantUML_ATGListener listener = new MyPlantUML_ATGListener();
             walker.walk(listener, tree);
-            UMLResult result = new UMLResult(listener.getUmlClasses(), listener.getRelationships(), listener.getAssociations(), listener.getConstraints());
+            UMLResult result = new UMLResult(listener.getUmlClasses(), listener.getRelationships(), listener.getAssociations(), listener.getConstraints(), listener.getMultiRelationships(),listener.getNotes(),listener.getNoteConnections());
             return result;
         } catch (Exception e) {
             throw e;
@@ -164,7 +164,7 @@ public class UmlGenerationService {
         ParseTreeWalker walker = new ParseTreeWalker();
         MyPlantUML_ATGListener listener = new MyPlantUML_ATGListener();
         walker.walk(listener, tree);
-        UMLResult result = new UMLResult(listener.getUmlClasses(), listener.getRelationships(), listener.getAssociations(), listener.getConstraints());
+        UMLResult result = new UMLResult(listener.getUmlClasses(), listener.getRelationships(), listener.getAssociations(), listener.getConstraints(), listener.getMultiRelationships(),listener.getNotes(),listener.getNoteConnections());
         return result;
     }
 }

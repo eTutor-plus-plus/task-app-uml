@@ -8,53 +8,19 @@ public class UMLResult {
     private List<UMLAssociation> associations;
     private List<UMLConstraints> constraints;
 
-    private List<UMLClass> remainingUmlClasses;
-    private List<UMLRelationship> remainingRelationships;
-    private List<UMLAssociation> remainingAssociations;
-    private List<UMLConstraints> remainingConstraints;
+    private List<UMLMultiRelationship> multiRelationships;
+    private List<UMLNote> notes;
+    private List<UMLNoteConnection> noteConnections;
 
 
-    public UMLResult(List<UMLClass> umlClasses, List<UMLRelationship> relationships, List<UMLAssociation> associations, List<UMLConstraints> constraints) {
+    public UMLResult(List<UMLClass> umlClasses, List<UMLRelationship> relationships, List<UMLAssociation> associations, List<UMLConstraints> constraints, List<UMLMultiRelationship> multiRelationships, List<UMLNote> notes, List<UMLNoteConnection> noteConnections) {
         this.umlClasses = umlClasses;
         this.relationships = relationships;
         this.associations = associations;
         this.constraints = constraints;
-        this.remainingUmlClasses = umlClasses;
-        this.remainingRelationships = relationships;
-        this.remainingAssociations = associations;
-        this.remainingConstraints = constraints;
-    }
-
-    public List<UMLClass> getRemainingUmlClasses() {
-        return remainingUmlClasses;
-    }
-
-    public void setRemainingUmlClasses(List<UMLClass> remainingUmlClasses) {
-        this.remainingUmlClasses = remainingUmlClasses;
-    }
-
-    public List<UMLRelationship> getRemainingRelationships() {
-        return remainingRelationships;
-    }
-
-    public void setRemainingRelationships(List<UMLRelationship> remainingRelationships) {
-        this.remainingRelationships = remainingRelationships;
-    }
-
-    public List<UMLAssociation> getRemainingAssociations() {
-        return remainingAssociations;
-    }
-
-    public void setRemainingAssociations(List<UMLAssociation> remainingAssociations) {
-        this.remainingAssociations = remainingAssociations;
-    }
-
-    public List<UMLConstraints> getRemainingConstraints() {
-        return remainingConstraints;
-    }
-
-    public void setRemainingConstraints(List<UMLConstraints> remainingConstraints) {
-        this.remainingConstraints = remainingConstraints;
+        this.multiRelationships = multiRelationships;
+        this.notes = notes;
+        this.noteConnections = noteConnections;
     }
 
     public UMLResult() {
@@ -92,5 +58,27 @@ public class UMLResult {
         this.constraints = constraints;
     }
 
-    // getters and setters...
+    public List<UMLMultiRelationship> getMultiRelationships() {
+        return multiRelationships;
+    }
+
+    public void setMultiRelationships(List<UMLMultiRelationship> multiRelationships) {
+        this.multiRelationships = multiRelationships;
+    }
+
+    public List<UMLNote> getNotes() {
+        return notes;
+    }
+
+    public void setNotes(List<UMLNote> notes) {
+        this.notes = notes;
+    }
+
+    public List<UMLNoteConnection> getNoteConnections() {
+        return noteConnections;
+    }
+
+    public void setNoteConnections(List<UMLNoteConnection> noteConnections) {
+        this.noteConnections = noteConnections;
+    }
 }

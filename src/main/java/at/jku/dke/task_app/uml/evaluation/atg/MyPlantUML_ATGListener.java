@@ -15,6 +15,9 @@ public class MyPlantUML_ATGListener extends PlantUML_ATGBaseListener {
     private List<UMLRelationship> relationships = new ArrayList<>();
     private List<UMLAssociation> associations = new ArrayList<>();
     private List<UMLConstraints> constraints = new ArrayList<>();
+    private List<UMLMultiRelationship> multiRelationships = new ArrayList<>();
+    private List<UMLNote> notes = new ArrayList<>();
+    private List<UMLNoteConnection> noteConnections = new ArrayList<>();
 
     @Override
     public void enterClassDefinition(PlantUML_ATGParser.ClassDefinitionContext ctx) {
@@ -168,5 +171,41 @@ public class MyPlantUML_ATGListener extends PlantUML_ATGBaseListener {
 
     public List<UMLConstraints> getConstraints() {
         return constraints;
+    }
+
+    @Override
+    public void enterMultiRelationship(PlantUML_ATGParser.MultiRelationshipContext ctx) {
+        UMLMultiRelationship multiRelationship = new UMLMultiRelationship();
+        multiRelationship.setName(ctx.multiRelationshipName().Identifier().getText());
+        multiRelationships.add(multiRelationship);
+
+    }
+
+    public List<UMLMultiRelationship> getMultiRelationships() {
+        return multiRelationships;
+    }
+
+    @Override
+    public void enterNoteConnection(PlantUML_ATGParser.NoteConnectionContext ctx) {
+        UMLNoteConnection noteConnection = new UMLNoteConnection();
+        noteConnection.setNoteName(ctx.noteName().getText());
+        noteConnection.setClassName(ctx.multiRelationshipName().Identifier().getText());
+        noteConnections.add(noteConnection);
+    }
+
+    public List<UMLNoteConnection> getNoteConnections() {
+        return noteConnections;
+    }
+
+    @Override
+    public void enterNote(PlantUML_ATGParser.NoteContext ctx) {
+        UMLNote note = new UMLNote();
+        note.setNote(ctx.noteText().Identifier().getText());
+        note.setNoteName(ctx.noteName().Identifier().getText());
+        notes.add(note);
+    }
+
+    public List<UMLNote> getNotes() {
+        return notes;
     }
 }

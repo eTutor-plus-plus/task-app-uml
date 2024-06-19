@@ -12,6 +12,11 @@ CREATE TABLE umlTask
     max_points    NUMERIC(7, 2) NOT NULL,
     status        TASK_STATUS   NOT NULL,
     identifiers   TEXT[]       ,
+    classPoints    NUMERIC(7, 2) NOT NULL,
+    attributePoints    NUMERIC(7, 2) NOT NULL,
+    relationshipPoints    NUMERIC(7, 2) NOT NULL,
+    constraintPoints    NUMERIC(7, 2) NOT NULL,
+    associationPoints    NUMERIC(7, 2) NOT NULL,
     CONSTRAINT task_pk PRIMARY KEY (id)
 );
 

@@ -14,11 +14,18 @@ public class EvaluationResult {
     List<UMLRelationship> missingRelationships;
     List<UMLAssociation> missingAssociations;
     List<UMLConstraints> missingConstraints;
+    List<UMLMultiRelationship> missingMultiRelationships;
+    List<UMLNote> missingNotes;
+    List<UMLNoteConnection> missingNoteConnections;
+
     List<UMLClass> wrongClasses;
     List<UMLAttribute> wrongAttributes;
     List<UMLRelationship> wrongRelationships;
     List<UMLAssociation> wrongAssociations;
     List<UMLConstraints> wrongConstraints;
+    List<UMLMultiRelationship> wrongMultiRelationships;
+    List<UMLNote> wrongNotes;
+    List<UMLNoteConnection> wrongNoteConnections;
 
     public EvaluationResult() {
         points = 0;
@@ -34,6 +41,12 @@ public class EvaluationResult {
         wrongRelationships = new ArrayList<>();
         wrongAssociations = new ArrayList<>();
         wrongConstraints = new ArrayList<>();
+        wrongNotes = new ArrayList<>();
+        wrongNoteConnections = new ArrayList<>();
+        wrongMultiRelationships = new ArrayList<>();
+        missingMultiRelationships = new ArrayList<>();
+        missingNotes = new ArrayList<>();
+        missingNoteConnections = new ArrayList<>();
     }
 
     public int getPoints() {
@@ -138,5 +151,53 @@ public class EvaluationResult {
 
     public void setWrongConstraints(List<UMLConstraints> wrongConstraints) {
         this.wrongConstraints = wrongConstraints;
+    }
+
+    public List<UMLMultiRelationship> getMissingMultiRelationships() {
+        return missingMultiRelationships;
+    }
+
+    public void setMissingMultiRelationships(List<UMLMultiRelationship> missingMultiRelationships) {
+        this.missingMultiRelationships = missingMultiRelationships;
+    }
+
+    public List<UMLNote> getMissingNotes() {
+        return missingNotes;
+    }
+
+    public void setMissingNotes(List<UMLNote> missingNotes) {
+        this.missingNotes = missingNotes;
+    }
+
+    public List<UMLNoteConnection> getMissingNoteConnections() {
+        return missingNoteConnections;
+    }
+
+    public void setMissingNoteConnections(List<UMLNoteConnection> missingNoteConnections) {
+        this.missingNoteConnections = missingNoteConnections;
+    }
+
+    public List<UMLMultiRelationship> getWrongMultiRelationships() {
+        return wrongMultiRelationships;
+    }
+
+    public void setWrongMultiRelationships(List<UMLMultiRelationship> wrongMultiRelationships) {
+        this.wrongMultiRelationships = wrongMultiRelationships;
+    }
+
+    public List<UMLNote> getWrongNotes() {
+        return wrongNotes;
+    }
+
+    public void setWrongNotes(List<UMLNote> wrongNotes) {
+        this.wrongNotes = wrongNotes;
+    }
+
+    public List<UMLNoteConnection> getWrongNoteConnections() {
+        return wrongNoteConnections;
+    }
+
+    public void setWrongNoteConnections(List<UMLNoteConnection> wrongNoteConnections) {
+        this.wrongNoteConnections = wrongNoteConnections;
     }
 }

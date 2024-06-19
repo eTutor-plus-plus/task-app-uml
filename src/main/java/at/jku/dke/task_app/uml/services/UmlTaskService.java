@@ -30,6 +30,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Locale;
 
@@ -75,6 +76,11 @@ public class UmlTaskService extends BaseTaskService<UmlTask, ModifyUmlTaskDto>{
 
         UmlTask task = new UmlTask();
         task.setCompleteComparison(modifyTaskDto.additionalData().completeComparison());
+        task.setClassPoints(BigDecimal.valueOf(modifyTaskDto.additionalData().classPoints()));
+        task.setAttributePoints(BigDecimal.valueOf(modifyTaskDto.additionalData().attributePoints()));
+        task.setRelationshipPoints(BigDecimal.valueOf(modifyTaskDto.additionalData().relationshipPoints()));
+        task.setAssociationPoints(BigDecimal.valueOf(modifyTaskDto.additionalData().associationPoints()));
+        task.setConstraintPoints(BigDecimal.valueOf(modifyTaskDto.additionalData().constraintPoints()));
         task.setId(id);
         return task;
     }
