@@ -185,23 +185,48 @@ public class EvaluationService {
                 for (UMLClass umlClass : evaluationResult.getMissingAbstractClasses()) {
                     s += umlClass.getName() + ", ";
                 }
+
+
                 criteria.add(new CriterionDto("Abstract Classes", BigDecimal.ZERO, false, s));
             }
             if (evaluationResult.getMissingRelationships().size() > 0 || !evaluationResult.getWrongRelationships().isEmpty()) {
                 String s = "Missing Relationships: ";
                 for (UMLRelationship umlRelationship : evaluationResult.getMissingRelationships()) {
-                    s += umlRelationship.getType() + ", ";
+                    s += umlRelationship.getEntities().getFirst().getClassname() + "--" + umlRelationship.getEntities().getLast().getClassname() + ", ";
                 }
+                s += "<br> Wrong Relationships: ";
+                for (UMLRelationship umlRelationship : evaluationResult.getWrongRelationships()) {
+                    s += umlRelationship.getEntities().getFirst().getClassname() + umlRelationship.getType() + umlRelationship.getEntities().getLast().getClassname() + ", ";
+                }
+                criteria.add(new CriterionDto("Relationships", BigDecimal.ZERO, false, s));
             }
             if (evaluationResult.getMissingAssociations().size() > 0 || !evaluationResult.getWrongAssociations().isEmpty()) {
-                criteria.add(new CriterionDto("Associations", BigDecimal.ZERO, false, "Missing Associations: " + evaluationResult.getMissingAssociations().size() + " Wrong Associations: " + evaluationResult.getWrongAssociations().size()));
+                String s = "Missing Associations: ";
+                for (UMLAssociation umlAssociation : evaluationResult.getMissingAssociations()) {
+                    s += umlAssociation.getAssoClass() + "--" + umlAssociation.getClass1() + "--" + umlAssociation.getClass2() + ", ";
+                }
+                s += "<br> Wrong Associations: ";
+                for (UMLAssociation umlAssociation : evaluationResult.getWrongAssociations()) {
+                    s += umlAssociation.getAssoClass() + "--" + umlAssociation.getClass1() + "--" + umlAssociation.getClass2() + ", ";
+                }
+                criteria.add(new CriterionDto("Associations", BigDecimal.ZERO, false, s));
             }
             if (evaluationResult.getMissingConstraints().size() > 0 || !evaluationResult.getWrongConstraints().isEmpty()) {
-                criteria.add(new CriterionDto("Constraints", BigDecimal.ZERO, false, "Missing Constraints: " + evaluationResult.getMissingConstraints().size() + "Wrong Constraints: " + evaluationResult.getWrongConstraints().size()));
+                String s = "Missing Constraints: ";
+                for (UMLConstraints umlConstraints : evaluationResult.getMissingConstraints()) {
+                    s += umlConstraints.getRel1C1() + "--" + umlConstraints.getRel1C2() + "--" + umlConstraints.getRel2C1() + "--" + umlConstraints.getRel2C2() + ", ";
+                }
+                s += "<br> Wrong Constraints: ";
+                for (UMLConstraints umlConstraints : evaluationResult.getWrongConstraints()) {
+                    s += umlConstraints.getRel1C1() + "--" + umlConstraints.getRel1C2() + "--" + umlConstraints.getRel2C1() + "--" + umlConstraints.getRel2C2() + ", ";
+                }
+                criteria.add(new CriterionDto("Constraints", BigDecimal.ZERO, false, s));
             }
             return new GradingDto(task.getMaxPoints(), BigDecimal.valueOf(evaluationResult.getPoints()), "", criteria);
         }
         return new GradingDto(task.getMaxPoints(), BigDecimal.valueOf(evaluationResult.getPoints()), "", criteria);
+
+
     }
 
     private GradingDto partiallyCompare(UmlTask task, UMLResult umlResultSubmission) {
@@ -393,14 +418,22 @@ public class EvaluationService {
                             if (umlClassSubmission.getParentClass() != null) {
                                 if (umlClassSolution.getParentClass() != null) {
                                     if (umlClassSubmission.getParentClass().getName().equals(umlClassSolution.getParentClass().getName())) {
-                                        points += umlClassSolution.getPoints();
+                                        if (umlClassSolution.getPoints() == 0) {
+                                            points += task.getClassPoints().intValue();
+                                        } else {
+                                            points += umlClassSolution.getPoints();
+                                        }
                                         isClassCorrect = true;
                                         for (UMLAttribute attributeSubmission : umlClassSubmission.getAttributes()) {
                                             boolean isAttributecorrect = false;
                                             for (UMLAttribute attributeSolution : umlClassSolution.getAttributes()) {
                                                 if (attributeSubmission.getName().equals(attributeSolution.getName())) {
                                                     if (attributeSubmission.getType().equals(attributeSolution.getType())) {
-                                                        points += attributeSolution.getPoints();
+                                                        if (attributeSolution.getPoints() == 0) {
+                                                            points += task.getAttributePoints().intValue();
+                                                        } else {
+                                                            points += attributeSolution.getPoints();
+                                                        }
                                                         isAttributecorrect = true;
                                                         break;
                                                     }
@@ -429,14 +462,22 @@ public class EvaluationService {
                                 }
                                 evaluationResult.getWrongClasses().add(umlClassSubmission);
                             } else if (umlClassSolution.getParentClass() == null) {
-                                points += umlClassSolution.getPoints();
+                                if (umlClassSolution.getPoints() == 0) {
+                                    points += task.getClassPoints().intValue();
+                                } else {
+                                    points += umlClassSolution.getPoints();
+                                }
                                 isClassCorrect = true;
                                 for (UMLAttribute attributeSubmission : umlClassSubmission.getAttributes()) {
                                     boolean isAttributecorrect = false;
                                     for (UMLAttribute attributeSolution : umlClassSolution.getAttributes()) {
                                         if (attributeSubmission.getName().equals(attributeSolution.getName())) {
                                             if (attributeSubmission.getType().equals(attributeSolution.getType())) {
-                                                points += attributeSolution.getPoints();
+                                                if (attributeSolution.getPoints() == 0) {
+                                                    points += task.getAttributePoints().intValue();
+                                                } else {
+                                                    points += attributeSolution.getPoints();
+                                                }
                                                 isAttributecorrect = true;
                                                 break;
                                             }
@@ -486,91 +527,108 @@ public class EvaluationService {
             }
 
 
-
-
-
-
             for (UMLRelationship relationshipSubmission : umlResultSubmission.getRelationships()) {
+                boolean isCorrectRelationship = false;
                 for (UMLRelationship relationshipSolution : umlResultSolution.getRelationships()) {
-                    if (relationshipSubmission.getType().equals(relationshipSolution.getType())) {
-                        boolean allEntitiesCorrect = true;
-                        for (UMLRelationshipEntity entitySubmission : relationshipSubmission.getEntities()) {
-                            for (UMLRelationshipEntity entitySolution : relationshipSolution.getEntities()) {
-                                if (entitySubmission.getClassname().equals(entitySolution.getClassname())) {
-                                    if (entitySubmission.getMultiplicity().equals(entitySolution.getMultiplicity())) {
-                                        break;
+                    if (relationshipSolution.getEntities().stream().anyMatch(e -> e.getClassname().equals(relationshipSubmission.getEntities().getFirst().getClassname()))) {
+                        if (relationshipSolution.getEntities().stream().anyMatch(e -> e.getClassname().equals(relationshipSubmission.getEntities().getLast().getClassname()))) {
+                            //compare multiplicity of the two entities with matching name
+                            if (relationshipSolution.getEntities().stream().filter(e -> e.getClassname().equals(relationshipSubmission.getEntities().getFirst().getClassname())).findFirst().get().getMultiplicity().equals(relationshipSubmission.getEntities().getFirst().getMultiplicity())) {
+                                if (relationshipSolution.getEntities().stream().filter(e -> e.getClassname().equals(relationshipSubmission.getEntities().getLast().getClassname())).findFirst().get().getMultiplicity().equals(relationshipSubmission.getEntities().getLast().getMultiplicity())) {
+                                    if (relationshipSubmission.getType().equals(relationshipSolution.getType())) {
+                                        if (relationshipSubmission.getName().equals(relationshipSolution.getName())) {
+                                            if (relationshipSolution.getPoints() == 0) {
+                                                points += task.getRelationshipPoints().intValue();
+                                            } else {
+                                                points += relationshipSolution.getPoints();
+                                            }
+
+                                            isCorrectRelationship = true;
+                                            break;
+                                        }
                                     }
                                 }
-
                             }
-                            allEntitiesCorrect = false;
-                        }
-                        if (allEntitiesCorrect) {
-                            points += relationshipSolution.getPoints();
-                            break;
+
                         }
                     }
                 }
-                evaluationResult.getWrongRelationships().add(relationshipSubmission);
+                if (!isCorrectRelationship) {
+                    evaluationResult.getWrongRelationships().add(relationshipSubmission);
+                }
             }
             for (UMLRelationship relationshipSolution : umlResultSolution.getRelationships()) {
+                boolean isCorrectRelationship = false;
                 for (UMLRelationship relationshipSubmission : umlResultSubmission.getRelationships()) {
-                    if (relationshipSubmission.getType().equals(relationshipSolution.getType())) {
-                        boolean allEntitiesCorrect = true;
-                        for (UMLRelationshipEntity entitySolution : relationshipSolution.getEntities()) {
-                            for (UMLRelationshipEntity entitySubmission : relationshipSubmission.getEntities()) {
-                                if (entitySubmission.getClassname().equals(entitySolution.getClassname())) {
-                                    if (entitySubmission.getMultiplicity().equals(entitySolution.getMultiplicity())) {
-                                        break;
-                                    }
-                                }
 
-                            }
-                            allEntitiesCorrect = false;
-
-                        }
-                        if (allEntitiesCorrect) {
+                    if (relationshipSolution.getEntities().stream().anyMatch(e -> e.getClassname().equals(relationshipSubmission.getEntities().getFirst().getClassname()))) {
+                        if (relationshipSolution.getEntities().stream().anyMatch(e -> e.getClassname().equals(relationshipSubmission.getEntities().getLast().getClassname()))) {
+                            //compare multiplicity of the two entities with matching name
+                            isCorrectRelationship = true;
                             break;
+
                         }
                     }
                 }
-                evaluationResult.getMissingRelationships().add(relationshipSolution);
+                if (!isCorrectRelationship) {
+                    evaluationResult.getMissingRelationships().add(relationshipSolution);
+                }
             }
+
+
             for (UMLAssociation associationSubmission : umlResultSubmission.getAssociations()) {
+                boolean isCorrectAssociation = false;
                 for (UMLAssociation associationSolution : umlResultSolution.getAssociations()) {
                     if (associationSubmission.getAssoClass().equals(associationSolution.getAssoClass())) {
                         if (associationSubmission.getClass1().equals(associationSolution.getClass1())) {
                             if (associationSubmission.getClass2().equals(associationSolution.getClass2())) {
-                                points += associationSolution.getPoints();
+                                if (associationSolution.getPoints() == 0) {
+                                    points += task.getAssociationPoints().intValue();
+                                } else {
+                                    points += associationSolution.getPoints();
+                                }
+                                isCorrectAssociation = true;
                                 break;
                             }
                         } else if (associationSubmission.getClass1().equals(associationSolution.getClass2())) {
                             if (associationSubmission.getClass2().equals(associationSolution.getClass1())) {
-                                points += associationSolution.getPoints();
-                                break;
+                                if (associationSolution.getPoints() == 0) {
+                                    points += task.getAssociationPoints().intValue();
+                                } else {
+                                    points += associationSolution.getPoints();
+                                }
+                                isCorrectAssociation = true;
                             }
                         }
                     }
                 }
-                evaluationResult.getWrongAssociations().add(associationSubmission);
+                if (!isCorrectAssociation) {
+                    evaluationResult.getWrongAssociations().add(associationSubmission);
+                }
             }
             for (UMLAssociation associationSolution : umlResultSolution.getAssociations()) {
+                boolean isCorrectAssociation = false;
                 for (UMLAssociation associationSubmission : umlResultSubmission.getAssociations()) {
                     if (associationSubmission.getAssoClass().equals(associationSolution.getAssoClass())) {
                         if (associationSubmission.getClass1().equals(associationSolution.getClass1())) {
                             if (associationSubmission.getClass2().equals(associationSolution.getClass2())) {
+                                isCorrectAssociation = true;
                                 break;
                             }
                         } else if (associationSubmission.getClass1().equals(associationSolution.getClass2())) {
                             if (associationSubmission.getClass2().equals(associationSolution.getClass1())) {
+                                isCorrectAssociation = true;
                                 break;
                             }
 
                         }
                     }
+
                     evaluationResult.getMissingAssociations().add(associationSolution);
                 }
             }
+
+
             for (UMLConstraints constraintSubmission : umlResultSubmission.getConstraints()) {
                 for (UMLConstraints constraintSolution : umlResultSolution.getConstraints()) {
                     if (constraintSubmission.getRel1C1().equals(constraintSolution.getRel1C1())) {
@@ -610,17 +668,18 @@ public class EvaluationService {
             }
 
             for (UMLConstraints constraintSolution : umlResultSolution.getConstraints()) {
+                boolean isCorrectConstraint = false;
                 for (UMLConstraints constraintSubmission : umlResultSubmission.getConstraints()) {
                     if (constraintSubmission.getRel1C1().equals(constraintSolution.getRel1C1())) {
                         if (constraintSubmission.getRel1C2().equals(constraintSolution.getRel1C2())) {
                             if (constraintSubmission.getRel2C1().equals(constraintSolution.getRel2C1())) {
                                 if (constraintSubmission.getRel2C2().equals(constraintSolution.getRel2C2())) {
-
+                                    isCorrectConstraint = true;
                                     break;
                                 }
                             } else if (constraintSubmission.getRel2C1().equals(constraintSolution.getRel2C2())) {
                                 if (constraintSubmission.getRel2C2().equals(constraintSolution.getRel2C1())) {
-
+                                    isCorrectConstraint = true;
                                     break;
                                 }
 
@@ -630,11 +689,12 @@ public class EvaluationService {
                         if (constraintSubmission.getRel1C2().equals(constraintSolution.getRel1C1())) {
                             if (constraintSubmission.getRel2C1().equals(constraintSolution.getRel2C1())) {
                                 if (constraintSubmission.getRel2C2().equals(constraintSolution.getRel2C2())) {
-
+                                    isCorrectConstraint = true;
                                     break;
                                 }
                             } else if (constraintSubmission.getRel2C1().equals(constraintSolution.getRel2C2())) {
                                 if (constraintSubmission.getRel2C2().equals(constraintSolution.getRel2C1())) {
+                                    isCorrectConstraint = true;
                                     break;
                                 }
                             }
@@ -642,7 +702,9 @@ public class EvaluationService {
                     }
 
                 }
-                evaluationResult.getMissingConstraints().add(constraintSolution);
+                if (!isCorrectConstraint) {
+                    evaluationResult.getMissingConstraints().add(constraintSolution);
+                }
             }
 
             points = points - evaluationResult.getMissingAttributes().size() - evaluationResult.getMissingAssociations().size() - evaluationResult.getMissingClasses().size() - evaluationResult.getMissingConstraints().size() - evaluationResult.getMissingRelationships().size();

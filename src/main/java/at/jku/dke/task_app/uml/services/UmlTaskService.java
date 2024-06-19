@@ -109,6 +109,13 @@ public class UmlTaskService extends BaseTaskService<UmlTask, ModifyUmlTaskDto>{
         deleteBlocks(task);
 
         task.setCompleteComparison(dto.additionalData().completeComparison());
+        task.setCompleteComparison(dto.additionalData().completeComparison());
+        task.setClassPoints(BigDecimal.valueOf(dto.additionalData().classPoints()));
+        task.setAttributePoints(BigDecimal.valueOf(dto.additionalData().attributePoints()));
+        task.setRelationshipPoints(BigDecimal.valueOf(dto.additionalData().relationshipPoints()));
+        task.setAssociationPoints(BigDecimal.valueOf(dto.additionalData().associationPoints()));
+        task.setConstraintPoints(BigDecimal.valueOf(dto.additionalData().constraintPoints()));
+
         umlTaskRepository.save(task);
     }
 

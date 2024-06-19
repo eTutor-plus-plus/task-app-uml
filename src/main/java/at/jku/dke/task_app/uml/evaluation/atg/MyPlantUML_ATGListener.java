@@ -107,7 +107,15 @@ public class MyPlantUML_ATGListener extends PlantUML_ATGBaseListener {
         if(ctx.score()!=null) {
             relationship.setPoints(Integer.parseInt(ctx.score().points().getText()));
         }
+        if(ctx.label()!=null) {
+            relationship.setName(ctx.label().getText());
+        }
+        else{
+            relationship.setName("");
+        }
         relationships.add(relationship);
+
+
         String className = ctx.participant1.className.getText();
         String className2 = ctx.participant2.className.getText();
         System.out.println(className + " " + className2);
