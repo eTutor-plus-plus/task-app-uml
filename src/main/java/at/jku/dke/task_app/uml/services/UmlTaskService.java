@@ -100,8 +100,13 @@ public class UmlTaskService extends BaseTaskService<UmlTask, ModifyUmlTaskDto>{
             }
 
         }
-        List<String> identifiers = umlGenerationService.generateIdentifiersFromSolution(task.getId());
         //get all identifiers from the task;
+
+        List<String> identifiers = umlGenerationService.generateIdentifiersFromSolution(task.getId());
+        int points = umlGenerationService.getMaxPossiblePoints(task.getId());
+        task.setMaxPoints(BigDecimal.valueOf(points));
+        umlTaskRepository.save(task);
+
     }
 
     @Override
@@ -135,7 +140,9 @@ public class UmlTaskService extends BaseTaskService<UmlTask, ModifyUmlTaskDto>{
 
         }
         List<String> identifiers = umlGenerationService.generateIdentifiersFromSolution(task.getId());
-
+        int points = umlGenerationService.getMaxPossiblePoints(task.getId());
+        task.setMaxPoints(BigDecimal.valueOf(points));
+        umlTaskRepository.save(task);
     }
 
     @Override
@@ -163,8 +170,9 @@ public class UmlTaskService extends BaseTaskService<UmlTask, ModifyUmlTaskDto>{
     protected TaskModificationResponseDto mapToReturnData(UmlTask task, boolean create) {
         return new TaskModificationResponseDto(
             this.messageSource.getMessage("defaultTaskDescription", null, Locale.GERMAN),
-            this.messageSource.getMessage("defaultTaskDescription", null, Locale.ENGLISH)
-        );
+            this.messageSource.getMessage("defaultTaskDescription", null, Locale.ENGLISH), null,task.getMaxPoints());
+
+
     }
 
 

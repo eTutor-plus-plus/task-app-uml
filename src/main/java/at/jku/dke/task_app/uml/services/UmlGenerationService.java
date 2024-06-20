@@ -43,6 +43,79 @@ public class UmlGenerationService {
         this.taskRepository = taskRepository;
     }
 
+    protected int getMaxPossiblePoints(long task){
+        UmlTask umlTask = umlTaskRepository.findById(task).orElseThrow(() -> new EntityNotFoundException("Task " + task + " does not exist."));
+        List<List<String>> blocksText = new ArrayList<>();
+        for (UmlBlock umlBlock : umlBlockRepository.findByTask(umlTask)) {
+            List<String> block = new ArrayList<>();
+            String altText = "";
+            for (UmlBlockAlt umlBlockAlt : umlBlockAltRepository.findByUmlBlock(umlBlock)) {
+                altText = umlBlockAlt.getUmlBlockAlternative();
+                altText = altText.replaceAll("@startuml", "");
+                altText = altText.replaceAll("@enduml", "");
+                block.add(altText);
+            }
+            blocksText.add(block);
+        }
+        List<String> allCombinations = generateCombinations(blocksText);
+        for (int i = 0; i < allCombinations.size(); i++) {
+            String combination = allCombinations.get(i);
+            combination = "@startuml\n" + combination + "\n@enduml";
+            allCombinations.set(i, combination);
+        }
+
+        double maxPoints = 0;
+        for (String combination : allCombinations) {
+            double currentPoints = 0;
+            UMLResult result = generateResultsFromText(combination);
+
+            for(UMLClass umlClass : result.getUmlClasses()){
+                if(umlClass.getPoints()!=0){
+                currentPoints += umlClass.getPoints();
+                }
+                else{
+                    currentPoints += umlTask.getClassPoints().doubleValue();
+                }
+                for(UMLAttribute attribute : umlClass.getAttributes()){
+                    if(attribute.getPoints()!=0){
+                        currentPoints += attribute.getPoints();
+                    }
+                    else{
+                        currentPoints += umlTask.getAttributePoints().doubleValue();
+                    }
+                }
+            }
+            for(UMLRelationship relationship : result.getRelationships()){
+                if(relationship.getPoints()!=0){
+                    currentPoints += relationship.getPoints();
+                }
+                else{
+                    currentPoints += umlTask.getRelationshipPoints().doubleValue();
+                }
+            }
+            for(UMLAssociation association : result.getAssociations()){
+                if(association.getPoints()!=0){
+                    currentPoints += association.getPoints();
+                }
+                else{
+                    currentPoints += umlTask.getAssociationPoints().doubleValue();
+                }
+            }
+            for(UMLConstraints constraint : result.getConstraints()){
+                if(constraint.getPoints()!=0){
+                    currentPoints += constraint.getPoints();
+                }
+                else{
+                    currentPoints += umlTask.getConstraintPoints().doubleValue();
+                }
+            }
+            if(maxPoints<currentPoints){
+                maxPoints = currentPoints;
+            }
+        }
+        return (int) maxPoints;
+    }
+
 
     protected List<String> generateIdentifiersFromSolution(long id) {
         UmlTask task = umlTaskRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Task " + id + " does not exist."));
@@ -167,4 +240,26 @@ public class UmlGenerationService {
         UMLResult result = new UMLResult(listener.getUmlClasses(), listener.getRelationships(), listener.getAssociations(), listener.getConstraints(), listener.getMultiRelationships(),listener.getNotes(),listener.getNoteConnections());
         return result;
     }
+    public  List<String> generateCombinations(List<List<String>> blocks) {
+        List<String> result = new ArrayList<>();
+        if (blocks == null || blocks.isEmpty()) {
+            return result;
+        }
+        // Start the combination process
+        generateCombinationsRecursive(blocks, result, "", 0);
+        return result;
+    }
+
+    private void generateCombinationsRecursive(List<List<String>> blocks, List<String> result, String current, int depth) {
+        // Base case: if the current depth equals the number of blocks, add the combination to the result list
+        if (depth == blocks.size()) {
+            result.add(current.trim());
+            return;
+        }
+        // Iterate through each alternative in the current block
+        for (String alternative : blocks.get(depth)) {
+            generateCombinationsRecursive(blocks, result, current + " " + alternative, depth + 1);
+        }
+    }
+
 }

@@ -111,6 +111,11 @@ public class EvaluationService {
             criteria.add(new CriterionDto("Image", BigDecimal.ZERO, true, generateImage(submission.submission().input())));
             return new GradingDto(task.getMaxPoints(), BigDecimal.ZERO, "", criteria);
         }
+        if(evaluationResult.getPoints() != task.getMaxPoints().intValue()){
+            if(evaluationResult.getWrongClasses().isEmpty()&&evaluationResult.getWrongAttributes().isEmpty()&&evaluationResult.getWrongRelationships().isEmpty()&&evaluationResult.getWrongAssociations().isEmpty()&&evaluationResult.getWrongConstraints().isEmpty()) {
+                criteria.add(new CriterionDto("Correctness", BigDecimal.ZERO, true, "Not the best Solution found!"));
+            }
+        }
 
 
         if (submission.feedbackLevel().equals(1)) {
@@ -403,7 +408,7 @@ public class EvaluationService {
             }
             blocksText.add(block);
         }
-        List<String> allCombinations = generateCombinations(blocksText);
+        List<String> allCombinations = umlGenerationService.generateCombinations(blocksText);
         for (int i = 0; i < allCombinations.size(); i++) {
             String combination = allCombinations.get(i);
             combination = "@startuml\n" + combination + "\n@enduml";
@@ -783,27 +788,7 @@ public class EvaluationService {
         return bestevaluationResult;
     }
 
-    public static List<String> generateCombinations(List<List<String>> blocks) {
-        List<String> result = new ArrayList<>();
-        if (blocks == null || blocks.isEmpty()) {
-            return result;
-        }
-        // Start the combination process
-        generateCombinationsRecursive(blocks, result, "", 0);
-        return result;
-    }
 
-    private static void generateCombinationsRecursive(List<List<String>> blocks, List<String> result, String current, int depth) {
-        // Base case: if the current depth equals the number of blocks, add the combination to the result list
-        if (depth == blocks.size()) {
-            result.add(current.trim());
-            return;
-        }
-        // Iterate through each alternative in the current block
-        for (String alternative : blocks.get(depth)) {
-            generateCombinationsRecursive(blocks, result, current + " " + alternative, depth + 1);
-        }
-    }
 
 
     public boolean areNamesInIdentifiers(UMLResult umlResult, List<String> identifiers) {
