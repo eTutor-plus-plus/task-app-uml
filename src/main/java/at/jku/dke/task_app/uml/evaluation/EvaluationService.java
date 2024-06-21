@@ -101,8 +101,9 @@ public class EvaluationService {
         CriterionDto syntax = new CriterionDto("Syntax", null, true, "Valid Syntax");
         List<CriterionDto> criteria = new ArrayList<>();
         criteria.add(syntax);
-        if (!areNamesInIdentifiers(umlResultSubmission, task.getIdentifiers())) {
-            criteria.add(new CriterionDto("Identifiers", null, false, "Not all Identifiers are correct"));
+        List<String> wrongIdentifier = wrongIdentifiers(umlResultSubmission, task.getIdentifiers());
+        if (wrongIdentifier.size() > 0 || !wrongIdentifier.isEmpty()) {
+            criteria.add(new CriterionDto("Identifiers", null, false, "Wrong Identifiers: " + wrongIdentifier.toString()));
         } else {
 
             criteria.add(new CriterionDto("Identifiers", null, true, "All Identifiers are correct"));
@@ -242,7 +243,7 @@ public class EvaluationService {
 
 
     }
-
+        //NOT WORKING - NOT FINISHED
     private GradingDto partiallyCompare(UmlTask task, UMLResult umlResultSubmission) {
         int allpoints = 0;
         List<UMLClass> allMissingClasses = new ArrayList<>();
@@ -791,15 +792,16 @@ public class EvaluationService {
 
 
 
-    public boolean areNamesInIdentifiers(UMLResult umlResult, List<String> identifiers) {
+    public List<String> wrongIdentifiers(UMLResult umlResult, List<String> identifiers) {
         // Check classes
+        List<String> wrongIdentifiers = new ArrayList<>();
         for (UMLClass umlClass : umlResult.getUmlClasses()) {
             if (!identifiers.contains(umlClass.getName())) {
-                return false;
+                wrongIdentifiers.add(umlClass.getName());
             }
             for (UMLAttribute attribute : umlClass.getAttributes()) {
                 if (!identifiers.contains(attribute.getName())) {
-                    return false;
+                    wrongIdentifiers.add(attribute.getName());
                 }
             }
         }
@@ -808,7 +810,7 @@ public class EvaluationService {
         for (UMLRelationship relationship : umlResult.getRelationships()) {
             for (UMLRelationshipEntity entity : relationship.getEntities()) {
                 if (!identifiers.contains(entity.getClassname())) {
-                    return false;
+                    wrongIdentifiers.add(entity.getClassname());
                 }
             }
         }
@@ -816,33 +818,33 @@ public class EvaluationService {
         // Check associations
         for (UMLAssociation association : umlResult.getAssociations()) {
             if (!identifiers.contains(association.getAssoClass())) {
-                return false;
+                wrongIdentifiers.add(association.getAssoClass());
             }
             if (!identifiers.contains(association.getClass1())) {
-                return false;
+                wrongIdentifiers.add(association.getClass1());
             }
             if (!identifiers.contains(association.getClass2())) {
-                return false;
+                wrongIdentifiers.add(association.getClass2());
             }
         }
 
         // Check constraints
         for (UMLConstraints constraint : umlResult.getConstraints()) {
             if (!identifiers.contains(constraint.getRel1C1())) {
-                return false;
+                wrongIdentifiers.add(constraint.getRel1C1());
             }
             if (!identifiers.contains(constraint.getRel1C2())) {
-                return false;
+                wrongIdentifiers.add(constraint.getRel1C2());
             }
             if (!identifiers.contains(constraint.getRel2C1())) {
-                return false;
+                wrongIdentifiers.add(constraint.getRel2C1());
             }
             if (!identifiers.contains(constraint.getRel2C2())) {
-                return false;
+                wrongIdentifiers.add(constraint.getRel2C2());
             }
         }
 
         // If all checks pass, all names are in the identifiers list
-        return true;
+        return wrongIdentifiers;
     }
 }
