@@ -74,12 +74,12 @@ public class EvaluationService {
         UMLResult umlResultSubmission = null;
         try {
             umlResultSubmission = umlGenerationService.generateResultsFromSubmission(submission.submission().input());
-            criteria.add(new CriterionDto("Syntax", BigDecimal.ZERO, true, "Valid Syntax"));
-            criteria.add(new CriterionDto("Image", BigDecimal.ZERO, true, generateImage(submission.submission().input())));
+            criteria.add(new CriterionDto("Syntax", null, true, "Valid Syntax"));
+            criteria.add(new CriterionDto("Image", null, true, generateImage(submission.submission().input())));
 
         } catch (Exception e) {
             LOG.error("Error while evaluating submission", e);
-            criteria.add(new CriterionDto("Syntax", BigDecimal.ZERO, false, "Syntax Error" + e.getMessage()));
+            criteria.add(new CriterionDto("Syntax", null, false, "Syntax Error" + e.getMessage()));
             return new GradingDto(task.getMaxPoints(), points, "", criteria);
         }
         System.out.println(umlResultSubmission);
@@ -98,64 +98,64 @@ public class EvaluationService {
     }
 
     private GradingDto generateFeedback(UmlTask task, EvaluationResult evaluationResult, SubmitSubmissionDto<UmlSubmissionDto> submission, UMLResult umlResultSubmission) {
-        CriterionDto syntax = new CriterionDto("Syntax", BigDecimal.ZERO, true, "Valid Syntax");
+        CriterionDto syntax = new CriterionDto("Syntax", null, true, "Valid Syntax");
         List<CriterionDto> criteria = new ArrayList<>();
         criteria.add(syntax);
         if (!areNamesInIdentifiers(umlResultSubmission, task.getIdentifiers())) {
-            criteria.add(new CriterionDto("Identifiers", BigDecimal.ZERO, false, "Not all Identifiers are correct"));
+            criteria.add(new CriterionDto("Identifiers", null, false, "Not all Identifiers are correct"));
         } else {
 
-            criteria.add(new CriterionDto("Identifiers", BigDecimal.ZERO, true, "All Identifiers are correct"));
+            criteria.add(new CriterionDto("Identifiers", null, true, "All Identifiers are correct"));
         }
         if (submission.mode().equals(SubmissionMode.RUN)) {
-            criteria.add(new CriterionDto("Image", BigDecimal.ZERO, true, generateImage(submission.submission().input())));
+            criteria.add(new CriterionDto("Image", null, true, generateImage(submission.submission().input())));
             return new GradingDto(task.getMaxPoints(), BigDecimal.ZERO, "", criteria);
         }
         if(evaluationResult.getPoints() != task.getMaxPoints().intValue()){
             if(evaluationResult.getWrongClasses().isEmpty()&&evaluationResult.getWrongAttributes().isEmpty()&&evaluationResult.getWrongRelationships().isEmpty()&&evaluationResult.getWrongAssociations().isEmpty()&&evaluationResult.getWrongConstraints().isEmpty()) {
-                criteria.add(new CriterionDto("Correctness", BigDecimal.ZERO, true, "Not the best Solution found!"));
+                criteria.add(new CriterionDto("Correctness", null, true, "Not the best Solution found!"));
             }
         }
 
 
         if (submission.feedbackLevel().equals(1)) {
             if (evaluationResult.getMissingClasses().size() > 0 || !evaluationResult.getWrongClasses().isEmpty()) {
-                criteria.add(new CriterionDto("Classes", BigDecimal.ZERO, false, "Missing Classes: " + (evaluationResult.getMissingClasses().size() + evaluationResult.getWrongClasses().size())));
+                criteria.add(new CriterionDto("Classes", null, false, "Missing Classes: " + (evaluationResult.getMissingClasses().size() + evaluationResult.getWrongClasses().size())));
             }
             if (evaluationResult.getMissingAttributes().size() > 0 || !evaluationResult.getWrongAttributes().isEmpty()) {
-                criteria.add(new CriterionDto("Attributes", BigDecimal.ZERO, false, "Missing Attributes: " + (evaluationResult.getMissingAttributes().size() + evaluationResult.getWrongAttributes().size())));
+                criteria.add(new CriterionDto("Attributes", null, false, "Missing Attributes: " + (evaluationResult.getMissingAttributes().size() + evaluationResult.getWrongAttributes().size())));
             }
             if (evaluationResult.getMissingAbstractClasses().size() > 0) {
-                criteria.add(new CriterionDto("Abstract Classes", BigDecimal.ZERO, false, "Missing Abstract Classes: " + (evaluationResult.getMissingAbstractClasses().size())));
+                criteria.add(new CriterionDto("Abstract Classes", null, false, "Missing Abstract Classes: " + (evaluationResult.getMissingAbstractClasses().size())));
             }
             if (evaluationResult.getMissingRelationships().size() > 0 || !evaluationResult.getWrongRelationships().isEmpty()) {
-                criteria.add(new CriterionDto("Relationships", BigDecimal.ZERO, false, "Missing Relationships: " + (evaluationResult.getMissingRelationships().size() + evaluationResult.getWrongRelationships().size())));
+                criteria.add(new CriterionDto("Relationships", null, false, "Missing Relationships: " + (evaluationResult.getMissingRelationships().size() + evaluationResult.getWrongRelationships().size())));
             }
             if (evaluationResult.getMissingAssociations().size() > 0 || !evaluationResult.getWrongAssociations().isEmpty()) {
-                criteria.add(new CriterionDto("Associations", BigDecimal.ZERO, false, "Missing Associations: " + (evaluationResult.getMissingAssociations().size() + evaluationResult.getWrongAssociations().size())));
+                criteria.add(new CriterionDto("Associations", null, false, "Missing Associations: " + (evaluationResult.getMissingAssociations().size() + evaluationResult.getWrongAssociations().size())));
             }
             if (evaluationResult.getMissingConstraints().size() > 0 || !evaluationResult.getWrongConstraints().isEmpty()) {
-                criteria.add(new CriterionDto("Constraints", BigDecimal.ZERO, false, "Missing Constraints: " + (evaluationResult.getMissingConstraints().size() + evaluationResult.getWrongConstraints().size())));
+                criteria.add(new CriterionDto("Constraints", null, false, "Missing Constraints: " + (evaluationResult.getMissingConstraints().size() + evaluationResult.getWrongConstraints().size())));
             }
         }
         if (submission.feedbackLevel().equals(2)) {
             if (evaluationResult.getMissingClasses().size() > 0 || !evaluationResult.getWrongClasses().isEmpty()) {
-                criteria.add(new CriterionDto("Classes", BigDecimal.ZERO, false, "Missing Classes: " + evaluationResult.getMissingClasses().size() + "<br>association Wrong Classes: " + evaluationResult.getWrongClasses().size()));
+                criteria.add(new CriterionDto("Classes", null, false, "Missing Classes: " + evaluationResult.getMissingClasses().size() + "<br>association Wrong Classes: " + evaluationResult.getWrongClasses().size()));
             }
             if (evaluationResult.getMissingAttributes().size() > 0 || !evaluationResult.getWrongAttributes().isEmpty()) {
-                criteria.add(new CriterionDto("Attributes", BigDecimal.ZERO, false, "Missing Attributes: " + evaluationResult.getMissingAttributes().size() + "<br> Wrong Attributes: " + evaluationResult.getWrongAttributes().size()));
+                criteria.add(new CriterionDto("Attributes", null, false, "Missing Attributes: " + evaluationResult.getMissingAttributes().size() + "<br> Wrong Attributes: " + evaluationResult.getWrongAttributes().size()));
             }
             if (evaluationResult.getMissingAbstractClasses().size() > 0) {
-                criteria.add(new CriterionDto("Abstract Classes", BigDecimal.ZERO, false, "Missing Abstract Classes: " + evaluationResult.getMissingAbstractClasses().size()));
+                criteria.add(new CriterionDto("Abstract Classes", null, false, "Missing Abstract Classes: " + evaluationResult.getMissingAbstractClasses().size()));
             }
             if (evaluationResult.getMissingRelationships().size() > 0 || !evaluationResult.getWrongRelationships().isEmpty()) {
-                criteria.add(new CriterionDto("Relationships", BigDecimal.ZERO, false, "Missing Relationships: " + evaluationResult.getMissingRelationships().size() + "<br> Wrong Relationships: " + evaluationResult.getWrongRelationships().size()));
+                criteria.add(new CriterionDto("Relationships", null, false, "Missing Relationships: " + evaluationResult.getMissingRelationships().size() + "<br> Wrong Relationships: " + evaluationResult.getWrongRelationships().size()));
             }
             if (evaluationResult.getMissingAssociations().size() > 0 || !evaluationResult.getWrongAssociations().isEmpty()) {
-                criteria.add(new CriterionDto("Associations", BigDecimal.ZERO, false, "Missing Associations: " + evaluationResult.getMissingAssociations().size() + "<br> Wrong Associations: " + evaluationResult.getWrongAssociations().size()));
+                criteria.add(new CriterionDto("Associations", null, false, "Missing Associations: " + evaluationResult.getMissingAssociations().size() + "<br> Wrong Associations: " + evaluationResult.getWrongAssociations().size()));
             }
             if (evaluationResult.getMissingConstraints().size() > 0 || !evaluationResult.getWrongConstraints().isEmpty()) {
-                criteria.add(new CriterionDto("Constraints", BigDecimal.ZERO, false, "Missing Constraints: " + evaluationResult.getMissingConstraints().size() + "<br>Wrong Constraints: " + evaluationResult.getWrongConstraints().size()));
+                criteria.add(new CriterionDto("Constraints", null, false, "Missing Constraints: " + evaluationResult.getMissingConstraints().size() + "<br>Wrong Constraints: " + evaluationResult.getWrongConstraints().size()));
             }
         }
         if (submission.feedbackLevel().equals(3)) {
@@ -168,7 +168,7 @@ public class EvaluationService {
                 for (UMLClass umlClass : evaluationResult.getWrongClasses()) {
                     s += umlClass.getName() + ", ";
                 }
-                criteria.add(new CriterionDto("Classes", BigDecimal.ZERO, false, s));
+                criteria.add(new CriterionDto("Classes", null, false, s));
             }
             if (evaluationResult.getMissingAttributes().size() > 0 || !evaluationResult.getWrongAttributes().isEmpty()) {
                 String s = "Missing Attributes: ";
@@ -180,7 +180,7 @@ public class EvaluationService {
                     s += umlAttribute.getName() + ", ";
 
                 }
-                criteria.add(new CriterionDto("Attributes", BigDecimal.ZERO, false, s));
+                criteria.add(new CriterionDto("Attributes", null, false, s));
             }
             if (evaluationResult.getMissingAbstractClasses().size() > 0) {
                 String s = "Missing Abstract Classes: ";
@@ -189,7 +189,7 @@ public class EvaluationService {
                 }
 
 
-                criteria.add(new CriterionDto("Abstract Classes", BigDecimal.ZERO, false, s));
+                criteria.add(new CriterionDto("Abstract Classes", null, false, s));
             }
             if (evaluationResult.getMissingRelationships().size() > 0 || !evaluationResult.getWrongRelationships().isEmpty()) {
                 String s = "Missing Relationships: ";
@@ -200,7 +200,7 @@ public class EvaluationService {
                 for (UMLRelationship umlRelationship : evaluationResult.getWrongRelationships()) {
                     s += umlRelationship.getEntities().getFirst().getClassname() + umlRelationship.getType() + umlRelationship.getEntities().getLast().getClassname() + ", ";
                 }
-                criteria.add(new CriterionDto("Relationships", BigDecimal.ZERO, false, s));
+                criteria.add(new CriterionDto("Relationships", null, false, s));
             }
             if (evaluationResult.getMissingAssociations().size() > 0 || !evaluationResult.getWrongAssociations().isEmpty()) {
                 String s = "Missing Associations: ";
@@ -211,7 +211,7 @@ public class EvaluationService {
                 for (UMLAssociation umlAssociation : evaluationResult.getWrongAssociations()) {
                     s += umlAssociation.getAssoClass() + "--" + umlAssociation.getClass1() + "--" + umlAssociation.getClass2() + ", ";
                 }
-                criteria.add(new CriterionDto("Associations", BigDecimal.ZERO, false, s));
+                criteria.add(new CriterionDto("Associations", null, false, s));
             }
             if (evaluationResult.getMissingConstraints().size() > 0 || !evaluationResult.getWrongConstraints().isEmpty()) {
                 String s = "Missing Constraints: ";
@@ -222,7 +222,7 @@ public class EvaluationService {
                 for (UMLConstraints umlConstraints : evaluationResult.getWrongConstraints()) {
                     s += umlConstraints.getRel1C1() + "--" + umlConstraints.getRel1C2() + "--" + umlConstraints.getRel2C1() + "--" + umlConstraints.getRel2C2() + ", ";
                 }
-                criteria.add(new CriterionDto("Constraints", BigDecimal.ZERO, false, s));
+                criteria.add(new CriterionDto("Constraints", null, false, s));
             }
 
             if(evaluationResult.getWrongMultiRelationships().size() > 0){
@@ -230,12 +230,12 @@ public class EvaluationService {
                 for (UMLMultiRelationship multiRelationship : evaluationResult.getWrongMultiRelationships()){
                     s +=  multiRelationship.getName() +", ";
                 }
-                criteria.add(new CriterionDto("MultiRelationships", BigDecimal.ZERO, false, s));
+                criteria.add(new CriterionDto("MultiRelationships", null, false, s));
             }
 
 
         }
-        criteria.add(new CriterionDto("Image", BigDecimal.ZERO, true, generateImage(submission.submission().input())));
+        criteria.add(new CriterionDto("Image", null, true, generateImage(submission.submission().input())));
 
 
         return new GradingDto(task.getMaxPoints(), BigDecimal.valueOf(evaluationResult.getPoints()), "", criteria);
