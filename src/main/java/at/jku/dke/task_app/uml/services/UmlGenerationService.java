@@ -80,9 +80,7 @@ public class UmlGenerationService {
                     if(attribute.getPoints()!=0){
                         currentPoints += attribute.getPoints();
                     }
-                    else{
-                        currentPoints += umlTask.getAttributePoints().doubleValue();
-                    }
+
                 }
             }
             for(UMLRelationship relationship : result.getRelationships()){
