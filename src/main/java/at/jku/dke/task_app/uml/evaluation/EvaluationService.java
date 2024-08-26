@@ -436,7 +436,7 @@ public class EvaluationService {
 
             points += compareMultiRelationships(evaluationResult, umlResultSolution, umlResultSubmission, task);
 
-            points = points - evaluationResult.getMissingAttributes().size() - evaluationResult.getMissingAssociations().size() - evaluationResult.getMissingClasses().size() - evaluationResult.getMissingConstraints().size() - evaluationResult.getMissingRelationships().size();
+            points = points - evaluationResult.getMissingAssociations().size() - evaluationResult.getWrongClasses().size() - evaluationResult.getMissingConstraints().size() - evaluationResult.getWrongRelationships().size();
             if (points < 0) {
                 points = 0;
             }
@@ -470,6 +470,7 @@ public class EvaluationService {
                 evaluationResult.getWrongMultiRelationships().add(multiRelationship);
             }
         }
+        LOG.info("Points multi: " + points);
         return points;
     }
 
@@ -582,6 +583,7 @@ public class EvaluationService {
                 evaluationResult.getMissingConstraints().add(constraintSolution);
             }
         }
+        LOG.info("Points con: " + points);
         return points;
     }
 
@@ -638,6 +640,8 @@ public class EvaluationService {
                 evaluationResult.getMissingAssociations().add(associationSolution);
             }
         }
+        LOG.info("Points asso: " + points);
+
         return points;
     }
 
@@ -690,6 +694,8 @@ public class EvaluationService {
                 evaluationResult.getMissingRelationships().add(relationshipSolution);
             }
         }
+        LOG.info("Points rel: " + points);
+
         return points;
     }
 
@@ -761,20 +767,20 @@ public class EvaluationService {
                         if (umlClassSubmission.getParentClass() != null) {
                             if (umlClassSolution.getParentClass() != null) {
                                 if (umlClassSubmission.getParentClass().getName().equals(umlClassSolution.getParentClass().getName())) {
-                                    if (umlClassSolution.getPoints() == 0) {
-                                        points += task.getClassPoints().doubleValue();
-                                    } else {
-                                        points += umlClassSolution.getPoints();
-                                    }
+//                                    if (umlClassSolution.getPoints() == 0) {
+//                                        points += task.getClassPoints().doubleValue();
+//                                    } else {
+//                                        points += umlClassSolution.getPoints();
+//                                    }
+                                    //the class is correct for now, if there is an attribute without a points specification it can still negate the points
                                     isClassCorrect = true;
                                     for (UMLAttribute attributeSubmission : umlClassSubmission.getAttributes()) {
                                         boolean isAttributecorrect = false;
                                         for (UMLAttribute attributeSolution : umlClassSolution.getAttributes()) {
                                             if (attributeSubmission.getName().equals(attributeSolution.getName())) {
                                                 if (attributeSubmission.getType().equals(attributeSolution.getType())) {
-                                                    if (attributeSolution.getPoints() == 0) {
-                                                        points += task.getAttributePoints().doubleValue();
-                                                    } else {
+                                                    //if points are specified it will add the points
+                                                    if (attributeSolution.getPoints() != 0) {
                                                         points += attributeSolution.getPoints();
                                                     }
                                                     isAttributecorrect = true;
@@ -782,8 +788,11 @@ public class EvaluationService {
                                                 }
                                             }
                                         }
+                                        //wrong attribute
                                         if (!isAttributecorrect) {
                                             evaluationResult.getWrongAttributes().add(attributeSubmission);
+                                            //always wrong class because an element not in the solution can not be specified as a points giving element
+                                            isClassCorrect = false;
                                         }
                                     }
                                     for (UMLAttribute attributeSolution : umlClassSolution.getAttributes()) {
@@ -798,27 +807,38 @@ public class EvaluationService {
                                         }
                                         if (!isAttributecorrect) {
                                             evaluationResult.getMissingAttributes().add(attributeSolution);
+                                            //if there are no points specified for an attribute in the solution that it is not in the submission it negate the class
+                                            if (attributeSolution.getPoints() == 0) {
+                                                isClassCorrect = false;
+                                            }
+                                        }
+                                    }
+                                    if(isClassCorrect)
+                                    {
+                                        if (umlClassSolution.getPoints() == 0) {
+                                            points += task.getClassPoints().doubleValue();
+                                        } else {
+                                            points += umlClassSolution.getPoints();
                                         }
                                     }
                                     break;
                                 }
                             }
-                            evaluationResult.getWrongClasses().add(umlClassSubmission);
+                            //submission is abstract solution is not
+                            break;
                         } else if (umlClassSolution.getParentClass() == null) {
-                            if (umlClassSolution.getPoints() == 0) {
-                                points += task.getClassPoints().doubleValue();
-                            } else {
-                                points += umlClassSolution.getPoints();
-                            }
+//                            if (umlClassSolution.getPoints() == 0) {
+//                                points += task.getClassPoints().doubleValue();
+//                            } else {
+//                                points += umlClassSolution.getPoints();
+//                            }
                             isClassCorrect = true;
                             for (UMLAttribute attributeSubmission : umlClassSubmission.getAttributes()) {
                                 boolean isAttributecorrect = false;
                                 for (UMLAttribute attributeSolution : umlClassSolution.getAttributes()) {
                                     if (attributeSubmission.getName().equals(attributeSolution.getName())) {
                                         if (attributeSubmission.getType().equals(attributeSolution.getType())) {
-                                            if (attributeSolution.getPoints() == 0) {
-                                                points += task.getAttributePoints().doubleValue();
-                                            } else {
+                                            if (attributeSolution.getPoints() != 0) {
                                                 points += attributeSolution.getPoints();
                                             }
                                             isAttributecorrect = true;
@@ -828,6 +848,7 @@ public class EvaluationService {
                                 }
                                 if (!isAttributecorrect) {
                                     evaluationResult.getWrongAttributes().add(attributeSubmission);
+                                    isClassCorrect = false;
                                 }
                             }
                             for (UMLAttribute attributeSolution : umlClassSolution.getAttributes()) {
@@ -842,6 +863,18 @@ public class EvaluationService {
                                 }
                                 if (!isAttributecorrect) {
                                     evaluationResult.getMissingAttributes().add(attributeSolution);
+                                    //if there are no points specified for an attribute in the solution that it is not in the submission it negate the class
+                                    if (attributeSolution.getPoints() == 0) {
+                                        isClassCorrect = false;
+                                    }
+                                }
+                            }
+                            if(isClassCorrect)
+                            {
+                                if (umlClassSolution.getPoints() == 0) {
+                                    points += task.getClassPoints().doubleValue();
+                                } else {
+                                    points += umlClassSolution.getPoints();
                                 }
                             }
                             break;
@@ -851,6 +884,7 @@ public class EvaluationService {
                     }
                     evaluationResult.getMissingAbstractClasses().add(umlClassSubmission);
                 }
+
             }
             if (!isClassCorrect) {
                 evaluationResult.getWrongClasses().add(umlClassSubmission);
@@ -871,7 +905,7 @@ public class EvaluationService {
             }
         }
 
-
+        LOG.info("Points Class: " + points);
         return points;
     }
 }
