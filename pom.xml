@@ -3,19 +3,21 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+
+
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.3.0</version>
+        <version>3.3.2</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
     <groupId>at.jku.dke.etutor</groupId>
-    <artifactId>task-app-binary-search</artifactId>
-    <version>1.0.3</version>
+    <artifactId>umlTask-app-uml</artifactId>
+    <version>1.1.0</version>
 
-    <name>eTutor Task-App: Binary Search</name>
-    <description>eTutor Task-App for task type "binary-search"</description>
+    <name>eTutor Task-App: UML</name>
+    <description>eTutor Task-App for umlTask type "Plant UML"</description>
     <packaging>jar</packaging>
 
     <properties>
@@ -28,14 +30,14 @@
     <repositories>
         <repository>
             <id>github-starter</id>
-            <url>https://maven.pkg.github.com/eTutor-plus-plus/task-app-starter</url>
+            <url>https://maven.pkg.github.com/eTutor-plus-plus/umlTask-app-starter</url>
         </repository>
     </repositories>
 
     <dependencies>
         <dependency>
             <groupId>at.jku.dke.etutor</groupId>
-            <artifactId>etutor-task-app-starter</artifactId>
+            <artifactId>etutor-Task-app-starter</artifactId>
             <version>1.2.2</version>
         </dependency>
 
@@ -89,12 +91,18 @@
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-            <version>2.5.0</version>
+            <version>2.6.0</version>
         </dependency>
         <dependency>
             <groupId>com.github.therapi</groupId>
             <artifactId>therapi-runtime-javadoc</artifactId>
             <version>0.15.0</version>
+        </dependency>
+        <!-- ANTLR -->
+        <dependency>
+            <groupId>org.antlr</groupId>
+            <artifactId>antlr4-runtime</artifactId>
+            <version>4.13.1</version>
         </dependency>
 
         <!-- Test -->
@@ -128,6 +136,11 @@
             <artifactId>rest-assured</artifactId>
             <version>5.4.0</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.sourceforge.plantuml</groupId>
+            <artifactId>plantuml</artifactId>
+            <version>1.2024.6</version>
         </dependency>
     </dependencies>
 
@@ -181,7 +194,7 @@
             <plugin>
                 <groupId>io.github.git-commit-id</groupId>
                 <artifactId>git-commit-id-maven-plugin</artifactId>
-                <version>8.0.2</version>
+                <version>9.0.1</version>
                 <executions>
                     <execution>
                         <id>get-the-git-infos</id>
@@ -221,6 +234,23 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+
+            <!-- ANTLR -->
+            <plugin>
+                <groupId>org.antlr</groupId>
+                <artifactId>antlr4-maven-plugin</artifactId>
+                <version>4.13.1</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>antlr4</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <outputDirectory>${project.basedir}/src/main/java/at/jku/dke/task_app/uml/evaluation/atg/gen</outputDirectory>
+                </configuration>
             </plugin>
         </plugins>
     </build>

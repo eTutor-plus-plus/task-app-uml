@@ -4,25 +4,35 @@ CREATE TYPE submission_mode AS ENUM ('run', 'diagnose', 'submit');
 CREATE CAST (CHARACTER VARYING as task_status) WITH INOUT AS IMPLICIT;
 CREATE CAST (CHARACTER VARYING as submission_mode) WITH INOUT AS IMPLICIT;
 
-CREATE TABLE task_group
-(
-    id         BIGINT      NOT NULL,
-    status     TASK_STATUS NOT NULL,
-    min_number INTEGER     NOT NULL, -- custom column
-    max_number INTEGER     NOT NULL, -- custom column
-    CONSTRAINT task_group_pk PRIMARY KEY (id)
-);
 
-CREATE TABLE task
+CREATE TABLE umlTask
 (
     id            BIGINT        NOT NULL,
+    complete_comparison BOOLEAN NOT NULL,
     max_points    NUMERIC(7, 2) NOT NULL,
     status        TASK_STATUS   NOT NULL,
-    task_group_id BIGINT        NOT NULL,
-    solution      INTEGER       NOT NULL, -- custom column
-    CONSTRAINT task_pk PRIMARY KEY (id),
-    CONSTRAINT task_task_group_fk FOREIGN KEY (task_group_id) REFERENCES task_group (id)
-        ON DELETE CASCADE
+    identifiers   TEXT[]       ,
+    classPoints    NUMERIC(7, 2) NOT NULL,
+    attributePoints    NUMERIC(7, 2) NOT NULL,
+    relationshipPoints    NUMERIC(7, 2) NOT NULL,
+    constraintPoints    NUMERIC(7, 2) NOT NULL,
+    associationPoints    NUMERIC(7, 2) NOT NULL,
+    CONSTRAINT task_pk PRIMARY KEY (id)
+);
+
+CREATE TABLE umlBlock
+(
+    id             integer generated always as identity primary key,
+    task_id       BIGINT        NOT NULL,
+    CONSTRAINT solution_task_fk FOREIGN KEY (task_id) REFERENCES umlTask (id)
+);
+
+CREATE TABLE umlBlockAlt
+(
+    id             integer generated always as identity primary key,
+    uml_block_alternative    TEXT          NOT NULL,
+    uml_block_id       integer         NOT NULL,
+    CONSTRAINT solution_alternative_solution_fk FOREIGN KEY (uml_block_id) REFERENCES umlBlock (id)
 );
 
 CREATE TABLE submission
@@ -36,8 +46,8 @@ CREATE TABLE submission
     mode              submission_mode NOT NULL,
     feedback_level    INT             NOT NULL,
     evaluation_result JSONB,
-    submission        VARCHAR(255), -- custom column
+    submission        TEXT, -- custom column
     CONSTRAINT submission_pk PRIMARY KEY (id),
-    CONSTRAINT submission_task_fk FOREIGN KEY (task_id) REFERENCES task (id)
+    CONSTRAINT submission_task_fk FOREIGN KEY (task_id) REFERENCES umlTask (id)
         ON DELETE CASCADE
 );
