@@ -129,7 +129,7 @@ participantMultiplicity returns [String multiplicity]
              $multiplicity = $text;
          };
 // Lexer Rules
-relationTyp: ('*--'|'--' | '<--' | '---|>' | '<|--');
+relationTyp: ('*--'|'--' | '<--'|'-->'|'--*' | '---|>' | '<|--');
 visibility: ('+' | '-' | '#' | '~');
 abstractModifier: 'abstract';
 points: Integer;

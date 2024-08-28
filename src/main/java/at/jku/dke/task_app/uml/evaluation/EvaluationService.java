@@ -476,9 +476,11 @@ public class EvaluationService {
 
     private double compareConstraints(EvaluationResult evaluationResult, UMLResult umlResultSolution, UMLResult umlResultSubmission, UmlTask task) {
         double points = 0;
+        boolean isFlipped = false;
         for (UMLConstraints constraintSubmission : umlResultSubmission.getConstraints()) {
             boolean isCorrectConstraint = false;
             for (UMLConstraints constraintSolution : umlResultSolution.getConstraints()) {
+                //same order
                 if (constraintSubmission.getRel1C1().equals(constraintSolution.getRel1C1())) {
                     if (constraintSubmission.getRel1C2().equals(constraintSolution.getRel1C2())) {
                         if (constraintSubmission.getRel2C1().equals(constraintSolution.getRel2C1())) {
@@ -493,6 +495,7 @@ public class EvaluationService {
                                     break;
                                 }
                             }
+                            //second relation flipped
                         } else if (constraintSubmission.getRel2C1().equals(constraintSolution.getRel2C2())) {
                             if (constraintSubmission.getRel2C2().equals(constraintSolution.getRel2C1())) {
                                 if (constraintSolution.getType().equals(constraintSubmission.getType())) {
@@ -508,6 +511,7 @@ public class EvaluationService {
 
                         }
                     }
+                    //dirst relation flipped/second relation in same order
                 } else if (constraintSubmission.getRel1C1().equals(constraintSolution.getRel1C2())) {
                     if (constraintSubmission.getRel1C2().equals(constraintSolution.getRel1C1())) {
                         if (constraintSubmission.getRel2C1().equals(constraintSolution.getRel2C1())) {
@@ -522,6 +526,7 @@ public class EvaluationService {
                                     break;
                                 }
                             }
+                            //second relation flipped and first relation flipped
                         } else if (constraintSubmission.getRel2C1().equals(constraintSolution.getRel2C2())) {
                             if (constraintSubmission.getRel2C2().equals(constraintSolution.getRel2C1())) {
                                 if (constraintSolution.getType().equals(constraintSubmission.getType())) {
@@ -538,11 +543,92 @@ public class EvaluationService {
                         }
                     }
                 }
+                //first and second relation flipped
+                if(!isCorrectConstraint){
+                    String r1c1 = constraintSubmission.getRel1C1();
+                    String r1c2 = constraintSubmission.getRel1C2();
+                    String r2c1 = constraintSubmission.getRel2C1();
+                    String r2c2 = constraintSubmission.getRel2C2();
+
+                    constraintSubmission.setRel1C1(r2c1);
+                    constraintSubmission.setRel1C2(r2c2);
+                    constraintSubmission.setRel2C1(r1c1);
+                    constraintSubmission.setRel2C2(r1c2);
+                    isFlipped = true;
+                    if (constraintSubmission.getRel1C1().equals(constraintSolution.getRel1C1())) {
+                        if (constraintSubmission.getRel1C2().equals(constraintSolution.getRel1C2())) {
+                            if (constraintSubmission.getRel2C1().equals(constraintSolution.getRel2C1())) {
+                                if (constraintSubmission.getRel2C2().equals(constraintSolution.getRel2C2())) {
+                                    if (constraintSolution.getType().equals(constraintSubmission.getType())) {
+                                        if (constraintSolution.getPoints() == 0) {
+                                            points += task.getConstraintPoints().doubleValue();
+                                        } else {
+                                            points += constraintSolution.getPoints();
+                                        }
+                                        isCorrectConstraint = true;
+                                        break;
+                                    }
+                                }
+                                //second relation flipped
+                            } else if (constraintSubmission.getRel2C1().equals(constraintSolution.getRel2C2())) {
+                                if (constraintSubmission.getRel2C2().equals(constraintSolution.getRel2C1())) {
+                                    if (constraintSolution.getType().equals(constraintSubmission.getType())) {
+                                        if (constraintSolution.getPoints() == 0) {
+                                            points += task.getConstraintPoints().doubleValue();
+                                        } else {
+                                            points += constraintSolution.getPoints();
+                                        }
+                                        isCorrectConstraint = true;
+                                        break;
+                                    }
+                                }
+
+                            }
+                        }
+                        //dirst relation flipped/second relation in same order
+                    } else if (constraintSubmission.getRel1C1().equals(constraintSolution.getRel1C2())) {
+                        if (constraintSubmission.getRel1C2().equals(constraintSolution.getRel1C1())) {
+                            if (constraintSubmission.getRel2C1().equals(constraintSolution.getRel2C1())) {
+                                if (constraintSubmission.getRel2C2().equals(constraintSolution.getRel2C2())) {
+                                    if (constraintSolution.getType().equals(constraintSubmission.getType())) {
+                                        if (constraintSolution.getPoints() == 0) {
+                                            points += task.getConstraintPoints().doubleValue();
+                                        } else {
+                                            points += constraintSolution.getPoints();
+                                        }
+                                        isCorrectConstraint = true;
+                                        break;
+                                    }
+                                }
+                                //second relation flipped and first relation flipped
+                            } else if (constraintSubmission.getRel2C1().equals(constraintSolution.getRel2C2())) {
+                                if (constraintSubmission.getRel2C2().equals(constraintSolution.getRel2C1())) {
+                                    if (constraintSolution.getType().equals(constraintSubmission.getType())) {
+                                        if (constraintSolution.getPoints() == 0) {
+                                            points += task.getConstraintPoints().doubleValue();
+                                        } else {
+                                            points += constraintSolution.getPoints();
+                                        }
+                                        isCorrectConstraint = true;
+                                        break;
+                                    }
+                                }
+
+                            }
+                        }
+                    }
+                    constraintSolution.setRel1C1(r1c1);
+                    constraintSolution.setRel1C2(r1c2);
+                    constraintSolution.setRel2C1(r2c1);
+                    constraintSolution.setRel2C2(r2c2);
+                }
 
             }
             if (!isCorrectConstraint) {
                 evaluationResult.getWrongConstraints().add(constraintSubmission);
             }
+
+
         }
         for (UMLConstraints constraintSolution : umlResultSolution.getConstraints()) {
             boolean isCorrectConstraint = false;
@@ -650,21 +736,57 @@ public class EvaluationService {
         for (UMLRelationship relationshipSubmission : umlResultSubmission.getRelationships()) {
             boolean isCorrectRelationship = false;
             for (UMLRelationship relationshipSolution : umlResultSolution.getRelationships()) {
+
                 if (relationshipSolution.getEntities().stream().anyMatch(e -> e.getClassname().equals(relationshipSubmission.getEntities().getFirst().getClassname()))) {
                     if (relationshipSolution.getEntities().stream().anyMatch(e -> e.getClassname().equals(relationshipSubmission.getEntities().getLast().getClassname()))) {
                         //compare multiplicity of the two entities with matching name
                         if (relationshipSolution.getEntities().stream().filter(e -> e.getClassname().equals(relationshipSubmission.getEntities().getFirst().getClassname())).findFirst().get().getMultiplicity().equals(relationshipSubmission.getEntities().getFirst().getMultiplicity())) {
                             if (relationshipSolution.getEntities().stream().filter(e -> e.getClassname().equals(relationshipSubmission.getEntities().getLast().getClassname())).findFirst().get().getMultiplicity().equals(relationshipSubmission.getEntities().getLast().getMultiplicity())) {
-                                if (relationshipSubmission.getType().equals(relationshipSolution.getType())) {
-                                    if (relationshipSubmission.getName().equals(relationshipSolution.getName())) {
-                                        if (relationshipSolution.getPoints() == 0) {
-                                            points += task.getRelationshipPoints().doubleValue();
-                                        } else {
-                                            points += relationshipSolution.getPoints();
-                                        }
 
-                                        isCorrectRelationship = true;
+                                if(relationshipSubmission.getEntities().getFirst().getClassname().equals(relationshipSubmission.getEntities().getLast().getClassname())){
+                                    if(!relationshipSolution.getEntities().getFirst().getClassname().equals(relationshipSolution.getEntities().getLast().getClassname())){
                                         break;
+                                    }
+                                }
+
+                                //opposite order
+                                if(relationshipSolution.getEntities().getFirst().getClassname().equals(relationshipSubmission.getEntities().getLast().getClassname()))
+                                {
+
+                                    String reversedType = reverseType(relationshipSolution.getType());
+                                    String reversedDirection = reverseType(relationshipSolution.getDirection());
+
+                                    if (relationshipSubmission.getType().equals(reversedType)) {
+                                        if(relationshipSubmission.getDirection().equals(reversedDirection)) {
+
+                                            if (relationshipSubmission.getName().equals(relationshipSolution.getName())) {
+
+                                                if (relationshipSolution.getPoints() == 0) {
+                                                    points += task.getRelationshipPoints().doubleValue();
+                                                } else {
+                                                    points += relationshipSolution.getPoints();
+                                                }
+
+                                                isCorrectRelationship = true;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }else //same order
+                                {
+                                    if (relationshipSubmission.getType().equals(relationshipSolution.getType())) {
+                                        if (relationshipSubmission.getName().equals(relationshipSolution.getName())) {
+                                            if(relationshipSubmission.getDirection().equals(relationshipSolution.getDirection())) {
+                                                if (relationshipSolution.getPoints() == 0) {
+                                                    points += task.getRelationshipPoints().doubleValue();
+                                                } else {
+                                                    points += relationshipSolution.getPoints();
+                                                }
+
+                                                isCorrectRelationship = true;
+                                                break;
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -755,6 +877,7 @@ public class EvaluationService {
         // If all checks pass, all names are in the identifiers list
         return wrongIdentifiers;
     }
+
 
     public double compareClass(EvaluationResult evaluationResult, UMLResult umlResultSolution, UMLResult umlResultSubmission, UmlTask task) {
         //compare if all classes in submission are part of the Solution
@@ -908,4 +1031,33 @@ public class EvaluationService {
         LOG.info("Points Class: " + points);
         return points;
     }
-}
+
+    public static String reverseType(String input) {
+        switch (input) {
+            case "--*":
+                return "*--";
+            case "*--":
+                return "--*";
+            case "<--":
+                return "-->";
+            case "-->":
+                return "<--";
+            case "--|>":
+                return "<|--";
+            case "<|--":
+                return "--|>";
+            case "<":
+                return ">";
+            case ">":
+                return "<";
+            case "--":
+                return "--";
+            default:
+                return input; // Return the input unchanged if it doesn't match any pattern
+        }
+    }
+
+
+
+    }
+
