@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * This class represents a data transfer object for modifying a binary search task.
+ * This class represents a data transfer object for modifying a uml search task.
  *
  * @param umlSolution The solution.
  */
