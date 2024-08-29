@@ -13,7 +13,7 @@
     </parent>
 
     <groupId>at.jku.dke.etutor</groupId>
-    <artifactId>umlTask-app-uml</artifactId>
+    <artifactId>task-app-uml</artifactId>
     <version>1.3.0</version>
 
     <name>eTutor Task-App: UML</name>
