@@ -10,7 +10,7 @@ FROM eclipse-temurin:21-jre
 EXPOSE 8081
 
 # Install Graphviz for UML class support
-RUN apt-get install graphviz -y
+RUN apt-get update && apt-get install graphviz -y
 
 # Copy layered JAR
 WORKDIR /app
