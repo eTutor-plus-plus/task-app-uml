@@ -14,7 +14,7 @@
 
     <groupId>at.jku.dke.etutor</groupId>
     <artifactId>task-app-uml</artifactId>
-    <version>1.5.1</version>
+    <version>1.5.3</version>
 
     <name>eTutor Task-App: UML</name>
     <description>eTutor Task-App for umlTask type "Plant UML"</description>
