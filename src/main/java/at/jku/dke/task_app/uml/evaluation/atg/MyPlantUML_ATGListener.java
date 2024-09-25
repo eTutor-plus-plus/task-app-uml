@@ -119,14 +119,14 @@ public class MyPlantUML_ATGListener extends PlantUML_ATGBaseListener {
         String className = ctx.participant1.className.getText();
         String className2 = ctx.participant2.className.getText();
         System.out.println(className + " " + className2);
-        if (className!=null&&!umlClasses.stream().anyMatch(c -> c.getName().equals(className))) {
+        if (className!=null&&!umlClasses.stream().anyMatch(c -> c.getName().equals(className))&&multiRelationships.stream().noneMatch(c -> c.getName().equals(className))) {
             UMLClass umlClass = new UMLClass(className);
             umlClass.setAttributes(new ArrayList<>());
             umlClass.setAssociations(new ArrayList<>());
             umlClasses.add(umlClass);
 
         }
-        if (className2!=null&&!umlClasses.stream().anyMatch(c -> c.getName().equals(className2))) {
+        if (className2!=null&&!umlClasses.stream().anyMatch(c -> c.getName().equals(className2))&&multiRelationships.stream().noneMatch(c -> c.getName().equals(className2))) {
             UMLClass umlClass = new UMLClass(className2);
             umlClass.setAttributes(new ArrayList<>());
             umlClass.setAssociations(new ArrayList<>());
@@ -166,10 +166,11 @@ public class MyPlantUML_ATGListener extends PlantUML_ATGBaseListener {
     @Override
     public void enterConstraints(PlantUML_ATGParser.ConstraintsContext ctx) {
         UMLConstraints constraint = new UMLConstraints();
-        constraint.setRel1C1(ctx.className1.getText());
-        constraint.setRel1C2(ctx.className2.getText());
-        constraint.setRel2C1(ctx.className3.getText());
-        constraint.setRel2C2(ctx.className4.getText());
+
+        constraint.setRel1C1(ctx.constraintmember(0).className1 != null ? ctx.constraintmember(0).className1.getText() : null);
+        constraint.setRel1C2(ctx.constraintmember(0).className2 != null ? ctx.constraintmember(0).className2.getText() : null);
+        constraint.setRel2C1(ctx.constraintmember(1).className1 != null ? ctx.constraintmember(1).className1.getText() : null);
+        constraint.setRel2C2(ctx.constraintmember(1).className2 != null ? ctx.constraintmember(1).className2.getText() : null);
         constraint.setType(ctx.constrainttype().getText());
         if(ctx.score()!=null) {
             constraint.setPoints(Integer.parseInt(ctx.score().points().getText()));
@@ -208,7 +209,7 @@ public class MyPlantUML_ATGListener extends PlantUML_ATGBaseListener {
     @Override
     public void enterNote(PlantUML_ATGParser.NoteContext ctx) {
         UMLNote note = new UMLNote();
-        note.setNote(ctx.noteText().Identifier().getText());
+        note.setNote(ctx.noteText().getText());
         note.setNoteName(ctx.noteName().Identifier().getText());
         notes.add(note);
     }

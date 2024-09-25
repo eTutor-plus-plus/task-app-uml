@@ -10,7 +10,7 @@ import java.util.List;
  *
  * @param umlSolution The solution.
  */
-public record ModifyUmlTaskDto(@NotNull boolean completeComparison, @NotNull List<UmlBlockDto> umlSolution, @NotNull double classPoints, @NotNull double attributePoints,
-                               @NotNull double relationshipPoints, @NotNull double associationPoints, @NotNull double constraintPoints) implements Serializable {
+public record ModifyUmlTaskDto(@NotNull boolean completeComparison, @NotNull List<UmlBlockDto> umlSolution, @NotNull double classPoints,
+                               @NotNull double associationPoints, @NotNull double associationClassPoints, @NotNull double constraintPoints) implements Serializable {
 
 }

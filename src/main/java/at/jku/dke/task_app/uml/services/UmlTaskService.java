@@ -77,9 +77,9 @@ public class UmlTaskService extends BaseTaskService<UmlTask, ModifyUmlTaskDto>{
         UmlTask task = new UmlTask();
         task.setCompleteComparison(modifyTaskDto.additionalData().completeComparison());
         task.setClassPoints(BigDecimal.valueOf(modifyTaskDto.additionalData().classPoints()));
-        task.setAttributePoints(BigDecimal.valueOf(modifyTaskDto.additionalData().attributePoints()));
-        task.setRelationshipPoints(BigDecimal.valueOf(modifyTaskDto.additionalData().relationshipPoints()));
-        task.setAssociationPoints(BigDecimal.valueOf(modifyTaskDto.additionalData().associationPoints()));
+        task.setAttributePoints(BigDecimal.ZERO);
+        task.setRelationshipPoints(BigDecimal.valueOf(modifyTaskDto.additionalData().associationPoints()));
+        task.setAssociationPoints(BigDecimal.valueOf(modifyTaskDto.additionalData().associationClassPoints()));
         task.setConstraintPoints(BigDecimal.valueOf(modifyTaskDto.additionalData().constraintPoints()));
         task.setId(id);
         return task;
@@ -103,6 +103,7 @@ public class UmlTaskService extends BaseTaskService<UmlTask, ModifyUmlTaskDto>{
         //get all identifiers from the task;
 
         List<String> identifiers = umlGenerationService.generateIdentifiersFromSolution(task.getId());
+        task.setIdentifiers(identifiers);
         int points = umlGenerationService.getMaxPossiblePoints(task.getId());
         task.setMaxPoints(BigDecimal.valueOf(points));
         umlTaskRepository.save(task);
@@ -116,9 +117,9 @@ public class UmlTaskService extends BaseTaskService<UmlTask, ModifyUmlTaskDto>{
         task.setCompleteComparison(dto.additionalData().completeComparison());
         task.setCompleteComparison(dto.additionalData().completeComparison());
         task.setClassPoints(BigDecimal.valueOf(dto.additionalData().classPoints()));
-        task.setAttributePoints(BigDecimal.valueOf(dto.additionalData().attributePoints()));
-        task.setRelationshipPoints(BigDecimal.valueOf(dto.additionalData().relationshipPoints()));
-        task.setAssociationPoints(BigDecimal.valueOf(dto.additionalData().associationPoints()));
+        task.setAttributePoints(BigDecimal.ZERO);
+        task.setRelationshipPoints(BigDecimal.valueOf(dto.additionalData().associationPoints()));
+        task.setAssociationPoints(BigDecimal.valueOf(dto.additionalData().associationClassPoints()));
         task.setConstraintPoints(BigDecimal.valueOf(dto.additionalData().constraintPoints()));
 
         umlTaskRepository.save(task);
@@ -140,6 +141,7 @@ public class UmlTaskService extends BaseTaskService<UmlTask, ModifyUmlTaskDto>{
 
         }
         List<String> identifiers = umlGenerationService.generateIdentifiersFromSolution(task.getId());
+        task.setIdentifiers(identifiers);
         int points = umlGenerationService.getMaxPossiblePoints(task.getId());
         task.setMaxPoints(BigDecimal.valueOf(points));
         umlTaskRepository.save(task);
@@ -168,9 +170,7 @@ public class UmlTaskService extends BaseTaskService<UmlTask, ModifyUmlTaskDto>{
 
     @Override
     protected TaskModificationResponseDto mapToReturnData(UmlTask task, boolean create) {
-        return new TaskModificationResponseDto(
-            this.messageSource.getMessage("defaultTaskDescription", null, Locale.GERMAN),
-            this.messageSource.getMessage("defaultTaskDescription", null, Locale.ENGLISH), null,task.getMaxPoints());
+        return new TaskModificationResponseDto(null,null, null,task.getMaxPoints());
 
 
     }

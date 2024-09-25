@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 
-
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
 /**
@@ -58,6 +57,16 @@ public interface PlantUML_ATGListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitConstraints(PlantUML_ATGParser.ConstraintsContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link PlantUML_ATGParser#constraintmember}.
+	 * @param ctx the parse tree
+	 */
+	void enterConstraintmember(PlantUML_ATGParser.ConstraintmemberContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link PlantUML_ATGParser#constraintmember}.
+	 * @param ctx the parse tree
+	 */
+	void exitConstraintmember(PlantUML_ATGParser.ConstraintmemberContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link PlantUML_ATGParser#constrainttype}.
 	 * @param ctx the parse tree
@@ -189,16 +198,6 @@ public interface PlantUML_ATGListener extends ParseTreeListener {
 	 */
 	void exitParticipantMultiplicity(PlantUML_ATGParser.ParticipantMultiplicityContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link PlantUML_ATGParser#relationTyp}.
-	 * @param ctx the parse tree
-	 */
-	void enterRelationTyp(PlantUML_ATGParser.RelationTypContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link PlantUML_ATGParser#relationTyp}.
-	 * @param ctx the parse tree
-	 */
-	void exitRelationTyp(PlantUML_ATGParser.RelationTypContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link PlantUML_ATGParser#visibility}.
 	 * @param ctx the parse tree
 	 */
@@ -308,6 +307,16 @@ public interface PlantUML_ATGListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitCardinality(PlantUML_ATGParser.CardinalityContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link PlantUML_ATGParser#relationTyp}.
+	 * @param ctx the parse tree
+	 */
+	void enterRelationTyp(PlantUML_ATGParser.RelationTypContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link PlantUML_ATGParser#relationTyp}.
+	 * @param ctx the parse tree
+	 */
+	void exitRelationTyp(PlantUML_ATGParser.RelationTypContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link PlantUML_ATGParser#start}.
 	 * @param ctx the parse tree
