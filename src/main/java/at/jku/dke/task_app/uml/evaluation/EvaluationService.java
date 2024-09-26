@@ -29,6 +29,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Service that evaluates submissions.
@@ -217,11 +218,20 @@ public class EvaluationService {
             if (evaluationResult.getMissingConstraints().size() > 0 || !evaluationResult.getWrongConstraints().isEmpty()) {
                 String s = "Missing Constraints: ";
                 for (UMLConstraints umlConstraints : evaluationResult.getMissingConstraints()) {
-                    s += umlConstraints.getRel1C1() + "--" + umlConstraints.getRel1C2() + "--" + umlConstraints.getRel2C1() + "--" + umlConstraints.getRel2C2() + ", ";
+                    if (umlConstraints.getType().equals("class")) {
+                        s += "Class: " + umlConstraints.getRel1C1() + " on Attribute: " + umlConstraints.getRel1C2() + ", ";
+                    } else {
+                        s += umlConstraints.getRel1C1() + "--" + umlConstraints.getRel1C2() + "--" + umlConstraints.getRel2C1() + "--" + umlConstraints.getRel2C2() + ", ";
+                    }
                 }
-                s += "<br> Wrong Constraints: ";
+
+                    s += "<br> Wrong Constraints: ";
                 for (UMLConstraints umlConstraints : evaluationResult.getWrongConstraints()) {
-                    s += umlConstraints.getRel1C1() + "--" + umlConstraints.getRel1C2() + "--" + umlConstraints.getRel2C1() + "--" + umlConstraints.getRel2C2() + ", ";
+                    if (umlConstraints.getType().equals("class")) {
+                        s += "Class: " + umlConstraints.getRel1C1() + " on Attribute: " + umlConstraints.getRel1C2() + ", ";
+                    } else {
+                        s += umlConstraints.getRel1C1() + "--" + umlConstraints.getRel1C2() + "--" + umlConstraints.getRel2C1() + "--" + umlConstraints.getRel2C2() + ", ";
+                    }
                 }
                 criteria.add(new CriterionDto("Constraints", null, false, s));
             }
@@ -436,7 +446,7 @@ public class EvaluationService {
 
             points += compareMultiRelationships(evaluationResult, umlResultSolution, umlResultSubmission, task);
 
-            points = points - evaluationResult.getMissingAssociations().size() - evaluationResult.getWrongClasses().size() - evaluationResult.getMissingConstraints().size() - evaluationResult.getWrongRelationships().size();
+            points = points - evaluationResult.getWrongAssociations().size() - evaluationResult.getWrongClasses().size() - evaluationResult.getWrongConstraints().size() - evaluationResult.getWrongRelationships().size();
             if (points < 0) {
                 points = 0;
             }
@@ -459,7 +469,7 @@ public class EvaluationService {
                 if (multiRelationship.getName().equals(multiRelationshipSolution.getName())) {
                     String connectedNoteSolution = umlResultSolution.getNoteConnections().stream().filter(noteConnection -> noteConnection.getClassName().equals(multiRelationshipSolution.getName())).findFirst().get().getNoteName();
                     if (umlResultSubmission.getNoteConnections().stream().anyMatch(e -> e.getClassName().equals(multiRelationship.getName()) && e.getNoteName().equals(connectedNoteSolution))) {
-                        if(umlResultSolution.getNotes().stream().anyMatch(e -> e.getNoteName().equals(connectedNoteSolution)) && umlResultSubmission.getNotes().stream().anyMatch(e -> e.getNoteName().equals(connectedNoteSolution))) {
+                        if (umlResultSolution.getNotes().stream().anyMatch(e -> e.getNoteName().equals(connectedNoteSolution)) && umlResultSubmission.getNotes().stream().anyMatch(e -> e.getNoteName().equals(connectedNoteSolution))) {
                             //search in submission and solution after nodename to find note and compare
                             String noteSubmission = umlResultSubmission.getNotes().stream()
                                 .filter(note -> note.getNoteName().equals(connectedNoteSolution))
@@ -684,6 +694,191 @@ public class EvaluationService {
                 evaluationResult.getMissingConstraints().add(constraintSolution);
             }
         }
+
+        // Check class constraints from submission if present in solution
+        for (UMLClass umlClass : umlResultSubmission.getUmlClasses()) {
+            for (UMLAttribute umlAttribute : umlClass.getAttributes()) {
+                if (umlAttribute.getType().equals("special")) {
+                    Optional<UMLClass> optionalUmlClass = umlResultSolution.getUmlClasses().stream()
+                        .filter(e -> e.getName().equals(umlClass.getName()))
+                        .findFirst();
+
+                    if (optionalUmlClass.isPresent()) {
+                        UMLClass umlClassFound = optionalUmlClass.get();
+
+                        Optional<UMLAttribute> optionalUmlAttribute = umlClassFound.getAttributes().stream()
+                            .filter(e -> e.getName().equals(umlAttribute.getName()))
+                            .findFirst();
+
+                        if (optionalUmlAttribute.isPresent()) {
+                            UMLAttribute umlAttributeFound = optionalUmlAttribute.get();
+                            if (umlAttributeFound.getName().equals(umlAttribute.getName())) {
+                                points += task.getConstraintPoints().doubleValue();
+                            }
+                        } else {
+                            // If attribute is not found, add wrong constraints
+                            evaluationResult.getWrongConstraints().add(new UMLConstraints(
+                                umlClass.getName(),
+                                umlAttribute.getName(),
+                                null,
+                                null,
+                                "class"
+                            ));
+                        }
+                    } else {
+                        // If class is not found, handle the same way as when the attribute is not found
+                        evaluationResult.getWrongConstraints().add(new UMLConstraints(
+                            umlClass.getName(),
+                            umlAttribute.getName(),
+                            null,
+                            null,
+                            "class"
+                        ));
+                    }
+                }
+
+                if (!umlAttribute.getType().equals("normal") && !umlAttribute.getType().equals("special")) {
+                    Optional<UMLClass> optionalUmlClassForTypeCheck = umlResultSolution.getUmlClasses().stream()
+                        .filter(e -> e.getName().equals(umlClass.getName()))
+                        .findFirst();
+
+                    if (optionalUmlClassForTypeCheck.isPresent()) {
+                        UMLClass umlClassFoundForTypeCheck = optionalUmlClassForTypeCheck.get();
+
+                        Optional<UMLAttribute> optionalUmlAttributeForTypeCheck = umlClassFoundForTypeCheck.getAttributes().stream()
+                            .filter(e -> e.getName().equals(umlAttribute.getName()))
+                            .findFirst();
+
+                        if (optionalUmlAttributeForTypeCheck.isPresent()) {
+                            UMLAttribute umlAttributeFoundForTypeCheck = optionalUmlAttributeForTypeCheck.get();
+                            if (umlAttributeFoundForTypeCheck.getType().equals(umlAttribute.getType())) {
+                                points += task.getConstraintPoints().doubleValue();
+                            } else {
+                                evaluationResult.getWrongConstraints().add(new UMLConstraints(
+                                    umlClass.getName(),
+                                    umlAttribute.getName(),
+                                    null,
+                                    null,
+                                    "class"
+                                ));
+                            }
+                        } else {
+                            evaluationResult.getWrongConstraints().add(new UMLConstraints(
+                                umlClass.getName(),
+                                umlAttribute.getName(),
+                                null,
+                                null,
+                                "class"
+                            ));
+                        }
+                    } else {
+                        evaluationResult.getWrongConstraints().add(new UMLConstraints(
+                            umlClass.getName(),
+                            umlAttribute.getName(),
+                            null,
+                            null,
+                            "class"
+                        ));
+                    }
+                }
+            }
+        }
+
+// Check class constraints from solution if present in submission
+        for (UMLClass umlClass : umlResultSolution.getUmlClasses()) {
+            for (UMLAttribute umlAttribute : umlClass.getAttributes()) {
+                if (umlAttribute.getType().equals("special")) {
+                    Optional<UMLClass> optionalUmlClassSubmission = umlResultSubmission.getUmlClasses().stream()
+                        .filter(e -> e.getName().equals(umlClass.getName()))
+                        .findFirst();
+
+                    if (optionalUmlClassSubmission.isPresent()) {
+                        UMLClass umlClassFoundInSubmission = optionalUmlClassSubmission.get();
+
+                        Optional<UMLAttribute> optionalUmlAttributeSubmission = umlClassFoundInSubmission.getAttributes().stream()
+                            .filter(e -> e.getName().equals(umlAttribute.getName()))
+                            .findFirst();
+
+                        if (optionalUmlAttributeSubmission.isPresent()) {
+                            UMLAttribute umlAttributeFoundInSubmission = optionalUmlAttributeSubmission.get();
+                            if (umlAttributeFoundInSubmission.getName().equals(umlAttribute.getName())) {
+
+                            } else {
+                                evaluationResult.getMissingConstraints().add(new UMLConstraints(
+                                    umlClass.getName(),
+                                    umlAttribute.getName(),
+                                    null,
+                                    null,
+                                    "class"
+                                ));
+                            }
+                        } else {
+                            evaluationResult.getMissingConstraints().add(new UMLConstraints(
+                                umlClass.getName(),
+                                umlAttribute.getName(),
+                                null,
+                                null,
+                                "class"
+                            ));
+                        }
+                    } else {
+                        evaluationResult.getMissingConstraints().add(new UMLConstraints(
+                            umlClass.getName(),
+                            umlAttribute.getName(),
+                            null,
+                            null,
+                            "class"
+                        ));
+                    }
+                }
+
+                if (!umlAttribute.getType().equals("normal") && !umlAttribute.getType().equals("special")) {
+                    Optional<UMLClass> optionalUmlClassForTypeCheckSubmission = umlResultSubmission.getUmlClasses().stream()
+                        .filter(e -> e.getName().equals(umlClass.getName()))
+                        .findFirst();
+
+                    if (optionalUmlClassForTypeCheckSubmission.isPresent()) {
+                        UMLClass umlClassFoundForTypeCheckSubmission = optionalUmlClassForTypeCheckSubmission.get();
+
+                        Optional<UMLAttribute> optionalUmlAttributeForTypeCheckSubmission = umlClassFoundForTypeCheckSubmission.getAttributes().stream()
+                            .filter(e -> e.getName().equals(umlAttribute.getName()))
+                            .findFirst();
+
+                        if (optionalUmlAttributeForTypeCheckSubmission.isPresent()) {
+                            UMLAttribute umlAttributeFoundForTypeCheckSubmission = optionalUmlAttributeForTypeCheckSubmission.get();
+                            if (umlAttributeFoundForTypeCheckSubmission.getType().equals(umlAttribute.getType())) {
+                            } else {
+                                evaluationResult.getMissingConstraints().add(new UMLConstraints(
+                                    umlClass.getName(),
+                                    umlAttribute.getName(),
+                                    null,
+                                    null,
+                                    "class"
+                                ));
+                            }
+                        } else {
+                            evaluationResult.getMissingConstraints().add(new UMLConstraints(
+                                umlClass.getName(),
+                                umlAttribute.getName(),
+                                null,
+                                null,
+                                "class"
+                            ));
+                        }
+                    } else {
+                        evaluationResult.getMissingConstraints().add(new UMLConstraints(
+                            umlClass.getName(),
+                            umlAttribute.getName(),
+                            null,
+                            null,
+                            "class"
+                        ));
+                    }
+                }
+            }
+        }
+
+
         LOG.info("Points con: " + points);
         return points;
     }
@@ -755,11 +950,10 @@ public class EvaluationService {
                 if (relationshipSolution.getEntities().stream().anyMatch(e -> e.getClassname().equals(relationshipSubmission.getEntities().getFirst().getClassname()))) {
                     if (relationshipSolution.getEntities().stream().anyMatch(e -> e.getClassname().equals(relationshipSubmission.getEntities().getLast().getClassname()))) {
                         //compare multiplicity of the two entities with matching name
-                        if(relationshipSubmission.getEntities().getFirst().getClassname().equals(relationshipSubmission.getEntities().getLast().getClassname()))
-                        {
+                        if (relationshipSubmission.getEntities().getFirst().getClassname().equals(relationshipSubmission.getEntities().getLast().getClassname())) {
                             //same entity
                             //compare multiplicity of the two entities with matching name
-                            if(relationshipSolution.getEntities().getFirst().getMultiplicity().equals(relationshipSubmission.getEntities().getFirst().getMultiplicity())) {
+                            if (relationshipSolution.getEntities().getFirst().getMultiplicity().equals(relationshipSubmission.getEntities().getFirst().getMultiplicity())) {
                                 if (relationshipSolution.getEntities().getLast().getMultiplicity().equals(relationshipSubmission.getEntities().getLast().getMultiplicity())) {
                                     if (relationshipSubmission.getType().equals(relationshipSolution.getType())) {
                                         if (relationshipSubmission.getName().equals(relationshipSolution.getName())) {
@@ -776,7 +970,7 @@ public class EvaluationService {
                                 }
                             }
                             //same entity flipped
-                            if(relationshipSolution.getEntities().getFirst().getMultiplicity().equals(relationshipSubmission.getEntities().getLast().getMultiplicity())) {
+                            if (relationshipSolution.getEntities().getFirst().getMultiplicity().equals(relationshipSubmission.getEntities().getLast().getMultiplicity())) {
                                 if (relationshipSolution.getEntities().getLast().getMultiplicity().equals(relationshipSubmission.getEntities().getFirst().getMultiplicity())) {
                                     if (relationshipSubmission.getType().equals(relationshipSolution.getType())) {
                                         if (relationshipSubmission.getName().equals(relationshipSolution.getName())) {
@@ -958,14 +1152,22 @@ public class EvaluationService {
                                     //the class is correct for now, if there is an attribute without a points specification it can still negate the points
                                     isClassCorrect = true;
                                     for (UMLAttribute attributeSubmission : umlClassSubmission.getAttributes()) {
+                                        if (attributeSubmission.getType().equals("special")) {
+                                            //special attribute not checked here
+                                            continue;
+                                        }
                                         boolean isAttributecorrect = false;
                                         for (UMLAttribute attributeSolution : umlClassSolution.getAttributes()) {
                                             if (attributeSubmission.getName().equals(attributeSolution.getName())) {
-                                                if (attributeSubmission.getType().equals(attributeSolution.getType())) {
+                                                if (!attributeSubmission.getType().equals("special")) {
                                                     //if points are specified it will add the points
                                                     if (attributeSolution.getPoints() != 0) {
                                                         points += attributeSolution.getPoints();
                                                     }
+                                                    isAttributecorrect = true;
+                                                    break;
+                                                } else {
+                                                    //special attribute not checked here
                                                     isAttributecorrect = true;
                                                     break;
                                                 }
@@ -980,13 +1182,16 @@ public class EvaluationService {
                                         }
                                     }
                                     for (UMLAttribute attributeSolution : umlClassSolution.getAttributes()) {
+                                        if (attributeSolution.getType().equals("special")) {
+                                            //special attribute not checked here
+                                            continue;
+                                        }
                                         boolean isAttributecorrect = false;
                                         for (UMLAttribute attributeSubmission : umlClassSubmission.getAttributes()) {
                                             if (attributeSubmission.getName().equals(attributeSolution.getName())) {
-                                                if (attributeSubmission.getType().equals(attributeSolution.getType())) {
-                                                    isAttributecorrect = true;
-                                                    break;
-                                                }
+
+                                                isAttributecorrect = true;
+                                                break;
                                             }
                                         }
                                         if (!isAttributecorrect) {
@@ -1017,13 +1222,22 @@ public class EvaluationService {
 //                            }
                             isClassCorrect = true;
                             for (UMLAttribute attributeSubmission : umlClassSubmission.getAttributes()) {
+                                if (attributeSubmission.getType().equals("special")) {
+                                    //special attribute not checked here
+                                    continue;
+                                }
                                 boolean isAttributecorrect = false;
                                 for (UMLAttribute attributeSolution : umlClassSolution.getAttributes()) {
                                     if (attributeSubmission.getName().equals(attributeSolution.getName())) {
-                                        if (attributeSubmission.getType().equals(attributeSolution.getType())) {
+                                        if (!attributeSubmission.getType().equals("special")) {
+                                            //if points are specified it will add the points
                                             if (attributeSolution.getPoints() != 0) {
                                                 points += attributeSolution.getPoints();
                                             }
+                                            isAttributecorrect = true;
+                                            break;
+                                        } else {
+                                            //special attribute not checked here
                                             isAttributecorrect = true;
                                             break;
                                         }
@@ -1035,13 +1249,17 @@ public class EvaluationService {
                                 }
                             }
                             for (UMLAttribute attributeSolution : umlClassSolution.getAttributes()) {
+                                if (attributeSolution.getType().equals("special")) {
+                                    //special attribute not checked here
+                                    continue;
+                                }
                                 boolean isAttributecorrect = false;
                                 for (UMLAttribute attributeSubmission : umlClassSubmission.getAttributes()) {
                                     if (attributeSubmission.getName().equals(attributeSolution.getName())) {
-                                        if (attributeSubmission.getType().equals(attributeSolution.getType())) {
-                                            isAttributecorrect = true;
-                                            break;
-                                        }
+
+                                        isAttributecorrect = true;
+                                        break;
+
                                     }
                                 }
                                 if (!isAttributecorrect) {
