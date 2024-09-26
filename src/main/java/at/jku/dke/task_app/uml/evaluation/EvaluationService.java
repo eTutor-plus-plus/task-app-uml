@@ -713,7 +713,14 @@ public class EvaluationService {
                         if (optionalUmlAttribute.isPresent()) {
                             UMLAttribute umlAttributeFound = optionalUmlAttribute.get();
                             if (umlAttributeFound.getName().equals(umlAttribute.getName())) {
-                                points += task.getConstraintPoints().doubleValue();
+                                if(umlAttributeFound.getPoints()!=0)
+                                {
+                                    points += umlAttributeFound.getPoints();
+                                }
+                                else
+                                {
+                                    points += task.getConstraintPoints().doubleValue();
+                                }
                             }
                         } else {
                             // If attribute is not found, add wrong constraints
