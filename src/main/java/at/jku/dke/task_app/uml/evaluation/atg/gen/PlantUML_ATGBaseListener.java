@@ -11,7 +11,6 @@ import java.util.Map;
 import java.util.HashMap;
 
 
-
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
@@ -71,6 +70,18 @@ public class PlantUML_ATGBaseListener implements PlantUML_ATGListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitConstraints(PlantUML_ATGParser.ConstraintsContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterConstraintmember(PlantUML_ATGParser.ConstraintmemberContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitConstraintmember(PlantUML_ATGParser.ConstraintmemberContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -232,18 +243,6 @@ public class PlantUML_ATGBaseListener implements PlantUML_ATGListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterRelationTyp(PlantUML_ATGParser.RelationTypContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitRelationTyp(PlantUML_ATGParser.RelationTypContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterVisibility(PlantUML_ATGParser.VisibilityContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -371,6 +370,18 @@ public class PlantUML_ATGBaseListener implements PlantUML_ATGListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitCardinality(PlantUML_ATGParser.CardinalityContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterRelationTyp(PlantUML_ATGParser.RelationTypContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitRelationTyp(PlantUML_ATGParser.RelationTypContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

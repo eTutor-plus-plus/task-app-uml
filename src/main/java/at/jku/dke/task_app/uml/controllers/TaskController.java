@@ -47,7 +47,7 @@ public class TaskController extends BaseTaskController<UmlTask, UmlTaskDto, Modi
 
             umlBlockDtos.add(umlBlockDto);
         }
-        return new UmlTaskDto(task.getCompleteComparison(), umlBlockDtos, task.getClassPoints().doubleValue(), task.getAttributePoints().doubleValue(), task.getRelationshipPoints().doubleValue(), task.getAssociationPoints().doubleValue(), task.getConstraintPoints().doubleValue());
+        return new UmlTaskDto(task.getCompleteComparison(), umlBlockDtos, task.getClassPoints().doubleValue(), task.getRelationshipPoints().doubleValue(), task.getAssociationPoints().doubleValue(), task.getConstraintPoints().doubleValue());
     }
 }
 
