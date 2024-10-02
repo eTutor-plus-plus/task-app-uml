@@ -44,7 +44,7 @@ public class MyPlantUML_ATGListener extends PlantUML_ATGBaseListener {
         UMLAttribute attribute = new UMLAttribute();
         attribute.setName(ctx.attributeName().getText());
         if(ctx.attributeModifier()!=null) {
-            attribute.setType(ctx.attributeModifier.getText());
+            attribute.setType(ctx.attributeModifier.getText().toLowerCase());
         }
         else{
             attribute.setType("normal");
@@ -58,7 +58,7 @@ public class MyPlantUML_ATGListener extends PlantUML_ATGBaseListener {
     @Override
     public void enterSpecialAttribute(PlantUML_ATGParser.SpecialAttributeContext ctx) {
         UMLAttribute attribute = new UMLAttribute();
-        attribute.setName(ctx.speciallabel().getText());
+        attribute.setName(ctx.speciallabel().getText().toLowerCase());
 
         if (ctx.score() != null) {
             attribute.setPoints(Integer.parseInt(ctx.score().points().getText()));

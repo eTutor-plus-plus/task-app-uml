@@ -1003,7 +1003,15 @@ public class EvaluationService {
                                 if (relationshipSolution.getEntities().getFirst().getClassname().equals(relationshipSubmission.getEntities().getLast().getClassname())) {
 
                                     String reversedType = reverseType(relationshipSolution.getType());
-                                    String reversedDirection = reverseType(relationshipSolution.getDirection());
+                                    String reversedDirection = "";
+                                    if(relationshipSolution.getDirection()!=null)
+                                    {
+                                    reversedDirection = reverseType(relationshipSolution.getDirection());
+                                    }
+                                    else{
+                                        break;
+                                    }
+
 
                                     if (relationshipSubmission.getType().equals(reversedType)) {
                                         if (relationshipSubmission.getDirection().equals(reversedDirection)) {
