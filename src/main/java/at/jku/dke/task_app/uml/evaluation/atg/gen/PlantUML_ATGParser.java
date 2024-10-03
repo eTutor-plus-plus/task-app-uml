@@ -1,5 +1,6 @@
 // Generated from PlantUML_ATG.g4 by ANTLR 4.13.1
 package at.jku.dke.task_app.uml.evaluation.atg.gen;
+
 import at.jku.dke.task_app.uml.evaluation.atg.objects.UMLAssociation;
 import at.jku.dke.task_app.uml.evaluation.atg.objects.UMLClass;
 import at.jku.dke.task_app.uml.evaluation.atg.objects.UMLAttribute;
@@ -1295,15 +1296,14 @@ public class PlantUML_ATGParser extends Parser {
 			                    entity2.setClassname((((RelationshipContext)_localctx).participant2!=null?_input.getText(((RelationshipContext)_localctx).participant2.start,((RelationshipContext)_localctx).participant2.stop):null));
 			                    entity2.setMultiplicity(((RelationshipContext)_localctx).participant2.multiplicity);
 
-			                    List<UMLRelationshipEntity> entities = new ArrayList<>();
-			                    entities.add(entity1);
-			                    entities.add(entity2);
+
 
 			                    UMLRelationship relation = new UMLRelationship();
-			                    relation.setEntities(entities);
+
 			                    relation.setName((((RelationshipContext)_localctx).label!=null?_input.getText(((RelationshipContext)_localctx).label.start,((RelationshipContext)_localctx).label.stop):null));
 			                    relation.setType((((RelationshipContext)_localctx).relationTyp!=null?_input.getText(((RelationshipContext)_localctx).relationTyp.start,((RelationshipContext)_localctx).relationTyp.stop):null));
-
+			                    relation.setEntity1(entity1);
+			                    relation.setEntity2(entity2);
 			                    relationships.add(relation);
 
 			}
