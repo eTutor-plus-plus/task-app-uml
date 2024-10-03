@@ -75,7 +75,7 @@ attribute: attributeName attributeModifier? score?
                     attributesMap.get(currentClassName).add(attr);
                 };
 
-attributeModifier: '{ID}';
+attributeModifier: '{ID}'|'{id}';
 score: '[' points ']';
 relationship: participant1=participant relationTyp participant2=participant (COLON label)? labelMultiplicity? score?
                 {
