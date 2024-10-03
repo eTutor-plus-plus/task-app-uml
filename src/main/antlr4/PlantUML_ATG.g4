@@ -87,15 +87,14 @@ relationship: participant1=participant relationTyp participant2=participant (COL
                     entity2.setClassname($participant2.text);
                     entity2.setMultiplicity($participant2.multiplicity);
 
-                    List<UMLRelationshipEntity> entities = new ArrayList<>();
-                    entities.add(entity1);
-                    entities.add(entity2);
+
 
                     UMLRelationship relation = new UMLRelationship();
                     relation.setEntities(entities);
                     relation.setName($label.text);
                     relation.setType($relationTyp.text);
-
+                    relation.setEntity1(entity1);
+                    relation.setEntity2(entity2);
                     relationships.add(relation);
                 };
 

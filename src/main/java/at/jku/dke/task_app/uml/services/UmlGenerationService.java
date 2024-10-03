@@ -168,11 +168,14 @@ public class UmlGenerationService {
                 }
             }
             for (UMLRelationship relationship : relationships) {
-                for (UMLRelationshipEntity entity : relationship.getEntities()) {
-                    if (!identifiers.stream().anyMatch(i -> i.equals(entity.getClassname()))) {
-                        identifiers.add(entity.getClassname());
-                    }
+
+                if (!identifiers.stream().anyMatch(i -> i.equals(relationship.getEntity1().getClassname()))) {
+                    identifiers.add(relationship.getEntity1().getClassname());
                 }
+                if (!identifiers.stream().anyMatch(i -> i.equals(relationship.getEntity2().getClassname()))) {
+                    identifiers.add(relationship.getEntity2().getClassname());
+                }
+
             }
             for (UMLAssociation association : associations) {
                 if (!identifiers.stream().anyMatch(i -> i.equals(association.getAssoClass()))) {

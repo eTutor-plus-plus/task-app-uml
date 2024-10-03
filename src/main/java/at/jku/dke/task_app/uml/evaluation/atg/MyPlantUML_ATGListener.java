@@ -98,12 +98,16 @@ public class MyPlantUML_ATGListener extends PlantUML_ATGBaseListener {
         if(ctx.participant2.multiplicity!=null) {
             entity2.setMultiplicity(ctx.participant2.multiplicity);
         }
-        relationship.addEntity(entity1);
-        relationship.addEntity(entity2);
+        relationship.setEntity1(entity1);
+        relationship.setEntity2(entity2);
         relationship.setType(ctx.relationTyp.getText());
         if(ctx.labelMultiplicity()!=null) {
             relationship.setDirection(ctx.labelMultiplicity().multiplicity);
+        }else
+        {
+            relationship.setDirection("");
         }
+
         if(ctx.score()!=null) {
             relationship.setPoints(Integer.parseInt(ctx.score().points().getText()));
         }
