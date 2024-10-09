@@ -363,10 +363,12 @@ public class EvaluationService {
 
     private double compareConstraints(EvaluationResult evaluationResult, UMLResult umlResultSolution, UMLResult umlResultSubmission, UmlTask task) {
         double points = 0;
-        boolean isFlipped = false;
+
         for (UMLConstraints constraintSubmission : umlResultSubmission.getConstraints()) {
+
             boolean isCorrectConstraint = false;
             for (UMLConstraints constraintSolution : umlResultSolution.getConstraints()) {
+                boolean isFlipped = false;
                 //same order
                 if (constraintSubmission.getRel1C1().equals(constraintSolution.getRel1C1())) {
                     if (constraintSubmission.getRel1C2().equals(constraintSolution.getRel1C2())) {
@@ -398,7 +400,8 @@ public class EvaluationService {
 
                         }
                     }
-                    //dirst relation flipped/second relation in same order
+
+                //first relation flipped/second relation in same order
                 } else if (constraintSubmission.getRel1C1().equals(constraintSolution.getRel1C2())) {
                     if (constraintSubmission.getRel1C2().equals(constraintSolution.getRel1C1())) {
                         if (constraintSubmission.getRel2C1().equals(constraintSolution.getRel2C1())) {
@@ -472,7 +475,7 @@ public class EvaluationService {
 
                             }
                         }
-                        //dirst relation flipped/second relation in same order
+                        //first relation flipped/second relation in same order
                     } else if (constraintSubmission.getRel1C1().equals(constraintSolution.getRel1C2())) {
                         if (constraintSubmission.getRel1C2().equals(constraintSolution.getRel1C1())) {
                             if (constraintSubmission.getRel2C1().equals(constraintSolution.getRel2C1())) {
@@ -504,10 +507,10 @@ public class EvaluationService {
                             }
                         }
                     }
-                    constraintSolution.setRel1C1(r1c1);
-                    constraintSolution.setRel1C2(r1c2);
-                    constraintSolution.setRel2C1(r2c1);
-                    constraintSolution.setRel2C2(r2c2);
+                    constraintSubmission.setRel1C1(r1c1);
+                    constraintSubmission.setRel1C2(r1c2);
+                    constraintSubmission.setRel2C1(r2c1);
+                    constraintSubmission.setRel2C2(r2c2);
                 }
 
             }
@@ -556,6 +559,8 @@ public class EvaluationService {
                 evaluationResult.getMissingConstraints().add(constraintSolution);
             }
         }
+
+
 
         // Check class constraints from submission if present in solution
         for (UMLClass umlClass : umlResultSubmission.getUmlClasses()) {
