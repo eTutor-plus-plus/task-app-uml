@@ -1,6 +1,6 @@
 {
     "name": "etutor-task-app-uml",
-    "version": "1.6.3",
+    "version": "1.6.4",
     "private": true,
     "scripts": {
         "commit": "cz",
