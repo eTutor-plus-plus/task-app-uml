@@ -121,7 +121,7 @@ public class EvaluationService {
                                 class1.setParentClasses(new ArrayList<>());
                             }
 
-                            if( !class1.getParentClasses().contains(parentClass)){
+                            if( !class1.getParentClasses().stream().anyMatch(c -> c.getName().equals(parentClass.getName()))){
                                 class1.getParentClasses().add(parentClass);
                             }
                         }
