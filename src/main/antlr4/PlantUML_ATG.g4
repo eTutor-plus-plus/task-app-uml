@@ -49,12 +49,12 @@ note: 'note'  noteText 'as' noteName;
 noteName: Identifier;
 noteText: StringLiteral ;
 
-classDefinition: visibility? abstractModifier? 'class' className ('extends' parentClassName)? score?
+classDefinition: visibility? abstractModifier? 'class' className ('extends' parentClassName )? score?
                 {
                     UMLClass clazz = new UMLClass($className.text);
                     clazz.setAbstract($abstractModifier.text != null);
                     if ($parentClassName.text != null) {
-                        clazz.setParentClass(classMap.get($parentClassName.text));
+                        clazz.addParentClass(classMap.get($parentClassName.text));
                     }
                     umlClasses.add(clazz);
                     classMap.put($className.text, clazz);

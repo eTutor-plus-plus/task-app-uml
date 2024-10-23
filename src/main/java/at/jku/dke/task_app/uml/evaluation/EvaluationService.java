@@ -98,6 +98,48 @@ public class EvaluationService {
         return gradingDto;
     }
 
+    //method to run through all classes and add them together if the name is matching
+    private void getUnionClassesWithSameName(List<UMLClass> classes) {
+        for (int i = 0; i < classes.size(); i++) {
+            UMLClass class1 = classes.get(i);
+            for (int j = i + 1; j < classes.size(); j++) {
+                UMLClass class2 = classes.get(j);
+                if (class1.getName().equals(class2.getName())) {
+                    //add attributes if not present
+                    for (UMLAttribute attribute : class2.getAttributes()) {
+                        if (!class1.getAttributes().contains(attribute)) {
+                            class1.getAttributes().add(attribute);
+                        }
+                    }
+                    if(class2.isAbstract())
+                    {
+                        class1.setAbstract(true);
+                    }
+                    if(class2.getParentClasses() != null && !class2.getParentClasses().isEmpty()){
+                        for(UMLClass parentClass : class2.getParentClasses()){
+                            if (class1.getParentClasses() == null){
+                                class1.setParentClasses(new ArrayList<>());
+                            }
+
+                            if( !class1.getParentClasses().contains(parentClass)){
+                                class1.getParentClasses().add(parentClass);
+                            }
+                        }
+                    }
+                    //add associations if not present
+                    for (UMLAssociation association : class2.getAssociations()) {
+                        if (!class1.getAssociations().contains(association)) {
+                            class1.getAssociations().add(association);
+                        }
+                    }
+                    //sum points
+                    class1.setPoints(class1.getPoints() + class2.getPoints());
+                    classes.remove(j);
+                }
+            }
+        }
+    }
+
     private GradingDto generateFeedback(UmlTask task, EvaluationResult evaluationResult, SubmitSubmissionDto<UmlSubmissionDto> submission, UMLResult umlResultSubmission) {
         CriterionDto syntax = new CriterionDto("Syntax", null, true, "Valid Syntax");
         List<CriterionDto> criteria = new ArrayList<>();
@@ -142,7 +184,7 @@ public class EvaluationService {
         }
         if (submission.feedbackLevel().equals(2)) {
             if (evaluationResult.getMissingClasses().size() > 0 || !evaluationResult.getWrongClasses().isEmpty()) {
-                criteria.add(new CriterionDto("Classes", null, false, "Missing Classes: " + evaluationResult.getMissingClasses().size() + "<br>association Wrong Classes: " + evaluationResult.getWrongClasses().size()));
+                criteria.add(new CriterionDto("Classes", null, false, "Missing Classes: " + evaluationResult.getMissingClasses().size() + "<br>Wrong Classes: " + evaluationResult.getWrongClasses().size()));
             }
             if (evaluationResult.getMissingAttributes().size() > 0 || !evaluationResult.getWrongAttributes().isEmpty()) {
                 criteria.add(new CriterionDto("Attributes", null, false, "Missing Attributes: " + evaluationResult.getMissingAttributes().size() + "<br> Wrong Attributes: " + evaluationResult.getWrongAttributes().size()));
@@ -296,6 +338,9 @@ public class EvaluationService {
             double points = 0;
             EvaluationResult evaluationResult = new EvaluationResult();
             UMLResult umlResultSolution = umlGenerationService.generateResultsFromText(combination);
+
+            getUnionClassesWithSameName(umlResultSolution.getUmlClasses());
+            getUnionClassesWithSameName(umlResultSubmission.getUmlClasses());
 
 
             points += compareClass(evaluationResult, umlResultSolution, umlResultSubmission, task);
@@ -849,6 +894,19 @@ public class EvaluationService {
                                                 isCorrectRelationship = true;
                                                 break;
                                             }
+                                            else
+                                            {
+                                                if(relationshipSolution.getPoints() == 0)
+                                                {
+                                                    points += task.getRelationshipPoints().doubleValue();
+                                                }
+                                                else
+                                                {
+                                                    points += relationshipSolution.getPoints();
+                                                }
+                                                isCorrectRelationship = false;
+                                                break;
+                                            }
                                         }
                                     }
                                 }
@@ -879,6 +937,18 @@ public class EvaluationService {
                                         {
                                             if(relationshipSubmission.getDirection().equals(reverseType(relationshipSolution.getDirection())))
                                             {
+                                                if(relationshipSolution.getPoints() == 0)
+                                                {
+                                                    points += task.getRelationshipPoints().doubleValue();
+                                                }
+                                                else
+                                                {
+                                                    points += relationshipSolution.getPoints();
+                                                }
+                                                isCorrectRelationship = true;
+                                                break;
+                                            }
+                                            else {
                                                 if(relationshipSolution.getPoints() == 0)
                                                 {
                                                     points += task.getRelationshipPoints().doubleValue();
@@ -924,11 +994,8 @@ public class EvaluationService {
                                 {
                                     if(relationshipSubmission.getName().equals(relationshipSolution.getName()))
                                     {
-                                        if(relationshipSubmission.getDirection().equals(relationshipSolution.getDirection()))
-                                        {
                                             isCorrectRelationship = true;
                                             break;
-                                        }
                                     }
                                 }
                             }
@@ -954,11 +1021,9 @@ public class EvaluationService {
                                     {
                                         if(relationshipSubmission.getName().equals(relationshipSolution.getName()))
                                         {
-                                            if(relationshipSubmission.getDirection().equals(reverseType(relationshipSolution.getDirection())))
-                                            {
                                                 isCorrectRelationship = true;
                                                 break;
-                                            }
+
                                         }
                                     }
                                 }
@@ -1049,9 +1114,9 @@ public class EvaluationService {
             for (UMLClass umlClassSolution : umlResultSolution.getUmlClasses()) {
                 if (umlClassSubmission.getName().equals(umlClassSolution.getName())) {
                     if (umlClassSubmission.isAbstract() == umlClassSolution.isAbstract()) {
-                        if (umlClassSubmission.getParentClass() != null) {
-                            if (umlClassSolution.getParentClass() != null) {
-                                if (umlClassSubmission.getParentClass().getName().equals(umlClassSolution.getParentClass().getName())) {
+                        if (umlClassSubmission.getParentClasses() != null) {
+                            if (umlClassSolution.getParentClasses() != null) {
+                                if (compareUmlClassNames(umlClassSolution.getParentClasses(), umlClassSubmission.getParentClasses())) {
 //                                    if (umlClassSolution.getPoints() == 0) {
 //                                        points += task.getClassPoints().doubleValue();
 //                                    } else {
@@ -1122,7 +1187,7 @@ public class EvaluationService {
                             }
                             //submission is abstract solution is not
                             break;
-                        } else if (umlClassSolution.getParentClass() == null) {
+                        } else if (umlClassSolution.getParentClasses() == null) {
 //                            if (umlClassSolution.getPoints() == 0) {
 //                                points += task.getClassPoints().doubleValue();
 //                            } else {
@@ -1215,6 +1280,18 @@ public class EvaluationService {
 
         LOG.info("Points Class: " + points);
         return points;
+    }
+
+    private boolean compareUmlClassNames(List<UMLClass> parentClasses1, List<UMLClass> parentClasses2) {
+        if (parentClasses1.size() != parentClasses2.size()) {
+            return false;
+        }
+        for (int i = 0; i < parentClasses1.size(); i++) {
+            if (!parentClasses1.get(i).getName().equals(parentClasses2.get(i).getName())) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public static String reverseType(String input) {
