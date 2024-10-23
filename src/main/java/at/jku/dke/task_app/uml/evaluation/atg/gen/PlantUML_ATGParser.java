@@ -881,7 +881,7 @@ public class PlantUML_ATGParser extends Parser {
 			                    UMLClass clazz = new UMLClass((((ClassDefinitionContext)_localctx).className!=null?_input.getText(((ClassDefinitionContext)_localctx).className.start,((ClassDefinitionContext)_localctx).className.stop):null));
 			                    clazz.setAbstract((((ClassDefinitionContext)_localctx).abstractModifier!=null?_input.getText(((ClassDefinitionContext)_localctx).abstractModifier.start,((ClassDefinitionContext)_localctx).abstractModifier.stop):null) != null);
 			                    if ((((ClassDefinitionContext)_localctx).parentClassName!=null?_input.getText(((ClassDefinitionContext)_localctx).parentClassName.start,((ClassDefinitionContext)_localctx).parentClassName.stop):null) != null) {
-			                        clazz.setParentClass(classMap.get((((ClassDefinitionContext)_localctx).parentClassName!=null?_input.getText(((ClassDefinitionContext)_localctx).parentClassName.start,((ClassDefinitionContext)_localctx).parentClassName.stop):null)));
+			                        clazz.addParentClass(classMap.get((((ClassDefinitionContext)_localctx).parentClassName!=null?_input.getText(((ClassDefinitionContext)_localctx).parentClassName.start,((ClassDefinitionContext)_localctx).parentClassName.stop):null)));
 			                    }
 			                    umlClasses.add(clazz);
 			                    classMap.put((((ClassDefinitionContext)_localctx).className!=null?_input.getText(((ClassDefinitionContext)_localctx).className.start,((ClassDefinitionContext)_localctx).className.stop):null), clazz);

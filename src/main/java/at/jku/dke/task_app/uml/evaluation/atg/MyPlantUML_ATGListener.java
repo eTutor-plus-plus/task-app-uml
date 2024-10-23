@@ -22,16 +22,16 @@ public class MyPlantUML_ATGListener extends PlantUML_ATGBaseListener {
     @Override
     public void enterClassDefinition(PlantUML_ATGParser.ClassDefinitionContext ctx) {
         currentClass = new UMLClass();
-        if (umlClasses.stream().anyMatch(c -> c.getName().equals(ctx.className.getText()))) {
-
-            currentClass = umlClasses.stream().filter(c -> c.getName().equals(ctx.className.getText())).findFirst().get();
-        }
+//        if (umlClasses.stream().anyMatch(c -> c.getName().equals(ctx.className.getText()))) {
+//
+//            currentClass = umlClasses.stream().filter(c -> c.getName().equals(ctx.className.getText())).findFirst().get();
+//        }
         currentClass.setName(ctx.className().getText());
         if(ctx.score()!=null) {
             currentClass.setPoints(Integer.parseInt(ctx.score().points().getText()));
         }
         if(ctx.parentClassName()!=null) {
-            currentClass.setParentClass(new UMLClass(ctx.parentClassName().getText()));
+            currentClass.addParentClass(new UMLClass(ctx.parentClassName().getText()));
         }
         currentAttributes = new ArrayList<>();
         currentAssociations = new ArrayList<>();
