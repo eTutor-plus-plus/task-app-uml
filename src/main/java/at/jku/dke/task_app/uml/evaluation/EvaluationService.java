@@ -334,24 +334,31 @@ public class EvaluationService {
             boolean isCorrectMultiRelationship = false;
             for (UMLMultiRelationship multiRelationshipSolution : umlResultSolution.getMultiRelationships()) {
                 if (multiRelationship.getName().equals(multiRelationshipSolution.getName())) {
-                    String connectedNoteSolution = umlResultSolution.getNoteConnections().stream().filter(noteConnection -> noteConnection.getClassName().equals(multiRelationshipSolution.getName())).findFirst().orElseThrow().getNoteName();
-                    String connectedNoteSubmission = umlResultSubmission.getNoteConnections().stream().filter(noteConnection -> noteConnection.getClassName().equals(multiRelationship.getName())).findFirst().orElseThrow().getNoteName();
-                    //search in submission and solution after nodename to find note and compare
-                    String noteSubmission = umlResultSubmission.getNotes().stream()
-                        .filter(note -> note.getNoteName().equals(connectedNoteSubmission))
-                        .findFirst()
-                        .get()
-                        .getNote();
-                    String noteSolution = umlResultSolution.getNotes().stream()
-                        .filter(note -> note.getNoteName().equals(connectedNoteSolution))
-                        .findFirst()
-                        .get()
-                        .getNote();
-                    if (noteSolution.equals(noteSubmission)) {
-                        isCorrectMultiRelationship = true;
-                        points += task.getRelationshipPoints().doubleValue();
-                        break;
+                    try {
+                        String connectedNoteSolution = umlResultSolution.getNoteConnections().stream().filter(noteConnection -> noteConnection.getClassName().equals(multiRelationshipSolution.getName())).findFirst().orElseThrow().getNoteName();
+                        String connectedNoteSubmission = umlResultSubmission.getNoteConnections().stream().filter(noteConnection -> noteConnection.getClassName().equals(multiRelationship.getName())).findFirst().orElseThrow().getNoteName();
+                        //search in submission and solution after nodename to find note and compare
+                        String noteSubmission = umlResultSubmission.getNotes().stream()
+                            .filter(note -> note.getNoteName().equals(connectedNoteSubmission))
+                            .findFirst()
+                            .get()
+                            .getNote();
+                        String noteSolution = umlResultSolution.getNotes().stream()
+                            .filter(note -> note.getNoteName().equals(connectedNoteSolution))
+                            .findFirst()
+                            .get()
+                            .getNote();
+                        if (noteSolution.equals(noteSubmission)) {
+                            isCorrectMultiRelationship = true;
+                            points += task.getRelationshipPoints().doubleValue();
+                            break;
+                        }
                     }
+                    catch (Exception e){
+
+                        LOG.error("Error while comparing Multi-Relationships", e);
+                    }
+
 
 
                 }
