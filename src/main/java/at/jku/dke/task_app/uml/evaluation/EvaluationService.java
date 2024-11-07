@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Service that evaluates submissions.
@@ -98,47 +99,7 @@ public class EvaluationService {
         return gradingDto;
     }
 
-    //method to run through all classes and add them together if the name is matching
-    private void getUnionClassesWithSameName(List<UMLClass> classes) {
-        for (int i = 0; i < classes.size(); i++) {
-            UMLClass class1 = classes.get(i);
-            for (int j = i + 1; j < classes.size(); j++) {
-                UMLClass class2 = classes.get(j);
-                if (class1.getName().equals(class2.getName())) {
-                    //add attributes if not present
-                    for (UMLAttribute attribute : class2.getAttributes()) {
-                        if (!class1.getAttributes().contains(attribute)) {
-                            class1.getAttributes().add(attribute);
-                        }
-                    }
-                    if(class2.isAbstract())
-                    {
-                        class1.setAbstract(true);
-                    }
-                    if(class2.getParentClasses() != null && !class2.getParentClasses().isEmpty()){
-                        for(UMLClass parentClass : class2.getParentClasses()){
-                            if (class1.getParentClasses() == null){
-                                class1.setParentClasses(new ArrayList<>());
-                            }
 
-                            if( !class1.getParentClasses().stream().anyMatch(c -> c.getName().equals(parentClass.getName()))){
-                                class1.getParentClasses().add(parentClass);
-                            }
-                        }
-                    }
-                    //add associations if not present
-                    for (UMLAssociation association : class2.getAssociations()) {
-                        if (!class1.getAssociations().contains(association)) {
-                            class1.getAssociations().add(association);
-                        }
-                    }
-                    //sum points
-                    class1.setPoints(class1.getPoints() + class2.getPoints());
-                    classes.remove(j);
-                }
-            }
-        }
-    }
 
     private GradingDto generateFeedback(UmlTask task, EvaluationResult evaluationResult, SubmitSubmissionDto<UmlSubmissionDto> submission, UMLResult umlResultSubmission) {
         CriterionDto syntax = new CriterionDto("Syntax", null, true, "Valid Syntax");
@@ -169,9 +130,6 @@ public class EvaluationService {
             if (evaluationResult.getMissingAttributes().size() > 0 || !evaluationResult.getWrongAttributes().isEmpty()) {
                 criteria.add(new CriterionDto("Attributes", null, false, "Missing Attributes: " + (evaluationResult.getMissingAttributes().size() + evaluationResult.getWrongAttributes().size())));
             }
-            if (evaluationResult.getMissingAbstractClasses().size() > 0) {
-                criteria.add(new CriterionDto("Abstract Classes", null, false, "Missing Abstract Classes: " + (evaluationResult.getMissingAbstractClasses().size())));
-            }
             if (evaluationResult.getMissingRelationships().size() > 0 || !evaluationResult.getWrongRelationships().isEmpty()) {
                 criteria.add(new CriterionDto("Associations", null, false, "Missing Associations: " + (evaluationResult.getMissingRelationships().size() + evaluationResult.getWrongRelationships().size())));
             }
@@ -188,9 +146,6 @@ public class EvaluationService {
             }
             if (evaluationResult.getMissingAttributes().size() > 0 || !evaluationResult.getWrongAttributes().isEmpty()) {
                 criteria.add(new CriterionDto("Attributes", null, false, "Missing Attributes: " + evaluationResult.getMissingAttributes().size() + "<br> Wrong Attributes: " + evaluationResult.getWrongAttributes().size()));
-            }
-            if (evaluationResult.getMissingAbstractClasses().size() > 0) {
-                criteria.add(new CriterionDto("Abstract Classes", null, false, "Missing Abstract Classes: " + evaluationResult.getMissingAbstractClasses().size()));
             }
             if (evaluationResult.getMissingRelationships().size() > 0 || !evaluationResult.getWrongRelationships().isEmpty()) {
                 criteria.add(new CriterionDto("Associations", null, false, "Missing Associations: " + evaluationResult.getMissingRelationships().size() + "<br> Wrong Associations: " + evaluationResult.getWrongRelationships().size()));
@@ -226,15 +181,7 @@ public class EvaluationService {
                 }
                 criteria.add(new CriterionDto("Attributes", null, false, s));
             }
-            if (evaluationResult.getMissingAbstractClasses().size() > 0) {
-                String s = "Missing Abstract Classes: ";
-                for (UMLClass umlClass : evaluationResult.getMissingAbstractClasses()) {
-                    s += umlClass.getName() + ", ";
-                }
 
-
-                criteria.add(new CriterionDto("Abstract Classes", null, false, s));
-            }
             if (evaluationResult.getMissingRelationships().size() > 0 || !evaluationResult.getWrongRelationships().isEmpty()) {
                 String s = "Missing Associations: ";
                 for (UMLRelationship umlRelationship : evaluationResult.getMissingRelationships()) {
@@ -339,8 +286,8 @@ public class EvaluationService {
             EvaluationResult evaluationResult = new EvaluationResult();
             UMLResult umlResultSolution = umlGenerationService.generateResultsFromText(combination);
 
-            getUnionClassesWithSameName(umlResultSolution.getUmlClasses());
-            getUnionClassesWithSameName(umlResultSubmission.getUmlClasses());
+            umlGenerationService.getUnionClassesWithSameName(umlResultSolution.getUmlClasses());
+            umlGenerationService.getUnionClassesWithSameName(umlResultSubmission.getUmlClasses());
 
 
             points += compareClass(evaluationResult, umlResultSolution, umlResultSubmission, task);
@@ -1100,6 +1047,9 @@ public class EvaluationService {
                 wrongIdentifiers.add(constraint.getRel2C2());
             }
         }
+
+        //remove duplicates
+        wrongIdentifiers = wrongIdentifiers.stream().distinct().collect(Collectors.toList());
 
         // If all checks pass, all names are in the identifiers list
         return wrongIdentifiers;

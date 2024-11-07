@@ -146,7 +146,7 @@ relationTyp : RELATION_TYPE;
 
 
 RELATION_TYPE
-    : '*--' | '--' | '<--' | '-->' | '--*' | '---|>' | '<|--'
+    : '*--' | '--' | '<--' | '-->' | '--*'
     ;
 
 // Define StringLiteral to match strings in double quotes
