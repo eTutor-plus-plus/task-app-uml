@@ -828,7 +828,12 @@ public class EvaluationService {
                                     {
                                         if(relationshipSubmission.getName().equals(relationshipSolution.getName()))
                                         {
-                                            if(relationshipSubmission.getDirection().equals(relationshipSolution.getDirection()))
+                                            //second if condition is because there is no flipped state if both entities and both multiplicities are the same
+                                            if(relationshipSubmission.getDirection().equals(relationshipSolution.getDirection())||(
+                                                                            relationshipSolution.getEntity1().getClassname().equals(relationshipSolution.getEntity2().getClassname()) &&
+                                                                            relationshipSolution.getEntity1().getMultiplicity().equals(relationshipSolution.getEntity2().getMultiplicity())&&
+                                                                                relationshipSolution.getType().equals("--")
+                                                                            ))
                                             {
                                                 if(relationshipSolution.getPoints() == 0)
                                                 {
