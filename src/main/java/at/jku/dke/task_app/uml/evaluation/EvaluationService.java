@@ -340,9 +340,20 @@ public class EvaluationService {
                             points += task.getRelationshipPoints().doubleValue();
                             break;
                         } else {
+
                             String connectedNoteSolution = umlResultSolution.getNoteConnections().stream().filter(noteConnection -> noteConnection.getClassName().equals(multiRelationshipSolution.getName())).findFirst().orElseThrow().getNoteName();
                             String connectedNoteSubmission = umlResultSubmission.getNoteConnections().stream().filter(noteConnection -> noteConnection.getClassName().equals(multiRelationship.getName())).findFirst().orElseThrow().getNoteName();
                             //search in submission and solution after nodename to find note and compare
+                            if (umlResultSolution.getNotes().isEmpty() || umlResultSolution.getNotes().stream().filter(note -> note.getNoteName().equals(connectedNoteSolution)).findFirst().isEmpty()) {
+                                //check for mathching class
+                                if (connectedNoteSolution.equals(connectedNoteSubmission)) {
+
+                                    isCorrectMultiRelationship = true;
+                                    points += task.getRelationshipPoints().doubleValue();
+
+                                }
+                                break;
+                            }
                             String noteSubmission = umlResultSubmission.getNotes().stream()
                                 .filter(note -> note.getNoteName().equals(connectedNoteSubmission))
                                 .findFirst()
