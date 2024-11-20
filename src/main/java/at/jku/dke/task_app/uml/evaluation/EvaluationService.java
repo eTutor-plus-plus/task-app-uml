@@ -299,19 +299,19 @@ public class EvaluationService {
             points += compareMultiRelationships(evaluationResult, umlResultSolution, umlResultSubmission, task);
 
             //if there are more wrong associations and relationships than there are both of them combined subtract points for each more than in the Solution
-            if(umlResultSubmission.getAssociations().size()+umlResultSubmission.getRelationships().size() > umlResultSolution.getAssociations().size()+umlResultSolution.getRelationships().size()){
-                if(umlResultSubmission.getAssociations().size() > umlResultSolution.getAssociations().size()){
-                    points = points - ((umlResultSubmission.getAssociations().size()-umlResultSolution.getAssociations().size())*task.getAssociationPoints().doubleValue());
+            if (umlResultSubmission.getAssociations().size() + umlResultSubmission.getRelationships().size() > umlResultSolution.getAssociations().size() + umlResultSolution.getRelationships().size()) {
+                if (umlResultSubmission.getAssociations().size() > umlResultSolution.getAssociations().size()) {
+                    points = points - ((umlResultSubmission.getAssociations().size() - umlResultSolution.getAssociations().size()) * task.getAssociationPoints().doubleValue());
                 }
-                if(umlResultSubmission.getRelationships().size() > umlResultSolution.getRelationships().size()){
-                    points = points - ((umlResultSubmission.getRelationships().size()-umlResultSolution.getRelationships().size())*task.getRelationshipPoints().doubleValue());
+                if (umlResultSubmission.getRelationships().size() > umlResultSolution.getRelationships().size()) {
+                    points = points - ((umlResultSubmission.getRelationships().size() - umlResultSolution.getRelationships().size()) * task.getRelationshipPoints().doubleValue());
                 }
             }
-            if(umlResultSubmission.getUmlClasses().size() > umlResultSolution.getUmlClasses().size()){
-                points = points - ((umlResultSubmission.getUmlClasses().size()-umlResultSolution.getUmlClasses().size())*task.getClassPoints().doubleValue());
+            if (umlResultSubmission.getUmlClasses().size() > umlResultSolution.getUmlClasses().size()) {
+                points = points - ((umlResultSubmission.getUmlClasses().size() - umlResultSolution.getUmlClasses().size()) * task.getClassPoints().doubleValue());
             }
-            if(umlResultSubmission.getConstraints().size() > umlResultSolution.getConstraints().size()){
-                points = points - ((umlResultSubmission.getConstraints().size()-umlResultSolution.getConstraints().size())*task.getConstraintPoints().doubleValue());
+            if (umlResultSubmission.getConstraints().size() > umlResultSolution.getConstraints().size()) {
+                points = points - ((umlResultSubmission.getConstraints().size() - umlResultSolution.getConstraints().size()) * task.getConstraintPoints().doubleValue());
             }
 
             if (points < 0) {
@@ -335,30 +335,34 @@ public class EvaluationService {
             for (UMLMultiRelationship multiRelationshipSolution : umlResultSolution.getMultiRelationships()) {
                 if (multiRelationship.getName().equals(multiRelationshipSolution.getName())) {
                     try {
-                        String connectedNoteSolution = umlResultSolution.getNoteConnections().stream().filter(noteConnection -> noteConnection.getClassName().equals(multiRelationshipSolution.getName())).findFirst().orElseThrow().getNoteName();
-                        String connectedNoteSubmission = umlResultSubmission.getNoteConnections().stream().filter(noteConnection -> noteConnection.getClassName().equals(multiRelationship.getName())).findFirst().orElseThrow().getNoteName();
-                        //search in submission and solution after nodename to find note and compare
-                        String noteSubmission = umlResultSubmission.getNotes().stream()
-                            .filter(note -> note.getNoteName().equals(connectedNoteSubmission))
-                            .findFirst()
-                            .get()
-                            .getNote();
-                        String noteSolution = umlResultSolution.getNotes().stream()
-                            .filter(note -> note.getNoteName().equals(connectedNoteSolution))
-                            .findFirst()
-                            .get()
-                            .getNote();
-                        if (noteSolution.equals(noteSubmission)) {
+                        if (umlResultSolution.getNoteConnections().isEmpty() || umlResultSolution.getNoteConnections().stream().filter(noteConnection -> noteConnection.getClassName().equals(multiRelationshipSolution.getName())).findFirst().isEmpty()) {
                             isCorrectMultiRelationship = true;
                             points += task.getRelationshipPoints().doubleValue();
                             break;
+                        } else {
+                            String connectedNoteSolution = umlResultSolution.getNoteConnections().stream().filter(noteConnection -> noteConnection.getClassName().equals(multiRelationshipSolution.getName())).findFirst().orElseThrow().getNoteName();
+                            String connectedNoteSubmission = umlResultSubmission.getNoteConnections().stream().filter(noteConnection -> noteConnection.getClassName().equals(multiRelationship.getName())).findFirst().orElseThrow().getNoteName();
+                            //search in submission and solution after nodename to find note and compare
+                            String noteSubmission = umlResultSubmission.getNotes().stream()
+                                .filter(note -> note.getNoteName().equals(connectedNoteSubmission))
+                                .findFirst()
+                                .get()
+                                .getNote();
+                            String noteSolution = umlResultSolution.getNotes().stream()
+                                .filter(note -> note.getNoteName().equals(connectedNoteSolution))
+                                .findFirst()
+                                .get()
+                                .getNote();
+                            if (noteSolution.equals(noteSubmission)) {
+                                isCorrectMultiRelationship = true;
+                                points += task.getRelationshipPoints().doubleValue();
+                                break;
+                            }
                         }
-                    }
-                    catch (Exception e){
+                    } catch (Exception e) {
 
                         LOG.error("Error while comparing Multi-Relationships", e);
                     }
-
 
 
                 }
@@ -843,11 +847,10 @@ public class EvaluationService {
                                             relationshipSolution.getEntity1().getClassname().equals(relationshipSolution.getEntity2().getClassname()) &&
                                                 relationshipSolution.getEntity1().getMultiplicity().equals(relationshipSolution.getEntity2().getMultiplicity()) &&
                                                 relationshipSolution.getType().equals("--")
-                                        ))
-                                        {
+                                        )) {
                                             //if the Direction equals or if the relationship is a self relationship the Direction must be present when it is present in the solution and cant be "" also if the Direction is not present in the Solution it cant be Present and still true
-                                            if((relationshipSolution.getDirection().equals("") && !relationshipSubmission.getDirection().equals(""))
-                                                || (!relationshipSolution.getDirection().equals("") && relationshipSubmission.getDirection().equals(""))){
+                                            if ((relationshipSolution.getDirection().equals("") && !relationshipSubmission.getDirection().equals(""))
+                                                || (!relationshipSolution.getDirection().equals("") && relationshipSubmission.getDirection().equals(""))) {
                                                 if (relationshipSolution.getPoints() == 0) {
                                                     points += task.getRelationshipPoints().doubleValue();
                                                 } else {
@@ -927,7 +930,7 @@ public class EvaluationService {
             }
         }
 
-        if(!wrongDirectionRelationships.isEmpty()){
+        if (!wrongDirectionRelationships.isEmpty()) {
             points -= wrongDirectionRelationships.size();
             evaluationResult.getWrongRelationships().addAll(wrongDirectionRelationships);
         }
