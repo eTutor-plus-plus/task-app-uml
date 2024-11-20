@@ -22,6 +22,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 
@@ -67,6 +68,9 @@ public class UmlGenerationService {
         for (String combination : allCombinations) {
             double currentPoints = 0;
             UMLResult result = generateResultsFromText(combination);
+            //union duplicated classes
+            getUnionClassesWithSameName(result.getUmlClasses());
+
 
             for (UMLClass umlClass : result.getUmlClasses()) {
                 if (umlClass.getPoints() != 0) {
@@ -205,6 +209,7 @@ public class UmlGenerationService {
 
 
         }
+
         task.setIdentifiers(identifiers);
         return identifiers;
     }
@@ -222,6 +227,49 @@ public class UmlGenerationService {
         walker.walk(listener, tree);
         UMLResult result = new UMLResult(listener.getUmlClasses(), listener.getRelationships(), listener.getAssociations(), listener.getConstraints(), listener.getMultiRelationships(), listener.getNotes(), listener.getNoteConnections());
         return result;
+    }
+
+
+    //method to run through all classes and add them together if the name is matching
+    public void getUnionClassesWithSameName(List<UMLClass> classes) {
+        for (int i = 0; i < classes.size(); i++) {
+            UMLClass class1 = classes.get(i);
+            for (int j = i + 1; j < classes.size(); j++) {
+                UMLClass class2 = classes.get(j);
+                if (class1.getName().equals(class2.getName())) {
+                    //add attributes if not present
+                    for (UMLAttribute attribute : class2.getAttributes()) {
+                        if (!class1.getAttributes().contains(attribute)) {
+                            class1.getAttributes().add(attribute);
+                        }
+                    }
+                    if(class2.isAbstract())
+                    {
+                        class1.setAbstract(true);
+                    }
+                    if(class2.getParentClasses() != null && !class2.getParentClasses().isEmpty()){
+                        for(UMLClass parentClass : class2.getParentClasses()){
+                            if (class1.getParentClasses() == null){
+                                class1.setParentClasses(new ArrayList<>());
+                            }
+
+                            if( !class1.getParentClasses().stream().anyMatch(c -> c.getName().equals(parentClass.getName()))){
+                                class1.getParentClasses().add(parentClass);
+                            }
+                        }
+                    }
+                    //add associations if not present
+                    for (UMLAssociation association : class2.getAssociations()) {
+                        if (!class1.getAssociations().contains(association)) {
+                            class1.getAssociations().add(association);
+                        }
+                    }
+                    //sum points
+                    class1.setPoints(class1.getPoints() + class2.getPoints());
+                    classes.remove(j);
+                }
+            }
+        }
     }
 
     public UMLResult generateResultsFromSubmission(String submission) {
