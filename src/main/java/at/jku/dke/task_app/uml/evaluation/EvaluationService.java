@@ -106,10 +106,10 @@ public class EvaluationService {
         criteria.add(syntax);
         List<String> wrongIdentifier = wrongIdentifiers(umlResultSubmission, task.getIdentifiers());
         if (wrongIdentifier.size() > 0 || !wrongIdentifier.isEmpty()) {
-            criteria.add(new CriterionDto("Identifiers", null, false, "Wrong Identifiers: " + wrongIdentifier.toString()));
+            criteria.add(new CriterionDto("Labels", null, false, "Wrong Labels: " + wrongIdentifier.toString()));
         } else {
 
-            criteria.add(new CriterionDto("Identifiers", null, true, "All Identifiers are correct"));
+            criteria.add(new CriterionDto("Labels", null, true, "All Labels are correct"));
         }
         if (submission.mode().equals(SubmissionMode.RUN)) {
             criteria.add(new CriterionDto("Image", null, true, generateImage(submission.submission().input())));
@@ -225,11 +225,11 @@ public class EvaluationService {
             }
 
             if (evaluationResult.getWrongMultiRelationships().size() > 0) {
-                String s = "Wrong ternaer Relationship: ";
+                String s = "Wrong ternaer Association: ";
                 for (UMLMultiRelationship multiRelationship : evaluationResult.getWrongMultiRelationships()) {
                     s += multiRelationship.getName() + ", ";
                 }
-                criteria.add(new CriterionDto("Multi-Relationships", null, false, s));
+                criteria.add(new CriterionDto("Multi-Association", null, false, s));
             }
 
 
